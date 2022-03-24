@@ -20,17 +20,8 @@ let appPublishPath = publishPath </> "app"
 // Targets
 let clean proj = [ proj </> "bin"; proj </> "obj" ] |> Shell.cleanDirs
 
-Target.create "InstallClient" (fun _ ->
-    printfn "Node version:"
-    Tools.node "--version" clientSrcPath
-    printfn "Yarn version:"
-    Tools.yarn "--version" clientSrcPath
-    Tools.yarn "install --frozen-lockfile" clientSrcPath
-)
-
 let createNuget proj =
     clean proj
-    Tools.yarn "install" proj
     Tools.dotnet "restore --no-cache" proj
     Tools.dotnet "pack -c Release" proj
 
@@ -66,10 +57,10 @@ Target.create "Run" (fun _ ->
 )
 
 let dependencies = [
-    "InstallClient" ==> "PublishDocs"
-    "InstallClient" ==> "Publish"
-    "InstallClient" ==> "Pack"
-    "InstallClient" ==> "Run"
+    "PublishDocs"
+    ==> "Publish"
+    ==> "Pack"
+    ==> "Run"
 ]
 
 [<EntryPoint>]
