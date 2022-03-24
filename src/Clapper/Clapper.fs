@@ -146,4 +146,12 @@ module PlcProgram =
             let tagTable = findTagTable plcSoftware tagTableName
             for tag in tags do
                 createNewTag tagTable tag
+            props
         | None ->  failwithf "Select / Add your device first - use `getDevice`"
+    let saveAndClose (props: PlcProps) =
+        match props.Project,props.ExistingTiaPortalConnection with
+        | Some project, Some tiaPortal ->
+            project.Save()
+            project.Close()
+            tiaPortal.Dispose()
+        | _ ->  failwithf "Can't save and close because no selected project"
