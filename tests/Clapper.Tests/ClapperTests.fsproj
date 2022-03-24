@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netframework4.8</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Tests.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../../src/Clapper/Clapper.fsproj" />   
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Siemens.Engineering">
+            <HintPath>.\..\..\libs\Siemens.Engineering.dll</HintPath>
+        </Reference>
+        <Reference Include="Siemens.Engineering.Contract">
+            <HintPath>.\..\..\libs\Siemens.Engineering.Contract.dll</HintPath>
+        </Reference>
+    </ItemGroup>  
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
+ 

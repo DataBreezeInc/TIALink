@@ -1,0 +1,16 @@
+version 5.249.0
+
+source https://api.nuget.org/v3/index.json
+framework: net6.0, netstandard2.0
+storage: none
+
+nuget FSharp.Core
+
+group Build
+    source https://api.nuget.org/v3/index.json
+    framework: net6.0
+    storage: none
+
+    nuget Fake.Core.Target
+    nuget Fake.DotNet.Cli
+    nuget Fake.Core.UserInput

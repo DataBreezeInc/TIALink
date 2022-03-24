@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageId>Clapper</PackageId>
+        <Description>TIA Openness FSharp wrapper library</Description>
+        <RepositoryUrl>https://github.com/tforkmann/Clapper</RepositoryUrl>
+        <PackageProjectUrl>https://tforkmann.github.io/Clapper</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/tforkmann/Clapper/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageIconUrl></PackageIconUrl>
+        <PackageTags>fsharp;tia portal;openness</PackageTags>
+        <Authors>Tim Forkmann</Authors>
+        <Version>0.0.1</Version>
+        <PackageReleaseNotes>Follow major release of Clapper</PackageReleaseNotes>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Siemens.Engineering">
+            <HintPath>.\..\..\libs\Siemens.Engineering.dll</HintPath>
+        </Reference>
+        <Reference Include="Siemens.Engineering.Contract">
+            <HintPath>.\..\..\libs\Siemens.Engineering.Contract.dll</HintPath>
+        </Reference>
+    </ItemGroup>  
+    <ItemGroup>
+    <Compile Include="Clapper.fs" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
