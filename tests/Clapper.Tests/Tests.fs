@@ -1,9 +1,5 @@
 open Siemens.Engineering
-open Clapper
-
-let tiaPortal = new TiaPortal(TiaPortalMode.WithoutUserInterface)
-let projects = tiaPortal.Projects
-let path = @"Your path"
+open Clapper  
 
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
@@ -19,7 +15,7 @@ let hardwareObjects =
       ]
     |> List.mapi (fun i (x,y) -> {  OrderNumber = x
                                     Name = y
-                                    Position = i + 2})
+                                    Position = i + 2})  
 let tags =
     [ "E0.0", Bool, "air blower 1","%10.1"
       "E0.1", Bool, "air blower 2","%10.2"
@@ -30,16 +26,16 @@ let tags =
                                         DataType = y
                                         Comment =z
                                         Address = a
-                                })
+                                })  
 
 let tagTableList = "Tag List Name"
 
-path
-|> PlcProgram.projectPath
-|> PlcProgram.activateUI
+@"C:\Users\TimForkmann\Documents\Automatisierung\"
+|> PlcProgram.projectPath 
 |> PlcProgram.selectProject "ESA Kuwait"
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
-|> PlcProgram.addTags (tags,tagTableList)
-|> PlcProgram.saveAndClose
+|> PlcProgram.addTags (tags,tagTableList) 
+|> PlcProgram.addPlcBlocks "Main"
+|> PlcProgram.saveAndClose 
