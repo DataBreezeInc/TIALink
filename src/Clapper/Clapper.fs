@@ -97,6 +97,7 @@ module PlcProgram =
                 tiaPortal.Projects.OpenWithUpgrade(projectPath)
 
         { props with
+            ExistingTiaPortalConnection = Some tiaPortal
             ProjectName = projectName
             Project = Some project }
 
@@ -205,4 +206,4 @@ module PlcProgram =
             project.Save()
             project.Close()
             tiaPortal.Dispose()
-        | _ -> failwithf "Can't save and close because no selected project"
+        | _ -> failwithf "Can't save and close because no selected project ; active ExistingTiaPortalConnection %b; active Project %b" props.ExistingTiaPortalConnection.IsSome props.Project.IsSome
