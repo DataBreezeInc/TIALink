@@ -69,9 +69,22 @@ module PlcProgram =
         | None -> new TiaPortal(TiaPortalMode.WithoutUserInterface)
     let selectProject projectName (props: PlcProps) =
         let tiaPortal = getTiaPortal props
-        printfn $"Opening Project {projectName}"
+
+        printfn $"Opening Project {projectName}..."
+
+        let targetDir =
+            if not (Directory.Exists(props.ProjectPath)) then
+                Directory.CreateDirectory(props.ProjectPath)
+            else
+                DirectoryInfo(props.ProjectPath)
         let projectPath = FileInfo(props.ProjectPath + projectName + @"\" + projectName + ".ap17")
-        let project = tiaPortal.Projects.OpenWithUpgrade(projectPath)
+        let project =
+            try
+                tiaPortal.Projects.Create(targetDir, projectName)
+            with
+            | _ ->
+                printfn "Project exists already"
+                tiaPortal.Projects.OpenWithUpgrade(projectPath)
         { props with
             ProjectName = projectName
             Project = Some project }

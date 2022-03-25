@@ -10,7 +10,7 @@
         <PackageIconUrl></PackageIconUrl>
         <PackageTags>fsharp;tia portal;openness</PackageTags>
         <Authors>Tim Forkmann</Authors>
-        <Version>0.0.1</Version>
+        <Version>0.0.3</Version>
         <PackageReleaseNotes>Follow major release of Clapper</PackageReleaseNotes>
     </PropertyGroup>
     <ItemGroup>
@@ -20,7 +20,7 @@
         <Reference Include="Siemens.Engineering.Contract">
             <HintPath>.\..\..\libs\Siemens.Engineering.Contract.dll</HintPath>
         </Reference>
-    </ItemGroup>  
+    </ItemGroup>
     <ItemGroup>
     <Compile Include="Clapper.fs" />
     </ItemGroup>

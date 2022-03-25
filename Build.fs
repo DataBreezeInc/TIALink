@@ -58,7 +58,7 @@ Target.create "Run" (fun _ ->
 
 let dependencies = [
     "PublishDocs"
-    ==> "Publish"
+    "Publish"
     ==> "Pack"
     ==> "Run"
 ]
