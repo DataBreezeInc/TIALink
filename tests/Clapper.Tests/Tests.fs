@@ -1,5 +1,5 @@
 open Siemens.Engineering
-open Clapper  
+open Clapper   
 
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
@@ -30,12 +30,36 @@ let tags =
 
 let tagTableList = "Tag List Name"
 
-@"C:\Users\TimForkmann\Documents\Automatisierung\"
-|> PlcProgram.projectPath 
-|> PlcProgram.selectProject "ESA Kuwait"
-|> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
-|> PlcProgram.plugNewHarwareObjects hardwareObjects
-|> PlcProgram.addTagTable tagTableList
-|> PlcProgram.addTags (tags,tagTableList) 
-|> PlcProgram.addPlcBlocks "Main"
-|> PlcProgram.saveAndClose 
+let blockFb ={
+  Name = "Fb1"
+  IsAutoNumbered = true
+  Number  = 1 
+  BlockType = FunctionalBlock
+}
+let blockDb ={
+  Name = "Db1"
+  IsAutoNumbered = true
+  Number  = 2 
+  BlockType = DataBlock "Fb1"
+}
+let blockOD ={
+  Name = "OB2"
+  IsAutoNumbered = true
+  Number  = 2 
+  BlockType = OrganisationalBlock
+}
+ 
+// @"C:\Users\TimForkmann\Documents\Automatisierung\"
+// |> PlcProgram.projectPath 
+// |> PlcProgram.selectProject "ESA Kuwait"
+// |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
+// |> PlcProgram.plugNewHarwareObjects hardwareObjects
+// |> PlcProgram.addTagTable tagTableList
+// |> PlcProgram.addTags (tags,tagTableList) 
+// |> PlcProgram.createPlcBlock blockFb
+// |> PlcProgram.createPlcBlock blockDb
+// |> PlcProgram.exportPlcBlock "Main"
+// // |> PlcProgram.createPlcBlock blockOD
+// |> PlcProgram.saveAndClose  
+
+
