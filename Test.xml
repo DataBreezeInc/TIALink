@@ -1,4 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document>
-  <Engineering>version=V17</Engineering>
-</Document>
+<DocumentInfo>
+  <dokumentinstanz kennung="Teil_A">
+    <anwendung>
+      <anwendungsname>EnergyReport</anwendungsname>
+      <version>0.0.1</version>
+      <hersteller>Danpower GmbH</hersteller>
+    </anwendung>
+  </dokumentinstanz>
+</DocumentInfo>

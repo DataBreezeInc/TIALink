@@ -2,13 +2,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netframework4.8</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="Tests.fs" />
+        <!-- <Compile Include="Tests.fs" /> -->
+        <Compile Include="XmlTests.fs" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../../src/Clapper/Clapper.fsproj" />   
+        <ProjectReference Include="../../src/Clapper/Clapper.fsproj" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Siemens.Engineering">
@@ -17,7 +18,6 @@
         <Reference Include="Siemens.Engineering.Contract">
             <HintPath>.\..\..\libs\Siemens.Engineering.Contract.dll</HintPath>
         </Reference>
-    </ItemGroup>  
+    </ItemGroup>
     <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
- 
