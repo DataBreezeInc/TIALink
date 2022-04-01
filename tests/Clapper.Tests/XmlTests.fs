@@ -100,32 +100,39 @@ type FCBlock = {
     Sections : seq<Xml>
 }
 
-let networkSource = 
-    Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[])
+let networkSource =
+    Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[
+        Element("Parts",[],"",[
+            Element("Access",[("Scope","GlobalVariable");("UId","21")],"",[
+                Element("Symbol",[],"",[
+                    Element("Component",[("Name","ROBNAMEA001RFLGW1")],"",[])
+                    Element("Adress",[("Area","Input");("Type","Bool");("BitOffset","8192");("Informative","true")],"",[])
+                ])
+            ])
+            Element("Access",[("Scope","GlobalVariable");("UId","22")],"",[
+                Element("Symbol",[],"",[
+                    Element("Component",[("Name","Rob")],"",[])
+                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                ])
+            ])
+            Element("Call",[("UId","23")],"",[
+                Element("CallInfo",[("Name","FB_Rob_PN_A");("BlockType","FB")],"201",[
+                    Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],"2017-06-08T09:11:58",[])
+                    Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],"",[])
+                    Element("Instance",[("Scope","GlobalVariable");("UId","24")],"",[
+                        Element("Component",[("Name","ROBNAME#FB_Rob_PN_A_DB")],"",[])
+                        Element("Address",[("Area","DB");("Type","FB_Rob_PN_A");("BlockNummer","2086");("BitOffset","0");("Informative","true")],"",[])
 
-// <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
-//                 <Parts>
-//                     <Access Scope="GlobalVariable" UId="21">
-//                         <Symbol>
-//                             <Component Name="ROBNAMEA001RFLGW1" />
-//                             <Address Area="Input" Type="Bool" BitOffset="8192" Informative="true" />
-//                         </Symbol>
-//                     </Access>
-//                     <Access Scope="GlobalVariable" UId="22">
-//                         <Symbol>
-//                             <Component Name="ROBNAME" />
-//                             <Component Name="Rob" />
-//                             <Address Area="None" Type="ST_Rob" BlockNumber="180" BitOffset="0" Informative="true" />
-//                         </Symbol>
-//                     </Access>
-//                     <Call UId="23">
-//                         <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
-//                             <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
-//                             <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>
-//                             <Instance Scope="GlobalVariable" UId="24">
-//                                 <Component Name="ROBNAME#FB_Rob_PN_A_DB" />
-//                                 <Address Area="DB" Type="FB_Rob_PN_A" BlockNumber="2086" BitOffset="0" Informative="true" />
-//                             </Instance>
+                    ])
+                    Element("Adress",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                    Element("Component",[("Name","Rob")],"",[])
+                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                ])
+            ])
+        ])
+        Element("Wires",[],"",[])
+    ])
+
 //                             <Parameter Name="Rob_A" Section="Input" Type="Pointer">
 //                                 <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
 //                             </Parameter>
@@ -149,13 +156,11 @@ let networkSource =
 //                         <NameCon UId="23" Name="ST_ROB" />
 //                     </Wire>
 //                 </Wires>
-//             </FlgNet>
-//         </NetworkSource>
 
 let blockCompileUnit (programmingLanguage:ProgrammingLanguage)=
     Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnits")],"",[
         Element("AttributeList",[],"",[
-            Element("NetworkSource",[],"",[])
+            Element("NetworkSource",[],"",[networkSource])
             Element("ProgrammingLanguage",[],programmingLanguage.GetValue,[])
 
         ])
@@ -235,7 +240,7 @@ let buildFcBlock (block:FCBlock) =
         ])
         Element("ObjectList",[],"",[
             multilingualTextElement 1 "Comment"
-            blockCompileUnit
+            blockCompileUnit block.ProgrammingLanguage
             multilingualTextElement 8 "Title"
         ])
     ])
@@ -272,7 +277,7 @@ let tests () =
         //     }
         test "EmptyRobotFC" {
                 let fcBlock  ={
-                    Name = "ROBNAME"   
+                    Name = "ROBNAME"
                     Number  = 71
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo
