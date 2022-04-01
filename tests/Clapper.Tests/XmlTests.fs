@@ -25,7 +25,7 @@ type Xml =
             this.WriteContentTo
         output.ToString()
 
-let products productName =
+let product productName =
     Element("Product",[],"",[
         Element("DisplayName",[],productName,[])
         Element("DisplayVersion",[],"V17",[])
@@ -76,7 +76,7 @@ let blockCompileUnit =
         ])
     ])
 let fcBlock =
-    Element("W.Blocks.FC",[("ID","0")],"",[
+    Element("SW.Blocks.FC",[("ID","0")],"",[
         Element("AttributeList",[],"",[
             Element("AutoNumber",[],"true",[])
             Element("HeaderAuthor",[],"",[])
@@ -130,12 +130,12 @@ let documentInfo =
                 Element("Created",[],"2022-03-11T11:27:36.1676076Z",[])
                 Element("ExportSetting",[],"WithDefaults",[])
                 Element("InstalledProducts",[],"",[
-                    products "Totally Integrated Automation Portal"
+                    product "Totally Integrated Automation Portal"
                     optionPackage "TIA Portal Openness"
                     optionPackage "TIA Portal Version Control Interface"
-                    optionPackage "STEP 7 Professional"
+                    product "STEP 7 Professional"
                     optionPackage "STEP 7 Safety"
-                    products "WinCC Advanced"
+                    product "WinCC Advanced"
                 ])
             ])
             fcBlock

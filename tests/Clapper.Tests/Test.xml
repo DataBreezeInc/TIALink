@@ -17,10 +17,10 @@
         <DisplayName>TIA Portal Version Control Interface</DisplayName>
         <DisplayVersion>V17</DisplayVersion>
       </OptionPackage>
-      <OptionPackage>
+      <Product>
         <DisplayName>STEP 7 Professional</DisplayName>
         <DisplayVersion>V17</DisplayVersion>
-      </OptionPackage>
+      </Product>
       <OptionPackage>
         <DisplayName>STEP 7 Safety</DisplayName>
         <DisplayVersion>V17</DisplayVersion>
@@ -31,7 +31,7 @@
       </Product>
     </InstalledProducts>
   </DocumentInfo>
-  <W.Blocks.FC ID="0">
+  <SW.Blocks.FC ID="0">
     <AttributeList>
       <AutoNumber>true</AutoNumber>
       <HeaderAuthor />
@@ -119,5 +119,5 @@
         </ObjectList>
       </MultilingualText>
     </ObjectList>
-  </W.Blocks.FC>
+  </SW.Blocks.FC>
 </Document>
