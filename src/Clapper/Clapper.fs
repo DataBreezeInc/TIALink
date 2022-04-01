@@ -292,6 +292,7 @@ module PlcProgram =
         | Some plcSoftware ->
             try
                 plcSoftware.BlockGroup.Blocks.Import((FileInfo blockName),ImportOptions.Override) |> ignore
+                printfn "Imported %s" blockName
                 props
             with
             | exn ->
