@@ -8,7 +8,7 @@ open Siemens.Engineering.HW.Features
 open Siemens.Engineering.SW
 open Siemens.Engineering.SW.Tags
 open Siemens.Engineering.SW.Blocks
-
+open System.Globalization
 open Siemens.Engineering.SW.Types
 open Siemens.Engineering.Hmi
 
@@ -31,15 +31,47 @@ type Tag =
       Address: string }
 
 type BlockType =
-| DataBlock of string
-| OrganisationalBlock
-| FunctionalBlock
+    | DataBlock of string
+    | OrganisationalBlock
+    | FunctionalBlock
+
+
+type Language =
+    | German
+    | English
+    | Spanish
+    | French
+    | Czech
+    | Polnish
+    | Chinese
+    | Russian
+    | Portuguese
+    | Slovak
+    | Dutch
+    | Hungarian
+    member this.GetValue =
+        match this with
+        | German -> "de-DE"
+        | English -> "en-US"
+        | Spanish -> "es-ES"
+        | French -> "fr-FR"
+        | Chinese -> "zh-CN"
+        | Czech -> "cs-CZ"
+        | Polnish -> "pl-PL"
+        | Russian -> "ru-RU"
+        | Portuguese -> "pt-BR"
+        | Slovak -> "sk-SK"
+        | Dutch -> "nl-BE"
+        | Hungarian -> "hu-HU"
+
+
+            
 
 type Block =
     { Name: string
       IsAutoNumbered: bool
       Number: int
-      BlockType : BlockType  }
+      BlockType: BlockType }
 
 [<RequireQualifiedAccess>]
 module PlcProgram =
@@ -48,8 +80,8 @@ module PlcProgram =
             { ExistingTiaPortalConnection: TiaPortal option
               Project: Project option
               Device: Device option
-              PlcSoftware : PlcSoftware option
-              PlcBlock : PlcBlock option
+              PlcSoftware: PlcSoftware option
+              PlcBlock: PlcBlock option
               ProjectName: string
               UserInterface: bool
               ProjectPath: string
@@ -133,6 +165,33 @@ module PlcProgram =
 
         let softwareContainer = cpuDevice.GetService<SoftwareContainer>()
         softwareContainer.Software :?> PlcSoftware
+
+    let addLanguage (language: Language) (props: PlcProps) =
+        match props.Project with
+        | Some project ->
+            let languageSettings = project.LanguageSettings
+            let supportedLanguages = languageSettings.Languages
+            let activeLanguages = languageSettings.ActiveLanguages
+
+            let language =
+                supportedLanguages.Find(CultureInfo.GetCultureInfo(language.GetValue))
+
+            activeLanguages.Add(language)
+            props
+        | None -> failwithf "Select your project first - use `selectProject`"
+    let addAllLanguages (props: PlcProps) =
+        match props.Project with
+        | Some project ->
+            let languageSettings = project.LanguageSettings
+            let supportedLanguages = languageSettings.Languages
+            for supportedLanguage in supportedLanguages do
+                match languageSettings.ActiveLanguages |> Seq.tryFind(fun l -> l.Culture = supportedLanguage.Culture) with 
+                | Some _-> ()
+                | None -> languageSettings.ActiveLanguages.Add(supportedLanguage)
+            props
+        | None -> failwithf "Select your project first - use `selectProject`"
+
+
     let getDevice (orderNumber: string, deviceName: string) (props: PlcProps) =
         match props.Project with
         | Some project ->
@@ -140,14 +199,17 @@ module PlcProgram =
                 printfn $"There is already a device name {deviceName}"
                 let device = findDevice (project, deviceName)
                 let plcSoftware = getPlcSoftware device
+
                 { props with
                     PlcSoftware = Some plcSoftware
                     Device = Some device }
             else
                 let device =
                     project.Devices.CreateWithItem("OrderNumber:" + orderNumber, deviceName, deviceName)
+
                 let plcSoftware = getPlcSoftware device
                 printfn "Successfully added device %s" deviceName
+
                 { props with
                     PlcSoftware = Some plcSoftware
                     Device = Some device }
@@ -190,6 +252,7 @@ module PlcProgram =
 
             { props with DeviceItems = deviceItems }
         | None -> failwithf "Select / Add your device first - use `getDevice`"
+
     let private tryFindTagTable (plcSoftware: PlcSoftware) tagTableName =
         plcSoftware.TagTableGroup.TagTables
         |> Seq.tryFind (fun tagTable -> tagTable.Name = tagTableName)
@@ -204,10 +267,11 @@ module PlcProgram =
             | _ ->
                 { props with
                     TagTableList =
-                        Array.concat [ props.TagTableList;[| plcSoftware.TagTableGroup.TagTables.Create(tagTableName) |] ] }
+                        Array.concat [ props.TagTableList
+                                       [| plcSoftware.TagTableGroup.TagTables.Create(tagTableName) |] ] }
         | None -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let private tryFindTag (plcTagComposition: PlcTagComposition) (tag:Tag) =
+    let private tryFindTag (plcTagComposition: PlcTagComposition) (tag: Tag) =
         plcTagComposition
         |> Seq.tryFind (fun plcTag -> plcTag.Name = tag.Name)
 
@@ -228,66 +292,85 @@ module PlcProgram =
                     | _ -> createNewTag tagTable tag
 
                 props
-            | _ -> failwithf "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"
+            | _ ->
+                failwithf
+                    "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"
         | None -> failwithf "Select / Add your device first - use `getDevice`"
+
     let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
         plcSoftware.BlockGroup.Blocks
         |> Seq.tryFind (fun plcBlock ->
             printfn "blockName %s" plcBlock.Name
             plcBlock.Name = plcBlockName)
-    let createPlcBlock (block:Block) (props: PlcProps) =
+
+    let createPlcBlock (block: Block) (props: PlcProps) =
         match props.PlcSoftware, props.ExistingTiaPortalConnection with
         | Some plcSoftware, Some _ ->
-            match  tryFindBlockGroup plcSoftware block.Name with
+            match tryFindBlockGroup plcSoftware block.Name with
             | Some plcBlock ->
                 printfn "PlcBlock %s already exists" plcBlock.Name
                 props
             | None ->
                 match block.BlockType with
                 | FunctionalBlock ->
-                    plcSoftware.BlockGroup.Blocks.CreateFB(block.Name,block.IsAutoNumbered,block.Number,ProgrammingLanguage.ProDiag) |> ignore
+                    plcSoftware.BlockGroup.Blocks.CreateFB(
+                        block.Name,
+                        block.IsAutoNumbered,
+                        block.Number,
+                        ProgrammingLanguage.ProDiag
+                    )
+                    |> ignore
+
                     printfn "Functional Block %s created" block.Name
                 | DataBlock instanceOfName ->
-                    plcSoftware.BlockGroup.Blocks.CreateInstanceDB(block.Name,block.IsAutoNumbered,block.Number,instanceOfName)  |> ignore
-                    printfn "Data Block %s created" block.Name
-                | OrganisationalBlock ->
-                    ()
-                    //TODO: Not working yet
-                    // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
-                    // for libraryInfo in libraryInfos do
-                    //         printfn "name %A" libraryInfo.Name
-                    // for libraries in tiaPortal.GlobalLibraries do
-                    //     for copies in libraries.MasterCopyFolder.MasterCopies do
-                    //         printfn "copies %A" copies.Name
+                    plcSoftware.BlockGroup.Blocks.CreateInstanceDB(
+                        block.Name,
+                        block.IsAutoNumbered,
+                        block.Number,
+                        instanceOfName
+                    )
+                    |> ignore
 
-                    // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
-                    // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
-                    // printfn "Data Block %s created" block.Name
+                    printfn "Data Block %s created" block.Name
+                | OrganisationalBlock -> ()
+                //TODO: Not working yet
+                // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
+                // for libraryInfo in libraryInfos do
+                //         printfn "name %A" libraryInfo.Name
+                // for libraries in tiaPortal.GlobalLibraries do
+                //     for copies in libraries.MasterCopyFolder.MasterCopies do
+                //         printfn "copies %A" copies.Name
+
+                // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
+                // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
+                // printfn "Data Block %s created" block.Name
                 props
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
-    let exportPlcBlock (blockName:string) (props: PlcProps) =
+
+    let exportPlcBlock (blockName: string) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
-            match  tryFindBlockGroup plcSoftware blockName with
+            match tryFindBlockGroup plcSoftware blockName with
             | Some plcBlock ->
-                plcBlock.Export(FileInfo(props.ProjectPath + blockName+".xlm"),ExportOptions.WithDefaults)
+                plcBlock.Export(FileInfo(props.ProjectPath + blockName + ".xlm"), ExportOptions.WithDefaults)
                 props
             | None ->
                 failwithf "Could not find block %s" blockName
-                    //TODO: Not working yet
-                    // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
-                    // for libraryInfo in libraryInfos do
-                    //         printfn "name %A" libraryInfo.Name
-                    // for libraries in tiaPortal.GlobalLibraries do
-                    //     for copies in libraries.MasterCopyFolder.MasterCopies do
-                    //         printfn "copies %A" copies.Name
+                //TODO: Not working yet
+                // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
+                // for libraryInfo in libraryInfos do
+                //         printfn "name %A" libraryInfo.Name
+                // for libraries in tiaPortal.GlobalLibraries do
+                //     for copies in libraries.MasterCopyFolder.MasterCopies do
+                //         printfn "copies %A" copies.Name
 
-                    // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
-                    // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
-                    // printfn "Data Block %s created" block.Name
+                // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
+                // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
+                // printfn "Data Block %s created" block.Name
                 props
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
-    let importPlcBlock (blockName:string) (props: PlcProps) =
+
+    let importPlcBlock (blockName: string) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
             try
@@ -295,8 +378,7 @@ module PlcProgram =
                 printfn "Imported %s" blockName
                 props
             with
-            | exn ->
-                failwithf "Could not import PlcBlock %A" exn.Message
+            | exn -> failwithf "Could not import PlcBlock %A" exn.Message
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
@@ -306,4 +388,8 @@ module PlcProgram =
             project.Save()
             project.Close()
             tiaPortal.Dispose()
-        | _ -> failwithf "Can't save and close because no selected project ; active ExistingTiaPortalConnection %b; active Project %b" props.ExistingTiaPortalConnection.IsSome props.Project.IsSome
+        | _ ->
+            failwithf
+                "Can't save and close because no selected project ; active ExistingTiaPortalConnection %b; active Project %b"
+                props.ExistingTiaPortalConnection.IsSome
+                props.Project.IsSome

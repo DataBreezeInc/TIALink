@@ -85,19 +85,6 @@ let multilingualTextElement  (id:int)  name =
         ])
     ])
 
-let blockCompileUnit =
-    Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnits")],"",[
-        Element("AttributeList",[],"",[
-            Element("NetworkSource",[],"",[])
-            Element("ProgrammingLanguage",[],"FBD",[])
-
-        ])
-        Element("ObjectList",[],"",[
-            multilingualTextElement 4 "Comment"
-            multilingualTextElement 6 "Title"
-        ])
-    ])
-
 type ProgrammingLanguage =
     | LAD
     | FBD
@@ -112,6 +99,73 @@ type FCBlock = {
     ProgrammingLanguage : ProgrammingLanguage
     Sections : seq<Xml>
 }
+
+let networkSource = 
+    Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[])
+
+// <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
+//                 <Parts>
+//                     <Access Scope="GlobalVariable" UId="21">
+//                         <Symbol>
+//                             <Component Name="ROBNAMEA001RFLGW1" />
+//                             <Address Area="Input" Type="Bool" BitOffset="8192" Informative="true" />
+//                         </Symbol>
+//                     </Access>
+//                     <Access Scope="GlobalVariable" UId="22">
+//                         <Symbol>
+//                             <Component Name="ROBNAME" />
+//                             <Component Name="Rob" />
+//                             <Address Area="None" Type="ST_Rob" BlockNumber="180" BitOffset="0" Informative="true" />
+//                         </Symbol>
+//                     </Access>
+//                     <Call UId="23">
+//                         <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
+//                             <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
+//                             <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>
+//                             <Instance Scope="GlobalVariable" UId="24">
+//                                 <Component Name="ROBNAME#FB_Rob_PN_A_DB" />
+//                                 <Address Area="DB" Type="FB_Rob_PN_A" BlockNumber="2086" BitOffset="0" Informative="true" />
+//                             </Instance>
+//                             <Parameter Name="Rob_A" Section="Input" Type="Pointer">
+//                                 <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+//                             </Parameter>
+//                             <Parameter Name="ST_ROB" Section="InOut" Type="ST_Rob">
+//                                 <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+//                             </Parameter>
+//                         </CallInfo>
+//                     </Call>
+//                 </Parts>
+//                 <Wires>
+//                     <Wire UId="25">
+//                         <Powerrail />
+//                         <NameCon UId="23" Name="en" />
+//                     </Wire>
+//                     <Wire UId="26">
+//                         <IdentCon UId="21" />
+//                         <NameCon UId="23" Name="Rob_A" />
+//                     </Wire>
+//                     <Wire UId="27">
+//                         <IdentCon UId="22" />
+//                         <NameCon UId="23" Name="ST_ROB" />
+//                     </Wire>
+//                 </Wires>
+//             </FlgNet>
+//         </NetworkSource>
+
+let blockCompileUnit (programmingLanguage:ProgrammingLanguage)=
+    Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnits")],"",[
+        Element("AttributeList",[],"",[
+            Element("NetworkSource",[],"",[])
+            Element("ProgrammingLanguage",[],programmingLanguage.GetValue,[])
+
+        ])
+        Element("ObjectList",[],"",[
+            multilingualTextElement 4 "Comment"
+            multilingualTextElement 6 "Title"
+        ])
+    ])
+
+
 let sectionsRobo =
     [
         section "Input" []
@@ -218,7 +272,7 @@ let tests () =
         //     }
         test "EmptyRobotFC" {
                 let fcBlock  ={
-                    Name = "ROBNAME"
+                    Name = "ROBNAME"   
                     Number  = 71
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo

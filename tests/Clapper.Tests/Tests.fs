@@ -51,14 +51,15 @@ let tagTableList = "Tag List Name"
 @"C:\Users\TimForkmann\Documents\Automatisierung\"
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "ESA Kuwait"
+// |> PlcProgram.addAllLanguages
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
 |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Inputs_1.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EingabenLesen.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Stellungsfreigaben.xml")
 |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EmptyRobotFC.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EingabenLesen.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Stellungsfreigaben.xml")
 
 // |> PlcProgram.createPlcBlock blockFb
 // |> PlcProgram.createPlcBlock blockDb
