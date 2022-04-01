@@ -62,7 +62,7 @@
       </Interface>
       <IsIECCheckEnabled>false</IsIECCheckEnabled>
       <MemoryLayout>Optimized</MemoryLayout>
-      <Name>Inputs_1</Name>
+      <Name>Input_1</Name>
       <Number>2</Number>
       <ProgrammingLanguage>FBD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>

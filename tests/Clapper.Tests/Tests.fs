@@ -5,7 +5,7 @@ let hardwareObjects =
       "6ES7 131-6BF00-0BA0/V1.1", "30A5.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A6.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A7.1"
-      "6ES7 131-6BF00-0BA0/V1.1", "30A8.1" 
+      "6ES7 131-6BF00-0BA0/V1.1", "30A8.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A9.1"
       "6ES7 132-6BF00-0BA0/V1.1", "30A10.1"
       "6ES7 132-6BF00-0BA0/V1.1", "30A11.1"
@@ -55,10 +55,12 @@ let tagTableList = "Tag List Name"
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
-|> PlcProgram.importPlcBlock (Path.GetFullPath "Test.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "/templates/EingabenLesen.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "/templates/Stellungsfreigaben.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "/templates/EmptyRobotFC.xml")
 
 // |> PlcProgram.createPlcBlock blockFb
-// |> PlcProgram.createPlcBlock blockDb  
+// |> PlcProgram.createPlcBlock blockDb
 // |> PlcProgram.exportPlcBlock "Main"
 // |> PlcProgram.exportPlcBlock "Main"
 // |> PlcProgram.createPlcBlock blockOD
