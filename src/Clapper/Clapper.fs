@@ -291,7 +291,7 @@ module PlcProgram =
         match props.PlcSoftware with
         | Some plcSoftware ->
             try
-                plcSoftware.BlockGroup.Blocks.Import((FileInfo blockName),ImportOptions.None) |> ignore
+                plcSoftware.BlockGroup.Blocks.Import((FileInfo blockName),ImportOptions.Override) |> ignore
                 props
             with
             | exn ->

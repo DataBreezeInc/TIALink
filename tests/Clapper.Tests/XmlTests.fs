@@ -15,7 +15,7 @@ type Xml =
                 for a in attributes do
                     writer.WriteAttributeString(fst a, snd a)
                 writer.WriteString(value)
-                children |> Seq.iter write
+                children |> Seq.iter write  
                 writer.WriteEndElement()
         write this
     override this.ToString() =
@@ -141,14 +141,24 @@ let documentInfo =
             fcBlock
         ])
 let doc =  XDocument(XElement.Parse(documentInfo.ToString()))
-doc.Save(Path.GetFullPath("./Test.xml"))
+doc.Save(Path.GetFullPath("./TestFolder/Test.xml"))
 
 
 let tests () =
-    test "Input_1" {
-            let actual = doc.ToString()
-            let expected = Path.GetFullPath("Inputs_1.xml") |> File.ReadAllText
-            Expect.equal actual expected "Process Excel file to produce expected MSCONS"
-        }
+    testList "XmlParser" [
+
+        test "Input_1" {
+                let actual = doc.ToString()
+                let expected = Path.GetFullPath("templates/Inputs_1.xml") |> File.ReadAllText
+                Expect.equal actual expected "Process Excel file to produce expected MSCONS"
+            }
+
+        test "EmptyRobotFC" {
+                let actual = doc.ToString()
+                let expected = Path.GetFullPath("EmptyRobotFC.xml") |> File.ReadAllText
+                Expect.equal actual expected "Process Excel file to produce expected MSCONS"
+            }
+
+    ]
 let result = runTests defaultConfig (tests())
 printfn "result %A" result

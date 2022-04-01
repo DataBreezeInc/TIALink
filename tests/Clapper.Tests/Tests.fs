@@ -1,12 +1,11 @@
-open Siemens.Engineering
 open Clapper
-
+open System.IO
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A5.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A6.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A7.1"
-      "6ES7 131-6BF00-0BA0/V1.1", "30A8.1"
+      "6ES7 131-6BF00-0BA0/V1.1", "30A8.1" 
       "6ES7 131-6BF00-0BA0/V1.1", "30A9.1"
       "6ES7 132-6BF00-0BA0/V1.1", "30A10.1"
       "6ES7 132-6BF00-0BA0/V1.1", "30A11.1"
@@ -30,24 +29,24 @@ let tags =
 
 let tagTableList = "Tag List Name"
 
-let blockFb ={
-  Name = "Fb1"
-  IsAutoNumbered = true
-  Number  = 1
-  BlockType = FunctionalBlock
-}
-let blockDb ={
-  Name = "Db1"
-  IsAutoNumbered = true
-  Number  = 2
-  BlockType = DataBlock "Fb1"
-}
-let blockOD ={
-  Name = "OB2"
-  IsAutoNumbered = true
-  Number  = 2
-  BlockType = OrganisationalBlock
-}
+// let blockFb ={
+//   Name = "Fb1"
+//   IsAutoNumbered = true
+//   Number  = 1
+//   BlockType = FunctionalBlock
+// }
+// let blockDb ={
+//   Name = "Db1"
+//   IsAutoNumbered = true
+//   Number  = 2
+//   BlockType = DataBlock "Fb1"
+// }
+// let blockOD ={
+//   Name = "OB2"
+//   IsAutoNumbered = true
+//   Number  = 2
+//   BlockType = OrganisationalBlock
+// }
 
 @"C:\Users\TimForkmann\Documents\Automatisierung\"
 |> PlcProgram.projectPath
@@ -56,10 +55,10 @@ let blockOD ={
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
-|> PlcProgram.importPlcBlock ("./Text.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "Test.xml")
 
 // |> PlcProgram.createPlcBlock blockFb
-// |> PlcProgram.createPlcBlock blockDb
+// |> PlcProgram.createPlcBlock blockDb  
 // |> PlcProgram.exportPlcBlock "Main"
 // |> PlcProgram.exportPlcBlock "Main"
 // |> PlcProgram.createPlcBlock blockOD
