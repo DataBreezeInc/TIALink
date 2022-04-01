@@ -56,9 +56,12 @@ let blockOD ={
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
-|> PlcProgram.createPlcBlock blockFb
-|> PlcProgram.createPlcBlock blockDb
-|> PlcProgram.exportPlcBlock "Main"
+|> PlcProgram.importPlcBlock ("./Text.xml")
+
+// |> PlcProgram.createPlcBlock blockFb
+// |> PlcProgram.createPlcBlock blockDb
+// |> PlcProgram.exportPlcBlock "Main"
+// |> PlcProgram.exportPlcBlock "Main"
 // |> PlcProgram.createPlcBlock blockOD
 |> PlcProgram.saveAndClose
 

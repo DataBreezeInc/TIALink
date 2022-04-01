@@ -30,7 +30,7 @@ type Tag =
       Comment: string
       Address: string }
 
-type BlockType = 
+type BlockType =
 | DataBlock of string
 | OrganisationalBlock
 | FunctionalBlock
@@ -138,9 +138,9 @@ module PlcProgram =
         | Some project ->
             if deviceExist (project, deviceName) then
                 printfn $"There is already a device name {deviceName}"
-                let device = findDevice (project, deviceName)    
-                let plcSoftware = getPlcSoftware device     
-                { props with 
+                let device = findDevice (project, deviceName)
+                let plcSoftware = getPlcSoftware device
+                { props with
                     PlcSoftware = Some plcSoftware
                     Device = Some device }
             else
@@ -148,7 +148,7 @@ module PlcProgram =
                     project.Devices.CreateWithItem("OrderNumber:" + orderNumber, deviceName, deviceName)
                 let plcSoftware = getPlcSoftware device
                 printfn "Successfully added device %s" deviceName
-                { props with 
+                { props with
                     PlcSoftware = Some plcSoftware
                     Device = Some device }
         | None -> failwithf "Select your project first - use `selectProject`"
@@ -158,7 +158,7 @@ module PlcProgram =
             device.DeviceItems.[0]
                 .PlugNew("OrderNumber:" + orderNumber, hardwareName, position)
         with
-        | _ -> 
+        | _ ->
             printfn "Can't plug new hardware object returning current state"
             device.DeviceItems.[0]
 
@@ -197,7 +197,7 @@ module PlcProgram =
     let addTagTable (tagTableName: string) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
-            match tryFindTagTable plcSoftware tagTableName with 
+            match tryFindTagTable plcSoftware tagTableName with
             | Some _ ->
                 printfn "TagTable %s already existis" tagTableName
                 props
@@ -220,19 +220,19 @@ module PlcProgram =
     let addTags (tags: Tag list, tagTableName) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
-            match tryFindTagTable plcSoftware tagTableName with 
+            match tryFindTagTable plcSoftware tagTableName with
             | Some tagTable ->
                 for tag in tags do
-                    match tryFindTag tagTable.Tags tag with 
+                    match tryFindTag tagTable.Tags tag with
                     | Some tag -> printfn "plcTag %s already exists" tag.Name
                     | _ -> createNewTag tagTable tag
 
                 props
-            | _ -> failwithf "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"   
+            | _ -> failwithf "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"
         | None -> failwithf "Select / Add your device first - use `getDevice`"
     let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
         plcSoftware.BlockGroup.Blocks
-        |> Seq.tryFind (fun plcBlock -> 
+        |> Seq.tryFind (fun plcBlock ->
             printfn "blockName %s" plcBlock.Name
             plcBlock.Name = plcBlockName)
     let createPlcBlock (block:Block) (props: PlcProps) =
@@ -243,14 +243,14 @@ module PlcProgram =
                 printfn "PlcBlock %s already exists" plcBlock.Name
                 props
             | None ->
-                match block.BlockType with 
-                | FunctionalBlock -> 
+                match block.BlockType with
+                | FunctionalBlock ->
                     plcSoftware.BlockGroup.Blocks.CreateFB(block.Name,block.IsAutoNumbered,block.Number,ProgrammingLanguage.ProDiag) |> ignore
                     printfn "Functional Block %s created" block.Name
-                | DataBlock instanceOfName -> 
+                | DataBlock instanceOfName ->
                     plcSoftware.BlockGroup.Blocks.CreateInstanceDB(block.Name,block.IsAutoNumbered,block.Number,instanceOfName)  |> ignore
                     printfn "Data Block %s created" block.Name
-                | OrganisationalBlock -> 
+                | OrganisationalBlock ->
                     ()
                     //TODO: Not working yet
                     // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
@@ -286,6 +286,17 @@ module PlcProgram =
                     // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
                     // printfn "Data Block %s created" block.Name
                 props
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
+    let importPlcBlock (blockName:string) (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            try
+                plcSoftware.BlockGroup.Blocks.Import((FileInfo blockName),ImportOptions.None) |> ignore
+                props
+            with
+            | exn ->
+                failwithf "Could not import PlcBlock %A" exn.Message
+
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let saveAndClose (props: PlcProps) =

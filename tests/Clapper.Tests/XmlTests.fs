@@ -49,7 +49,7 @@ let sectionElement name dataType accessibility =
 let attributeList =
     Element("AttributeList",[],"",[
         Element("Culture",[],"en-US",[])
-        Element("Test",[],"",[])
+        Element("Text",[],"",[])
     ])
 
 let multilingualTextItemElement (id:int) =
@@ -64,7 +64,7 @@ let multilingualTextElement  (id:int)  name =
     ])
 
 let blockCompileUnit =
-    Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnit")],"",[
+    Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnits")],"",[
         Element("AttributeList",[],"",[
             Element("NetworkSource",[],"",[])
             Element("ProgrammingLanguage",[],"FBD",[])
@@ -101,12 +101,12 @@ let fcBlock =
                     section "Temp" []
                     section "Constant" []
                     section "Return" [
-                        sectionElement "Rel_Val" "Void" "Public"
+                        sectionElement "Ret_Val" "Void" "Public"
                     ]
                 ])
             ])
             Element("IsIECCheckEnabled",[],"false",[])
-            Element("MemoryLayout",[],"Optimizes",[])
+            Element("MemoryLayout",[],"Optimized",[])
             Element("Name",[],"Inputs_1",[])
             Element("Number",[],"2",[])
             Element("ProgrammingLanguage",[],"FBD",[])
