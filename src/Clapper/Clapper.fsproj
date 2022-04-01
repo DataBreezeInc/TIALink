@@ -10,7 +10,7 @@
         <PackageIconUrl></PackageIconUrl>
         <PackageTags>fsharp;tia portal;openness</PackageTags>
         <Authors>Tim Forkmann</Authors>
-        <Version>0.0.5</Version>
+        <Version>0.0.6</Version>
         <PackageReleaseNotes>Follow major release of Clapper</PackageReleaseNotes>
     </PropertyGroup>
     <ItemGroup>

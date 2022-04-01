@@ -7,6 +7,7 @@ open Siemens.Engineering.HW
 open Siemens.Engineering.HW.Features
 open Siemens.Engineering.SW
 open Siemens.Engineering.SW.Tags
+open Siemens.Engineering.SW.Blocks
 
 open Siemens.Engineering.SW.Types
 open Siemens.Engineering.Hmi
@@ -29,6 +30,17 @@ type Tag =
       Comment: string
       Address: string }
 
+type BlockType = 
+| DataBlock of string
+| OrganisationalBlock
+| FunctionalBlock
+
+type Block =
+    { Name: string
+      IsAutoNumbered: bool
+      Number: int
+      BlockType : BlockType  }
+
 [<RequireQualifiedAccess>]
 module PlcProgram =
     type PlcProps =
@@ -36,6 +48,8 @@ module PlcProgram =
             { ExistingTiaPortalConnection: TiaPortal option
               Project: Project option
               Device: Device option
+              PlcSoftware : PlcSoftware option
+              PlcBlock : PlcBlock option
               ProjectName: string
               UserInterface: bool
               ProjectPath: string
@@ -46,6 +60,8 @@ module PlcProgram =
         { ExistingTiaPortalConnection = None
           Project = None
           Device = None
+          PlcSoftware = None
+          PlcBlock = None
           UserInterface = false
           ProjectPath = ""
           ProjectName = ""
@@ -109,18 +125,32 @@ module PlcProgram =
         project.Devices
         |> Seq.find (fun device -> device.Name = deviceName)
 
+
+    let private getPlcSoftware (device: Device) =
+        let cpuDevice =
+            device.DeviceItems
+            |> Seq.find (fun deviceItem -> deviceItem.Classification = DeviceItemClassifications.CPU)
+
+        let softwareContainer = cpuDevice.GetService<SoftwareContainer>()
+        softwareContainer.Software :?> PlcSoftware
     let getDevice (orderNumber: string, deviceName: string) (props: PlcProps) =
         match props.Project with
         | Some project ->
             if deviceExist (project, deviceName) then
                 printfn $"There is already a device name {deviceName}"
-                { props with Device = Some(findDevice (project, deviceName)) }
+                let device = findDevice (project, deviceName)    
+                let plcSoftware = getPlcSoftware device     
+                { props with 
+                    PlcSoftware = Some plcSoftware
+                    Device = Some device }
             else
                 let device =
                     project.Devices.CreateWithItem("OrderNumber:" + orderNumber, deviceName, deviceName)
-
+                let plcSoftware = getPlcSoftware device
                 printfn "Successfully added device %s" deviceName
-                { props with Device = Some device }
+                { props with 
+                    PlcSoftware = Some plcSoftware
+                    Device = Some device }
         | None -> failwithf "Select your project first - use `selectProject`"
 
     let private tryPlugNew (device: Device, orderNumber: string, hardwareName: string, position: int) =
@@ -128,7 +158,9 @@ module PlcProgram =
             device.DeviceItems.[0]
                 .PlugNew("OrderNumber:" + orderNumber, hardwareName, position)
         with
-        | exn -> failwithf "Can't plug Device %A" exn.Message
+        | _ -> 
+            printfn "Can't plug new hardware object returning current state"
+            device.DeviceItems.[0]
 
     let plugNew (orderNumber: string, hardwareName: string, position: int) (props: PlcProps) =
         match props.Device with
@@ -148,7 +180,7 @@ module PlcProgram =
         | Some device ->
             let mutable deviceItems = [||]
 
-            for i, hardwareObject in hardwareObjects |> List.indexed do
+            for hardwareObject in hardwareObjects do
                 let deviceItem =
                     tryPlugNew (device, hardwareObject.OrderNumber, hardwareObject.Name, hardwareObject.Position)
 
@@ -158,29 +190,26 @@ module PlcProgram =
 
             { props with DeviceItems = deviceItems }
         | None -> failwithf "Select / Add your device first - use `getDevice`"
-
-    let private getPlcSoftware (device: Device) =
-        let cpuDevice =
-            device.DeviceItems
-            |> Seq.find (fun deviceItem -> deviceItem.Classification = DeviceItemClassifications.CPU)
-
-        let softwareContainer = cpuDevice.GetService<SoftwareContainer>()
-        softwareContainer.Software :?> PlcSoftware
+    let private tryFindTagTable (plcSoftware: PlcSoftware) tagTableName =
+        plcSoftware.TagTableGroup.TagTables
+        |> Seq.tryFind (fun tagTable -> tagTable.Name = tagTableName)
 
     let addTagTable (tagTableName: string) (props: PlcProps) =
-        match props.Device with
-        | Some device ->
-            let plcSoftware = getPlcSoftware device
-
-            { props with
-                TagTableList =
-                    Array.concat [ props.TagTableList
-                                   [| plcSoftware.TagTableGroup.TagTables.Create(tagTableName) |] ] }
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            match tryFindTagTable plcSoftware tagTableName with 
+            | Some _ ->
+                printfn "TagTable %s already existis" tagTableName
+                props
+            | _ ->
+                { props with
+                    TagTableList =
+                        Array.concat [ props.TagTableList;[| plcSoftware.TagTableGroup.TagTables.Create(tagTableName) |] ] }
         | None -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let private findTagTable (plcSoftware: PlcSoftware) tagTableName =
-        plcSoftware.TagTableGroup.TagTables
-        |> Seq.find (fun tagTable -> tagTable.Name = tagTableName)
+    let private tryFindTag (plcTagComposition: PlcTagComposition) (tag:Tag) =
+        plcTagComposition
+        |> Seq.tryFind (fun plcTag -> plcTag.Name = tag.Name)
 
     let private createNewTag (tagTable: PlcTagTable) (tag: Tag) =
         let plcTag = tagTable.Tags.Create(tag.Name)
@@ -189,16 +218,75 @@ module PlcProgram =
         plcTag.LogicalAddress <- tag.Address
 
     let addTags (tags: Tag list, tagTableName) (props: PlcProps) =
-        match props.Device with
-        | Some device ->
-            let plcSoftware = getPlcSoftware device
-            let tagTable = findTagTable plcSoftware tagTableName
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            match tryFindTagTable plcSoftware tagTableName with 
+            | Some tagTable ->
+                for tag in tags do
+                    match tryFindTag tagTable.Tags tag with 
+                    | Some tag -> printfn "plcTag %s already exists" tag.Name
+                    | _ -> createNewTag tagTable tag
 
-            for tag in tags do
-                createNewTag tagTable tag
-
-            props
+                props
+            | _ -> failwithf "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"   
         | None -> failwithf "Select / Add your device first - use `getDevice`"
+    let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
+        plcSoftware.BlockGroup.Blocks
+        |> Seq.tryFind (fun plcBlock -> 
+            printfn "blockName %s" plcBlock.Name
+            plcBlock.Name = plcBlockName)
+    let createPlcBlock (block:Block) (props: PlcProps) =
+        match props.PlcSoftware, props.ExistingTiaPortalConnection with
+        | Some plcSoftware, Some _ ->
+            match  tryFindBlockGroup plcSoftware block.Name with
+            | Some plcBlock ->
+                printfn "PlcBlock %s already exists" plcBlock.Name
+                props
+            | None ->
+                match block.BlockType with 
+                | FunctionalBlock -> 
+                    plcSoftware.BlockGroup.Blocks.CreateFB(block.Name,block.IsAutoNumbered,block.Number,ProgrammingLanguage.ProDiag) |> ignore
+                    printfn "Functional Block %s created" block.Name
+                | DataBlock instanceOfName -> 
+                    plcSoftware.BlockGroup.Blocks.CreateInstanceDB(block.Name,block.IsAutoNumbered,block.Number,instanceOfName)  |> ignore
+                    printfn "Data Block %s created" block.Name
+                | OrganisationalBlock -> 
+                    ()
+                    //TODO: Not working yet
+                    // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
+                    // for libraryInfo in libraryInfos do
+                    //         printfn "name %A" libraryInfo.Name
+                    // for libraries in tiaPortal.GlobalLibraries do
+                    //     for copies in libraries.MasterCopyFolder.MasterCopies do
+                    //         printfn "copies %A" copies.Name
+
+                    // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
+                    // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
+                    // printfn "Data Block %s created" block.Name
+                props
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
+    let exportPlcBlock (blockName:string) (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            match  tryFindBlockGroup plcSoftware blockName with
+            | Some plcBlock ->
+                plcBlock.Export(FileInfo(props.ProjectPath + blockName+".xlm"),ExportOptions.WithDefaults)
+                props
+            | None ->
+                failwithf "Could not find block %s" blockName
+                    //TODO: Not working yet
+                    // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
+                    // for libraryInfo in libraryInfos do
+                    //         printfn "name %A" libraryInfo.Name
+                    // for libraries in tiaPortal.GlobalLibraries do
+                    //     for copies in libraries.MasterCopyFolder.MasterCopies do
+                    //         printfn "copies %A" copies.Name
+
+                    // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
+                    // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
+                    // printfn "Data Block %s created" block.Name
+                props
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let saveAndClose (props: PlcProps) =
         match props.Project, props.ExistingTiaPortalConnection with
