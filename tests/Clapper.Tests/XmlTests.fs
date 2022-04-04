@@ -116,7 +116,7 @@ let networkSource =
                 ])
             ])
             Element("Call",[("UId","23")],"",[
-                Element("CallInfo",[("Name","FB_Rob_PN_A");("BlockType","FB")],"201",[
+                Element("CallInfo",[("Name","FB_Rob_PN_A");("BlockType","FB")],"",[
                     Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],"2017-06-08T09:11:58",[])
                     Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],"",[])
                     Element("Instance",[("Scope","GlobalVariable");("UId","24")],"",[
