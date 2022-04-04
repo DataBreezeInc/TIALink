@@ -101,10 +101,27 @@
                   </Symbol>
                 </Access>
                 <Call UId="23">
-                  <CallInfo Name="FB_Rob_PN_A" BlockType="FB">201<IntegerAttribute Name="BlockNumber" Informative="true">2017-06-08T09:11:58</IntegerAttribute><DateAttribute Name="ParameterModifiedTS" Informative="true" /><Instance Scope="GlobalVariable" UId="24"><Component Name="ROBNAME#FB_Rob_PN_A_DB" /><Address Area="DB" Type="FB_Rob_PN_A" BlockNummer="2086" BitOffset="0" Informative="true" /></Instance><Adress Area="None" Type="ST_Rob" BlockNummer="180" BitOffset="0" /><Component Name="Rob" /><Address Area="None" Type="ST_Rob" BlockNummer="180" BitOffset="0" /></CallInfo>
+                  <CallInfo Name="FB_Rob_PN_A" BlockType="FB">201<IntegerAttribute Name="BlockNumber" Informative="true">2017-06-08T09:11:58</IntegerAttribute><DateAttribute Name="ParameterModifiedTS" Informative="true" /><Instance Scope="GlobalVariable" UId="24"><Component Name="ROBNAME#FB_Rob_PN_A_DB" /><Address Area="DB" Type="FB_Rob_PN_A" BlockNummer="2086" BitOffset="0" Informative="true" /></Instance><Address Area="None" Type="ST_Rob" BlockNummer="180" BitOffset="0" /><Component Name="Rob" /><Address Area="None" Type="ST_Rob" BlockNummer="180" BitOffset="0" /><Parameter Name="Rob_A" Section="Input" Type="Pointer"><StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute></Parameter><Parameter Name="ST_ROB" Section="InOut" Type="ST_Rob"><StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute></Parameter></CallInfo>
                 </Call>
               </Parts>
-              <Wires />
+              <Wires>
+                <Wire UId="25">
+                  <Powerrail />
+                  <NameCon UId="23" Name="en" />
+                </Wire>
+                <Wire UId="26">
+                  <IdentCon UId="21" />
+                  <NameCon UId="23" Name="Rob_a" />
+                </Wire>
+                <Wire UId="26">
+                  <IdentCon UId="21" />
+                  <NameCon UId="23" Name="Rob_a" />
+                </Wire>
+                <Wire UId="27">
+                  <IdentCon UId="22" />
+                  <NameCon UId="23" Name="ST_ROB" />
+                </Wire>
+              </Wires>
             </FlgNet>
           </NetworkSource>
           <ProgrammingLanguage>LAD</ProgrammingLanguage>

@@ -124,38 +124,38 @@ let networkSource =
                         Element("Address",[("Area","DB");("Type","FB_Rob_PN_A");("BlockNummer","2086");("BitOffset","0");("Informative","true")],"",[])
 
                     ])
-                    Element("Adress",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
                     Element("Component",[("Name","Rob")],"",[])
                     Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                    Element("Parameter",[("Name","Rob_A");("Section","Input");("Type","Pointer")],"",[
+                        Element("StringAttribute",[("Name","InterfaceFlags");("Informative","true")],"S7_Visible",[])
+                    ])
+                    Element("Parameter",[("Name","ST_ROB");("Section","InOut");("Type","ST_Rob")],"",[
+                        Element("StringAttribute",[("Name","InterfaceFlags");("Informative","true")],"S7_Visible",[])
+                    ])
                 ])
             ])
         ])
-        Element("Wires",[],"",[])
+        Element("Wires",[],"",[
+            Element("Wire",[("UId","25")],"",[
+                Element("Powerrail",[],"",[])
+                Element("NameCon",[("UId","23");("Name","en")],"",[])
+            ])
+            Element("Wire",[("UId","26")],"",[
+                Element("IdentCon",[("UId","21")],"",[])
+                Element("NameCon",[("UId","23");("Name","Rob_a")],"",[])
+            ])
+            Element("Wire",[("UId","26")],"",[
+                Element("IdentCon",[("UId","21")],"",[])
+                Element("NameCon",[("UId","23");("Name","Rob_a")],"",[])
+            ])
+            Element("Wire",[("UId","27")],"",[
+                Element("IdentCon",[("UId","22")],"",[])
+                Element("NameCon",[("UId","23");("Name","ST_ROB")],"",[])
+            ])
+        ])
     ])
 
-//                             <Parameter Name="Rob_A" Section="Input" Type="Pointer">
-//                                 <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
-//                             </Parameter>
-//                             <Parameter Name="ST_ROB" Section="InOut" Type="ST_Rob">
-//                                 <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
-//                             </Parameter>
-//                         </CallInfo>
-//                     </Call>
-//                 </Parts>
-//                 <Wires>
-//                     <Wire UId="25">
-//                         <Powerrail />
-//                         <NameCon UId="23" Name="en" />
-//                     </Wire>
-//                     <Wire UId="26">
-//                         <IdentCon UId="21" />
-//                         <NameCon UId="23" Name="Rob_A" />
-//                     </Wire>
-//                     <Wire UId="27">
-//                         <IdentCon UId="22" />
-//                         <NameCon UId="23" Name="ST_ROB" />
-//                     </Wire>
-//                 </Wires>
 
 let blockCompileUnit (programmingLanguage:ProgrammingLanguage)=
     Element("SW.Blocks.CompileUnit",[("ID","3");("CompositionName","CompileUnits")],"",[
