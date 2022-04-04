@@ -83,36 +83,41 @@
           </MultilingualTextItem>
         </ObjectList>
       </MultilingualText>
-      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+      <SW.Blocks.CompileUnit ID="E" CompositionName="CompileUnits">
         <AttributeList>
           <NetworkSource>
             <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
               <Parts>
                 <Access Scope="GlobalVariable" UId="21">
                   <Symbol>
-                    <Component Name="ROBNAMEA001RFLGW1" />
-                    <Address Area="Input" Type="Bool" BitOffset="8192" Informative="true" />
+                    <Component Name="Folge" />
+                    <Address Area="None" Type="Byte" BlockNumer="180" BitOffset="2392" Informative="true" />
                   </Symbol>
                 </Access>
                 <Access Scope="GlobalVariable" UId="22">
                   <Symbol>
-                    <Component Name="ROBNAME" />
-                    <Component Name="Rob" />
-                    <Address Area="None" Type="ST_Rob" BlockNumber="180" BitOffset="0" Informative="true" />
+                    <Component Name="FrgFolge" />
+                    <Address Area="None" Type="Bool" BlockNumer="180" BitOffset="2360" Informative="true" />
                   </Symbol>
                 </Access>
-                <Call UId="23">
+                <Access Scope="LocalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="Temp" />
+                    <Address Area="None" Type="Bool" BitOffset="2360" Informative="true" />
+                  </Symbol>
+                </Access>
+                <Call UId="UId 23">
                   <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
                     <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
                     <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>
                     <Instance Scope="GlobalVariable" UId="24">
-                      <Component Name="ROBNAME#FB_Rob_PN_A_DB" />
+                      <Component Name="FB_Rob_PN_A" />
                       <Address Area="DB" Type="FB_Rob_PN_A" BlockNumber="2086" BitOffset="0" Informative="true" />
                     </Instance>
                     <Parameter Name="Rob_A" Section="Input" Type="Pointer">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>
-                    <Parameter Name="ST_ROB" Section="InOut" Type="ST_Rob">
+                    <Parameter Name="ST_ROB" Section="Input" Type="ST_Rob">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>
                   </CallInfo>
@@ -125,11 +130,11 @@
                 </Wire>
                 <Wire UId="26">
                   <IdentCon UId="21" />
-                  <NameCon UId="23" Name="Rob_A" />
+                  <NameCon UId="23" Name="en" />
                 </Wire>
                 <Wire UId="27">
                   <IdentCon UId="22" />
-                  <NameCon UId="23" Name="ST_ROB" />
+                  <NameCon UId="23" Name="en" />
                 </Wire>
               </Wires>
             </FlgNet>
