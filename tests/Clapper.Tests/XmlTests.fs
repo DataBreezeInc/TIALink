@@ -106,7 +106,7 @@ let networkSource =
             Element("Access",[("Scope","GlobalVariable");("UId","21")],"",[
                 Element("Symbol",[],"",[
                     Element("Component",[("Name","ROBNAMEA001RFLGW1")],"",[])
-                    Element("Adress",[("Area","Input");("Type","Bool");("BitOffset","8192");("Informative","true")],"",[])
+                    Element("Address",[("Area","Input");("Type","Bool");("BitOffset","8192");("Informative","true")],"",[])
                 ])
             ])
             Element("Access",[("Scope","GlobalVariable");("UId","22")],"",[
@@ -121,12 +121,12 @@ let networkSource =
                     Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],"",[])
                     Element("Instance",[("Scope","GlobalVariable");("UId","24")],"",[
                         Element("Component",[("Name","ROBNAME#FB_Rob_PN_A_DB")],"",[])
-                        Element("Address",[("Area","DB");("Type","FB_Rob_PN_A");("BlockNummer","2086");("BitOffset","0");("Informative","true")],"",[])
+                        Element("Address",[("Area","DB");("Type","FB_Rob_PN_A");("BlockNumber","2086");("BitOffset","0");("Informative","true")],"",[])
 
                     ])
-                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNumber","180");("BitOffset","0")],"",[])
                     Element("Component",[("Name","Rob")],"",[])
-                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNummer","180");("BitOffset","0")],"",[])
+                    Element("Address",[("Area","None");("Type","ST_Rob");("BlockNumber","180");("BitOffset","0")],"",[])
                     Element("Parameter",[("Name","Rob_A");("Section","Input");("Type","Pointer")],"",[
                         Element("StringAttribute",[("Name","InterfaceFlags");("Informative","true")],"S7_Visible",[])
                     ])

@@ -57,7 +57,7 @@ let tagTableList = "Tag List Name"
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Inputs_1.xml")
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EmptyRobotFC.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/EmptyRobotFC.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EingabenLesen.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Stellungsfreigaben.xml")
 
