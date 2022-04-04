@@ -102,7 +102,8 @@
                 </Access>
                 <Call UId="23">
                   <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
-                    <IntegerAttribute Name="BlockNumber" Informative="true">2017-06-08T09:11:58</IntegerAttribute>
+                    <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
+                    <ParameterModifiedTS Informative="true">2017-06-08T09:11:58</ParameterModifiedTS>
                     <DateAttribute Name="ParameterModifiedTS" Informative="true" />
                     <Instance Scope="GlobalVariable" UId="24">
                       <Component Name="ROBNAME#FB_Rob_PN_A_DB" />
