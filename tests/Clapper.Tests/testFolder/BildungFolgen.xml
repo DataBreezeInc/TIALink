@@ -83,35 +83,94 @@
           </MultilingualTextItem>
         </ObjectList>
       </MultilingualText>
-      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+      <SW.Blocks.CompileUnit ID="E" CompositionName="CompileUnits">
         <AttributeList>
           <NetworkSource>
             <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
               <Parts>
                 <Access Scope="GlobalVariable" UId="21">
                   <Symbol>
-                    <Component Name="ROBNAMEA001RFLGW1" />
-                    <Address Area="Input" Type="Bool" BitOffset="8192" Informative="true" />
+                    <Component Name="Folge" />
+                    <Address Area="None" Type="Bool" BlockNumber="180" BitOffset="2392" Informative="true" />
                   </Symbol>
                 </Access>
                 <Access Scope="GlobalVariable" UId="22">
                   <Symbol>
-                    <Component Name="ROBNAME" />
-                    <Address Area="None" Type="ST_Rob" BlockNumber="180" BitOffset="0" Informative="true" />
+                    <Component Name="FrgFolge" />
+                    <Address Area="None" Type="Bool" BlockNumber="180" BitOffset="2360" Informative="true" />
                   </Symbol>
                 </Access>
-                <Call UId="23">
-                  <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
-                    <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
-                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>
-                    <Instance Scope="GlobalVariable" UId="24">
-                      <Component Name="FB_Rob_PN_A" />
-                      <Address Area="DB" Type="FB_Rob_PN_A" BlockNumber="2086" BitOffset="0" Informative="true" />
+                <Access Scope="LocalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="Temp" />
+                  </Symbol>
+                </Access>
+                <Call UId="24">
+                  <CallInfo Name="FB_RobFolge_8" BlockType="FB">
+                    <IntegerAttribute Name="BlockNumber" Informative="true">203</IntegerAttribute>
+                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-06T10:19:07</DateAttribute>
+                    <Instance Scope="GlobalVariable" UId="25">
+                      <Component Name="FB_RobFolge_8" />
+                      <Address Area="DB" Type="FB_RobFolge_8" BlockNumber="2086" BitOffset="0" Informative="true" />
                     </Instance>
-                    <Parameter Name="Rob_A" Section="Input" Type="Pointer">
+                    <Parameter Name="PaFeVerk" Section="Input" Type="Bool">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>
-                    <Parameter Name="ST_ROB" Section="Input" Type="ST_Rob">
+                    <Parameter Name="FrgFolge1" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge1" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge2" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge2" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge3" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge3" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge4" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge4" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge5" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge5" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge6" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge6" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge7" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge7" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge8" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge8" Section="Input" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="Folge" Section="Output" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="FrgFolge" Section="Output" Type="Bool">
+                      <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                    </Parameter>
+                    <Parameter Name="PaFe" Section="Output" Type="Bool">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>
                   </CallInfo>

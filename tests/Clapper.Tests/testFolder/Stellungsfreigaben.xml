@@ -91,13 +91,13 @@
                 <Access Scope="GlobalVariable" UId="21">
                   <Symbol>
                     <Component Name="Folge" />
-                    <Address Area="None" Type="Byte" BlockNumer="180" BitOffset="2392" Informative="true" />
+                    <Address Area="None" Type="Byte" BlockNumber="180" BitOffset="2392" Informative="true" />
                   </Symbol>
                 </Access>
                 <Access Scope="GlobalVariable" UId="22">
                   <Symbol>
                     <Component Name="FrgFolge" />
-                    <Address Area="None" Type="Bool" BlockNumer="180" BitOffset="2360" Informative="true" />
+                    <Address Area="None" Type="Bool" BlockNumber="180" BitOffset="2360" Informative="true" />
                   </Symbol>
                 </Access>
                 <Access Scope="LocalVariable" UId="23">
@@ -106,7 +106,7 @@
                     <Address Area="None" Type="Bool" BitOffset="2360" Informative="true" />
                   </Symbol>
                 </Access>
-                <Call UId="UId 23">
+                <Call UId="23">
                   <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
                     <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
                     <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>

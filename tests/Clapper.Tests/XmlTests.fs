@@ -4,7 +4,7 @@ open System.Xml.Linq
 open System.IO
 open System.Text
 open Expecto
-
+open System
 type Xml =
     | Element of string * (string* string) seq * string * Xml seq
     member this.WriteContentTo(writer:XmlWriter) =
@@ -71,7 +71,7 @@ type DataType =
         | Time -> "Time"
         | Void -> "Void"
         | Struct -> "Struct"
-        | Custom str -> "str"
+        | Custom str -> str
 
 let memberElement name (dataType:DataType) accessibility childElements =
     Element("Member",[("Name",name);("Datatype",dataType.GetValue);("Accessibility",accessibility)],"",childElements)
@@ -130,15 +130,20 @@ type Scope =
         | Global -> "GlobalVariable"
         | Local -> "LocalVariable"
 
-type Access = {
-    AreaType : AreaType
-    DataType : DataType
-    ComponentName : string
-    UId : UId
-    BitOffset : int
-    BlockNumber : int option
-    Scope : Scope
-}
+type Access =
+        {
+        AreaType : AreaType
+        DataType : DataType
+        ComponentName : string
+        UId : UId
+        BitOffset : int option
+        BlockNumber : int option
+        Scope : Scope
+        }
+        member this.GetBitOffset =
+            match this.BitOffset with
+            | Some offset -> offset |> string
+            | None -> failwithf "bit offset not set"
 
 type BlockType =
     | FB
@@ -165,7 +170,7 @@ type Call = {
     BitOffset : int
     BlockNumber : int
     InstanceBlockNumber : int
-    CreateDate : string // ToDate later
+    CreateDate : DateTime
     Parameters : seq<Xml>
 
 }
@@ -173,33 +178,37 @@ type Call = {
 let accessElement (access : Access) =
     Element("Access",[("Scope",access.Scope.Value);("UId",access.UId.ValueAsString)],"",[
         Element("Symbol",[],"",[
-            Element("Component",[("Name",access.ComponentName)],"",[])
-            Element("Address",
-                match access.BlockNumber with
-                | Some bN -> [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BlockNumer", bN |> string);("BitOffset",access.BitOffset |> string);("Informative","true")]
-                | None ->  [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BitOffset",access.BitOffset |> string);("Informative","true")]
-                ,"",[])
+            match access.Scope with
+            | Global ->
+                Element("Component",[("Name",access.ComponentName)],"",[])
+                Element("Address",
+                    match access.BlockNumber with
+                    | Some bN -> [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BlockNumber", bN |> string);("BitOffset",access.GetBitOffset);("Informative","true")]
+                    | None ->  [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BitOffset",access.GetBitOffset |> string);("Informative","true")]
+                    ,"",[])
+            | Local ->
+                Element("Component",[("Name",access.ComponentName)],"",[])
         ])
     ])
 
 
-let parameter name (section :Section) parameterType =
-    Element("Parameter",[("Name",name);("Section",section.GetValue);("Type",parameterType)],"",[
+let parameter name (section :Section) (dataType:DataType) =
+    Element("Parameter",[("Name",name);("Section",section.GetValue);("Type",dataType.GetValue)],"",[
                 Element("StringAttribute",[("Name","InterfaceFlags");("Informative","true")],"S7_Visible",[])
             ])
 
 let callElement (call : Call) =
-    Element("Call",[("UId",call.UId |> string)],"",[
+    Element("Call",[("UId",call.UId.ValueAsString)],"",[
         Element("CallInfo",[("Name",call.CallInfoName);("BlockType",call.BlockType.GetValue)],"",[
             Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],call.BlockNumber |> string,[])
-            Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],call.CreateDate,[])
+            Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],call.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss"),[])
             Element("Instance",[("Scope","GlobalVariable");("UId",(call.UId.Value + 1)|> string)],"",[
                 Element("Component",[("Name",call.CallInfoName)],"",[])
                 Element("Address",[("Area",call.AreaType.GetValue);("Type",call.CallInfoName);("BlockNumber",call.InstanceBlockNumber|> string);("BitOffset",call.BitOffset |> string);("Informative","true")],"",[])
 
             ])
-            parameter "Rob_A" Input "Pointer"
-            parameter "ST_ROB" Input "ST_Rob"
+            for p in call.Parameters do
+                p
         ])
     ])
 
@@ -234,60 +243,196 @@ let wireElement (wire:Wire)=
 let wires childElements=
     Element("Wires",[],"",childElements)
 
-let networkSourceInputRead =
+let networkSourceBildungFolgen =
     Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[
         parts [
             accessElement {
-                AreaType = AreaType.Input
-                ComponentName = "ROBNAMEA001RFLGW1"
+                AreaType = NoArea
+                ComponentName = "Folge"
                 UId = UId 21
-                BitOffset = 8192
-                BlockNumber = None
+                BitOffset = Some 2392
+                BlockNumber = Some 180
                 DataType = Bool
                 Scope  = Global }
             accessElement
                 {
                 AreaType = NoArea
-                ComponentName = "ROBNAME"
+                ComponentName = "FrgFolge"
                 UId = UId 22
-                BitOffset = 0
+                BitOffset = Some 2360
                 BlockNumber = Some 180
-                DataType = Custom "ST_Rob"
+                DataType = Bool
                 Scope  = Global }
+            accessElement
+                {
+                AreaType = NoArea
+                ComponentName = "Temp"
+                UId = UId 23
+                BitOffset = None
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Local }
             callElement
                 {
                     AreaType =  DB
-                    CallInfoName = "FB_Rob_PN_A"
+                    CallInfoName = "FB_RobFolge_8"
                     BlockType = FB
-                    UId = UId  23
+                    UId = UId 24
                     BitOffset = 0
-                    BlockNumber = 201
+                    BlockNumber = 203
                     InstanceBlockNumber = 2086
-                    CreateDate = "2017-06-08T09:11:58"
+                    CreateDate = DateTime.Now
                     Parameters=
                         [
-                            parameter "Rob_A" Input "Pointer"
-                            parameter "ST_ROB" Input "ST_Rob"]
+                            parameter "PaFeVerk" Input Bool
+                            parameter "FrgFolge1" Input Bool
+                            parameter "Folge1" Input Bool
+                            parameter "FrgFolge2" Input Bool
+                            parameter "Folge2" Input Bool
+                            parameter "FrgFolge3" Input Bool
+                            parameter "Folge3" Input Bool
+                            parameter "FrgFolge4" Input Bool
+                            parameter "Folge4" Input Bool
+                            parameter "FrgFolge5" Input Bool
+                            parameter "Folge5" Input Bool
+                            parameter "FrgFolge6" Input Bool
+                            parameter "Folge6" Input Bool
+                            parameter "FrgFolge7" Input Bool
+                            parameter "Folge7" Input Bool
+                            parameter "FrgFolge8" Input Bool
+                            parameter "Folge8" Input Bool
+                            parameter "Folge" Output Bool
+                            parameter "FrgFolge" Output Bool
+                            parameter "PaFe" Output Bool
+                            ]
                 }
         ]
         wires [
             wireElement {
-                    UId = UId 25
+                    UId = UId 43
                     Name = "en"
-                    NameUId = UId 23
+                    NameUId = UId 24
                     WireType = PowerRail
                 }
             wireElement {
-                    UId = UId 26
-                    Name = "Rob_A"
-                    NameUId = UId 23
+                    UId = UId 44
+                    Name = "PaFeVerk"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 26)
+                }
+            wireElement {
+                    UId = UId 45
+                    Name = "FrgFolge1"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 27)
+                }
+            wireElement {
+                    UId = UId 46
+                    Name = "Folge1"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 28)
+                }
+            wireElement {
+                    UId = UId 47
+                    Name = "FrgFolge2"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 29)
+                }
+            wireElement {
+                    UId = UId 48
+                    Name = "Folge2"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 30)
+                }
+            wireElement {
+                    UId = UId 49
+                    Name = "FrgFolge3"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 31)
+                }
+            wireElement {
+                    UId = UId 50
+                    Name = "Folge3"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 32)
+                }
+            wireElement {
+                    UId = UId 51
+                    Name = "FrgFolge4"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 33)
+                }
+            wireElement {
+                    UId = UId 52
+                    Name = "Folge4"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 34)
+                }
+            wireElement {
+                    UId = UId 53
+                    Name = "FrgFolge5"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 35)
+                }
+            wireElement {
+                    UId = UId 54
+                    Name = "Folge5"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 36)
+                }
+            wireElement {
+                    UId = UId 55
+                    Name = "FrgFolge6"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 37)
+                }
+            wireElement {
+                    UId = UId 56
+                    Name = "Folge6"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 38)
+                }
+            wireElement {
+                    UId = UId 57
+                    Name = "FrgFolge7"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 39)
+                }
+            wireElement {
+                    UId = UId 58
+                    Name = "Folge7"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 40)
+                }
+            wireElement {
+                    UId = UId 59
+                    Name = "FrgFolge8"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 41)
+                }
+            wireElement {
+                    UId = UId 60
+                    Name = "Folge8"
+                    NameUId = UId 24
+                    WireType = OpenCon (UId 42)
+                }
+            wireElement {
+                    UId = UId 61
+                    Name = "Folge"
+                    NameUId = UId 24
                     WireType = IdentCon (UId 21)
                 }
             wireElement {
-                    UId = UId 27
-                    Name = "ST_ROB"
-                    NameUId = UId 23
+                    UId = UId 62
+                    Name = "FrgFolge"
+                    NameUId = UId 24
                     WireType = IdentCon (UId 22)
+                }
+            wireElement {
+                    UId = UId 63
+                    Name = "PaFe"
+                    NameUId = UId 24
+                    WireType = IdentCon (UId 23)
                 }
         ]
     ])
@@ -298,7 +443,7 @@ let networkSourceFrgFolge =
                 AreaType = NoArea
                 ComponentName = "Folge"
                 UId = UId 21
-                BitOffset = 2392
+                BitOffset = Some 2392
                 BlockNumber = Some 180
                 DataType = Byte
                 Scope  = Global}
@@ -307,7 +452,7 @@ let networkSourceFrgFolge =
                 AreaType = NoArea
                 ComponentName = "FrgFolge"
                 UId = UId 22
-                BitOffset = 2360
+                BitOffset = Some 2360
                 BlockNumber = Some 180
                 DataType = Bool
                 Scope  = Global }
@@ -316,7 +461,7 @@ let networkSourceFrgFolge =
                 AreaType = NoArea
                 ComponentName = "Temp"
                 UId = UId 23
-                BitOffset = 2360
+                BitOffset = Some 2360
                 BlockNumber = None
                 DataType = Bool
                 Scope  = Local }
@@ -329,11 +474,11 @@ let networkSourceFrgFolge =
                     BitOffset = 0
                     BlockNumber = 201
                     InstanceBlockNumber = 2086
-                    CreateDate = "2017-06-08T09:11:58"
+                    CreateDate = DateTime.Now
                     Parameters=
                         [
-                            parameter "Rob_A" Input "Pointer"
-                            parameter "ST_ROB" Input "ST_Rob"]
+                            parameter "Rob_A" Input (Custom "Pointer")
+                            parameter "ST_ROB" Input (Custom"ST_Rob")]
                 }
         ]
         wires [
@@ -479,31 +624,31 @@ let tests () =
         //         let expected = Path.GetFullPath("templates/Inputs_1.xml") |> File.ReadAllText
         //         Expect.equal actual expected "Input file should match"
         //     }
-        test "EingabenLesen" {
-                let fcBlock  ={
-                    Name = "ROBNAME"
-                    Number  = 71
-                    Id = "3"
-                    ProgrammingLanguage = LAD
-                    Sections = sectionsRobo
-                    NetworkSource = Some networkSourceInputRead
-                }
-                let actual = createBlock ("EingabenLesen","V17",buildFcBlock fcBlock)
-                let expected = Path.GetFullPath("templates/EingabenLesen.xml") |> File.ReadAllText
-                Expect.equal actual expected "EingabenLesen file should match"
-            }
-        test "Stellungsfreigaben" {
+        // test "EingabenLesen" {
+        //         let fcBlock  ={
+        //             Name = "ROBNAME"
+        //             Number  = 71
+        //             Id = "3"
+        //             ProgrammingLanguage = LAD
+        //             Sections = sectionsRobo
+        //             NetworkSource = Some networkSourceInputRead
+        //         }
+        //         let actual = createBlock ("EingabenLesen","V17",buildFcBlock fcBlock)
+        //         let expected = Path.GetFullPath("templates/EingabenLesen.xml") |> File.ReadAllText
+        //         Expect.equal actual expected "EingabenLesen file should match"
+        //     }
+        test "BildungFolgen" {
                 let fcBlock  ={
                     Name = "ROBNAME"
                     Number  = 71
                     Id = "E"
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo
-                    NetworkSource = Some networkSourceFrgFolge
+                    NetworkSource = Some networkSourceBildungFolgen
                 }
-                let actual = createBlock ("Stellungsfreigaben","V17",buildFcBlock fcBlock)
-                let expected = Path.GetFullPath("templates/Stellungsfreigaben.xml") |> File.ReadAllText
-                Expect.equal actual expected "Stellungsfreigaben file should match"
+                let actual = createBlock ("BildungFolgen","V17",buildFcBlock fcBlock)
+                let expected = Path.GetFullPath("templates/BildungFolgen.xml") |> File.ReadAllText
+                Expect.equal actual expected "BildungFolgen file should match"
             }
 
     ]
