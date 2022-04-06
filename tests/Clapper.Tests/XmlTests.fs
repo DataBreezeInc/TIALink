@@ -58,7 +58,7 @@ type DataType =
     | Void
     | Struct
     | Custom of string
-    member this.GetValue =
+    member this.Value =
         match this with
         | Bool -> "Bool"
         | Byte -> "Byte"
@@ -74,7 +74,7 @@ type DataType =
         | Custom str -> str
 
 let memberElement name (dataType:DataType) accessibility childElements =
-    Element("Member",[("Name",name);("Datatype",dataType.GetValue);("Accessibility",accessibility)],"",childElements)
+    Element("Member",[("Name",name);("Datatype",dataType.Value);("Accessibility",accessibility)],"",childElements)
 
 let attributeList =
     Element("AttributeList",[],"",[
@@ -96,7 +96,7 @@ let multilingualTextElement  (id:int)  name =
 type ProgrammingLanguage =
     | LAD
     | FBD
-    member this.GetValue =
+    member this.Value =
         match this with
         | LAD -> "LAD"
         | FBD -> "FBD"
@@ -115,7 +115,7 @@ type AreaType =
     | Input
     | NoArea
     | DB
-    member this.GetValue =
+    member this.Value =
         match this with
         | Memory-> "Memory"
         | Input-> "Input"
@@ -147,22 +147,27 @@ type Access =
 
 type BlockType =
     | FB
-    member this.GetValue =
+    | FC
+    member this.Value =
         match this with
         | FB-> "FB"
+        | FC-> "FC"
 
 type Section =
     | Input
     | InOut
     | Output
-    member this.GetValue =
+    | Return
+    member this.Value =
         match this with
         | Input-> "Input"
         | InOut-> "InOut"
         | Output-> "Output"
+        | Return-> "Return"
 
 
 type Call = {
+    BlockName : string
     AreaType : AreaType
     CallInfoName : string
     BlockType : BlockType
@@ -183,8 +188,8 @@ let accessElement (access : Access) =
                 Element("Component",[("Name",access.ComponentName)],"",[])
                 Element("Address",
                     match access.BlockNumber with
-                    | Some bN -> [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BlockNumber", bN |> string);("BitOffset",access.GetBitOffset);("Informative","true")]
-                    | None ->  [("Area",access.AreaType.GetValue);("Type",access.DataType.GetValue);("BitOffset",access.GetBitOffset |> string);("Informative","true")]
+                    | Some bN -> [("Area",access.AreaType.Value);("Type",access.DataType.Value);("BlockNumber", bN |> string);("BitOffset",access.GetBitOffset);("Informative","true")]
+                    | None ->  [("Area",access.AreaType.Value);("Type",access.DataType.Value);("BitOffset",access.GetBitOffset |> string);("Informative","true")]
                     ,"",[])
             | Local ->
                 Element("Component",[("Name",access.ComponentName)],"",[])
@@ -193,20 +198,25 @@ let accessElement (access : Access) =
 
 
 let parameter name (section :Section) (dataType:DataType) =
-    Element("Parameter",[("Name",name);("Section",section.GetValue);("Type",dataType.GetValue)],"",[
+    Element("Parameter",[("Name",name);("Section",section.Value);("Type",dataType.Value)],"",[
                 Element("StringAttribute",[("Name","InterfaceFlags");("Informative","true")],"S7_Visible",[])
             ])
 
 let callElement (call : Call) =
     Element("Call",[("UId",call.UId.ValueAsString)],"",[
-        Element("CallInfo",[("Name",call.CallInfoName);("BlockType",call.BlockType.GetValue)],"",[
-            Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],call.BlockNumber |> string,[])
-            Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],call.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss"),[])
-            Element("Instance",[("Scope","GlobalVariable");("UId",(call.UId.Value + 1)|> string)],"",[
-                Element("Component",[("Name",call.CallInfoName)],"",[])
-                Element("Address",[("Area",call.AreaType.GetValue);("Type",call.CallInfoName);("BlockNumber",call.InstanceBlockNumber|> string);("BitOffset",call.BitOffset |> string);("Informative","true")],"",[])
+        Element("CallInfo",[("Name",call.CallInfoName);("BlockType",call.BlockType.Value)],"",[
+            match call.BlockType with
+            | FB ->
+                Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],call.BlockNumber |> string,[])
+                Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],call.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss"),[])
+                Element("Instance",[("Scope","GlobalVariable");("UId",(call.UId.Value + 1)|> string)],"",[
+                    Element("Component",[("Name",call.BlockName+"#"+call.CallInfoName+"_"+call.BlockType.Value)],"",[])
+                    Element("Address",[("Area",call.AreaType.Value);("Type",call.CallInfoName);("BlockNumber",call.InstanceBlockNumber|> string);("BitOffset",call.BitOffset |> string);("Informative","true")],"",[])
 
-            ])
+                ])
+            | FC ->
+                Element("IntegerAttribute",[("Name","BlockNumber");("Informative","true")],call.BlockNumber |> string,[])
+                Element("DateAttribute",[("Name","ParameterModifiedTS");("Informative","true")],call.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss"),[])
             for p in call.Parameters do
                 p
         ])
@@ -237,13 +247,13 @@ let wireElement (wire:Wire)=
             Element("IdentCon",[("UId",uId.ValueAsString)],"",[])
         | OpenCon uId ->
             Element("OpenCon",[("UId",uId.ValueAsString)],"",[])
-        Element("NameCon",[("UId",wire.NameUId.ValueAsString);("Name","en")],"",[])
+        Element("NameCon",[("UId",wire.NameUId.ValueAsString);("Name",wire.Name)],"",[])
     ])
 
 let wires childElements=
     Element("Wires",[],"",childElements)
 
-let networkSourceBildungFolgen =
+let networkSourceBildungFolgen blockName =
     Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[
         parts [
             accessElement {
@@ -274,34 +284,35 @@ let networkSourceBildungFolgen =
                 Scope  = Local }
             callElement
                 {
+                    BlockName = blockName
                     AreaType =  DB
                     CallInfoName = "FB_RobFolge_8"
                     BlockType = FB
                     UId = UId 24
                     BitOffset = 0
                     BlockNumber = 203
-                    InstanceBlockNumber = 2086
+                    InstanceBlockNumber = 2087
                     CreateDate = DateTime.Now
                     Parameters=
                         [
                             parameter "PaFeVerk" Input Bool
                             parameter "FrgFolge1" Input Bool
-                            parameter "Folge1" Input Bool
+                            parameter "Folge1" Input Byte
                             parameter "FrgFolge2" Input Bool
-                            parameter "Folge2" Input Bool
+                            parameter "Folge2" Input Byte
                             parameter "FrgFolge3" Input Bool
-                            parameter "Folge3" Input Bool
+                            parameter "Folge3" Input Byte
                             parameter "FrgFolge4" Input Bool
-                            parameter "Folge4" Input Bool
+                            parameter "Folge4" Input Byte
                             parameter "FrgFolge5" Input Bool
-                            parameter "Folge5" Input Bool
+                            parameter "Folge5" Input Byte
                             parameter "FrgFolge6" Input Bool
-                            parameter "Folge6" Input Bool
+                            parameter "Folge6" Input Byte
                             parameter "FrgFolge7" Input Bool
-                            parameter "Folge7" Input Bool
+                            parameter "Folge7" Input Byte
                             parameter "FrgFolge8" Input Bool
-                            parameter "Folge8" Input Bool
-                            parameter "Folge" Output Bool
+                            parameter "Folge8" Input Byte
+                            parameter "Folge" Output Byte
                             parameter "FrgFolge" Output Bool
                             parameter "PaFe" Output Bool
                             ]
@@ -436,7 +447,179 @@ let networkSourceBildungFolgen =
                 }
         ]
     ])
-let networkSourceFrgFolge =
+let networkSourceTypRoboter blockName =
+
+    Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[
+        parts [
+            accessElement {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 21
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 22
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 23
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 24
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 25
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 26
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 27
+                BitOffset = Some 2360
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = Memory
+                ComponentName = "INTROSYS_VKE=0"
+                UId = UId 28
+                BitOffset = Some 80
+                BlockNumber = None
+                DataType = Bool
+                Scope  = Global }
+            accessElement
+                {
+                AreaType = NoArea
+                ComponentName = "E233_240_Typinfo_SPS"
+                UId = UId 29
+                BitOffset = Some 912
+                BlockNumber = Some 180
+                DataType = Byte
+                Scope  = Global }
+            callElement
+                {
+                    BlockName = blockName
+                    AreaType =  DB
+                    CallInfoName = "BIT_TO_BYTE"
+                    BlockType = FC
+                    UId = UId 30
+                    BitOffset = 0
+                    BlockNumber = 679
+                    InstanceBlockNumber = 2087
+                    CreateDate = DateTime.Now
+                    Parameters=
+                        [
+                            parameter "BIT_0" Input Bool
+                            parameter "BIT_1" Input Bool
+                            parameter "BIT_2" Input Bool
+                            parameter "BIT_3" Input Bool
+                            parameter "BIT_4" Input Bool
+                            parameter "BIT_5" Input Bool
+                            parameter "BIT_6" Input Bool
+                            parameter "BIT_7" Input Bool
+                            parameter "Ret_Val" Return Byte
+                            ]
+                }
+        ]
+        wires [
+            wireElement {
+                    UId = UId 31
+                    Name = "en"
+                    NameUId = UId 30
+                    WireType = PowerRail
+                }
+            wireElement {
+                    UId = UId 32
+                    Name = "BIT_0"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 26)
+                }
+            wireElement {
+                    UId = UId 33
+                    Name = "BIT_1"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 27)
+                }
+            wireElement {
+                    UId = UId 34
+                    Name = "BIT_2"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 28)
+                }
+            wireElement {
+                    UId = UId 35
+                    Name = "BIT_3"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 29)
+                }
+            wireElement {
+                    UId = UId 36
+                    Name = "BIT_4"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 30)
+                }
+            wireElement {
+                    UId = UId 37
+                    Name = "BIT_5"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 31)
+                }
+            wireElement {
+                    UId = UId 38
+                    Name = "BIT_6"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 32)
+                }
+            wireElement {
+                    UId = UId 39
+                    Name = "BIT_7"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 33)
+                }
+            wireElement {
+                    UId = UId 40
+                    Name = "Ret_Val"
+                    NameUId = UId 30
+                    WireType = IdentCon (UId 34)
+                }
+        ]
+    ])
+let networkSourceFrgFolge blockName =
     Element("FlgNet",[("xmlns","http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2")],"",[
         parts [
             accessElement {
@@ -467,6 +650,7 @@ let networkSourceFrgFolge =
                 Scope  = Local }
             callElement
                 {
+                    BlockName = blockName
                     AreaType =  DB
                     CallInfoName = "FB_Rob_PN_A"
                     BlockType = FB
@@ -510,7 +694,7 @@ let blockCompileUnit (fcBlock:FCBlock)=
             match fcBlock.NetworkSource with
             | Some networkSource -> Element("NetworkSource",[],"",[networkSource])
             | None -> Element("NetworkSource",[],"",[])
-            Element("ProgrammingLanguage",[],fcBlock.ProgrammingLanguage.GetValue,[])
+            Element("ProgrammingLanguage",[],fcBlock.ProgrammingLanguage.Value,[])
 
         ])
         Element("ObjectList",[],"",[
@@ -518,7 +702,6 @@ let blockCompileUnit (fcBlock:FCBlock)=
             multilingualTextElement 6 "Title"
         ])
     ])
-
 
 let sectionsRobo =
     [
@@ -542,6 +725,7 @@ let sectionsRobo =
         section "Return" [
             memberElement "Ret_Val" Void "Public" []
         ]]
+
 let sectionsInput1 =
     [
         section "Input" [
@@ -580,7 +764,7 @@ let buildFcBlock (block:FCBlock) =
             Element("MemoryLayout",[],"Optimized",[])
             Element("Name",[],block.Name,[])
             Element("Number",[],block.Number |> string,[])
-            Element("ProgrammingLanguage",[],block.ProgrammingLanguage.GetValue,[])
+            Element("ProgrammingLanguage",[],block.ProgrammingLanguage.Value,[])
             Element("SetENOAutomatically",[],"false",[])
             Element("StructureModified",[("ReadOnly","true")],"2017-06-20T14:56:00.5916118Z",[])
             Element("UDABlockProperties",[],"",[])
@@ -637,18 +821,31 @@ let tests () =
         //         let expected = Path.GetFullPath("templates/EingabenLesen.xml") |> File.ReadAllText
         //         Expect.equal actual expected "EingabenLesen file should match"
         //     }
-        test "BildungFolgen" {
+        // test "BildungFolgen" {
+        //         let fcBlock  ={
+        //             Name = "ROBNAME"
+        //             Number  = 71
+        //             Id = "E"
+        //             ProgrammingLanguage = LAD
+        //             Sections = sectionsRobo
+        //             NetworkSource = Some (networkSourceBildungFolgen "ROBNAME")
+        //         }
+        //         let actual = createBlock ("BildungFolgen","V17",buildFcBlock fcBlock)
+        //         let expected = Path.GetFullPath("templates/BildungFolgen.xml") |> File.ReadAllText
+        //         Expect.equal actual expected "BildungFolgen file should match"
+        //     }
+        test "TypeRoboter" {
                 let fcBlock  ={
                     Name = "ROBNAME"
                     Number  = 71
                     Id = "E"
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo
-                    NetworkSource = Some networkSourceBildungFolgen
+                    NetworkSource = Some (networkSourceBildungFolgen "ROBNAME")
                 }
-                let actual = createBlock ("BildungFolgen","V17",buildFcBlock fcBlock)
-                let expected = Path.GetFullPath("templates/BildungFolgen.xml") |> File.ReadAllText
-                Expect.equal actual expected "BildungFolgen file should match"
+                let actual = createBlock ("TypRoboter","V17",buildFcBlock fcBlock)
+                let expected = Path.GetFullPath("templates/TypRoboter.xml") |> File.ReadAllText
+                Expect.equal actual expected "TypRoboter file should match"
             }
 
     ]
