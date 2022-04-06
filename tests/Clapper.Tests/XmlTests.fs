@@ -567,55 +567,55 @@ let networkSourceTypRoboter blockName =
                     UId = UId 32
                     Name = "BIT_0"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 26)
+                    WireType = IdentCon (UId 21)
                 }
             wireElement {
                     UId = UId 33
                     Name = "BIT_1"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 27)
+                    WireType = IdentCon (UId 22)
                 }
             wireElement {
                     UId = UId 34
                     Name = "BIT_2"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 28)
+                    WireType = IdentCon (UId 23)
                 }
             wireElement {
                     UId = UId 35
                     Name = "BIT_3"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 29)
+                    WireType = IdentCon (UId 24)
                 }
             wireElement {
                     UId = UId 36
                     Name = "BIT_4"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 30)
+                    WireType = IdentCon (UId 25)
                 }
             wireElement {
                     UId = UId 37
                     Name = "BIT_5"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 31)
+                    WireType = IdentCon (UId 26)
                 }
             wireElement {
                     UId = UId 38
                     Name = "BIT_6"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 32)
+                    WireType = IdentCon (UId 27)
                 }
             wireElement {
                     UId = UId 39
                     Name = "BIT_7"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 33)
+                    WireType = IdentCon (UId 28)
                 }
             wireElement {
                     UId = UId 40
                     Name = "Ret_Val"
                     NameUId = UId 30
-                    WireType = IdentCon (UId 34)
+                    WireType = IdentCon (UId 29)
                 }
         ]
     ])
@@ -841,7 +841,7 @@ let tests () =
                     Id = "E"
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo
-                    NetworkSource = Some (networkSourceBildungFolgen "ROBNAME")
+                    NetworkSource = Some (networkSourceTypRoboter "ROBNAME")
                 }
                 let actual = createBlock ("TypRoboter","V17",buildFcBlock fcBlock)
                 let expected = Path.GetFullPath("templates/TypRoboter.xml") |> File.ReadAllText
