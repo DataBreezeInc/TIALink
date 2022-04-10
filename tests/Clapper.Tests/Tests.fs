@@ -29,43 +29,17 @@ let tags =
 
 let tagTableList = "Tag List Name"
 
-// let blockFb ={
-//   Name = "Fb1"
-//   IsAutoNumbered = true
-//   Number  = 1
-//   BlockType = FunctionalBlock
-// }
-// let blockDb ={
-//   Name = "Db1"
-//   IsAutoNumbered = true
-//   Number  = 2
-//   BlockType = DataBlock "Fb1"
-// }
-// let blockOD ={
-//   Name = "OB2"
-//   IsAutoNumbered = true
-//   Number  = 2
-//   BlockType = OrganisationalBlock
-// }
-
 @"C:\Users\TimForkmann\Documents\Automatisierung\"
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "ESA Kuwait"
 // |> PlcProgram.addAllLanguages
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
-|> PlcProgram.addTagTable tagTableList
+|> PlcProgram.addTagTable tagTableList 
 |> PlcProgram.addTags (tags,tagTableList)
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Inputs_1.xml")
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/EmptyRobotFC.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/EingabenLesen.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./templates/Stellungsfreigaben.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
 
-// |> PlcProgram.createPlcBlock blockFb
-// |> PlcProgram.createPlcBlock blockDb
-// |> PlcProgram.exportPlcBlock "Main"
-// |> PlcProgram.exportPlcBlock "Main"
-// |> PlcProgram.createPlcBlock blockOD
 |> PlcProgram.saveAndClose
 
 
