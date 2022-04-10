@@ -44,6 +44,12 @@ type UId =
     | UId of int
     member this.Value = (fun (UId id) -> id) this
     member this.ValueAsString = (fun (UId id) -> string id) this
+type FCBlockId =
+    | FCBlockId of int
+    member this.Value = (fun (FCBlockId id) -> string id) this
+type CompileUnitId =
+    | CompileUnitId of string
+    member this.Value = (fun (CompileUnitId id) -> id) this
 
 type DataType =
     | Bool
@@ -104,7 +110,8 @@ type ProgrammingLanguage =
 type FCBlock = {
     Name : string
     Number : int
-    Id : string
+    FCBlockId : FCBlockId
+    CompileUnitId : CompileUnitId
     ProgrammingLanguage : ProgrammingLanguage
     Sections : seq<Xml>
     NetworkSource : Xml option
@@ -689,7 +696,7 @@ let networkSourceFrgFolge blockName =
 
 
 let blockCompileUnit (fcBlock:FCBlock)=
-    Element("SW.Blocks.CompileUnit",[("ID",fcBlock.Id);("CompositionName","CompileUnits")],"",[
+    Element("SW.Blocks.CompileUnit",[("ID",fcBlock.CompileUnitId.Value);("CompositionName","CompileUnits")],"",[
         Element("AttributeList",[],"",[
             match fcBlock.NetworkSource with
             | Some networkSource -> Element("NetworkSource",[],"",[networkSource])
@@ -749,7 +756,7 @@ let sectionsInput1 =
 
 
 let buildFcBlock (block:FCBlock) =
-    Element("SW.Blocks.FC",[("ID","0")],"",[
+    Element("SW.Blocks.FC",[("ID",block.FCBlockId.Value)],"",[
         Element("AttributeList",[],"",[
             Element("AutoNumber",[],"true",[])
             Element("HeaderAuthor",[],"",[])
@@ -838,7 +845,8 @@ let tests () =
                 let fcBlock  ={
                     Name = "ROBNAME"
                     Number  = 71
-                    Id = "E"
+                    FCBlockId = FCBlockId 0
+                    CompileUnitId = CompileUnitId "E"
                     ProgrammingLanguage = LAD
                     Sections = sectionsRobo
                     NetworkSource = Some (networkSourceTypRoboter "ROBNAME")
