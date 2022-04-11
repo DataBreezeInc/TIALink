@@ -37,15 +37,11 @@ let tagTableList = "Tag List Name"
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList 
 |> PlcProgram.addTags (tags,tagTableList)
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Main.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/dbVolumeCounter.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/VolumeCounter.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Motor.xml")
-|> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/FB1.xml")
-// |> PlcProgram.exportPlcBlock "Main"
-
+|> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/FREQ_COUNTER.xml")
+|> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/PropDosing.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/AllPump.xml")
 |> PlcProgram.saveAndClose
 
 

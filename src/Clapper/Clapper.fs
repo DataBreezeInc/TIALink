@@ -86,7 +86,9 @@ module PlcProgram =
               UserInterface: bool
               ProjectPath: string
               DeviceItems: DeviceItem []
-              TagTableList: PlcTagTable [] }
+              TagTableList: PlcTagTable []
+              PlcTypeList: PlcType []
+               }
 
     let private defaultProps () =
         { ExistingTiaPortalConnection = None
@@ -98,7 +100,8 @@ module PlcProgram =
           ProjectPath = ""
           ProjectName = ""
           DeviceItems = [||]
-          TagTableList = [||] }
+          TagTableList = [||]
+          PlcTypeList = [||]  }
 
     let projectPath projectPath =
         { defaultProps () with ProjectPath = projectPath }
@@ -296,6 +299,22 @@ module PlcProgram =
                 failwithf
                     "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"
         | None -> failwithf "Select / Add your device first - use `getDevice`"
+
+    let private tryFindPlcType (plcSoftware: PlcSoftware) plcTypeName =
+        plcSoftware.TypeGroup.Types
+        |> Seq.tryFind (fun plcType -> plcType.Name = plcTypeName)
+
+    let importPlcType (plcTypeName: string) (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            try
+                plcSoftware.TypeGroup.Types.Import((FileInfo plcTypeName),ImportOptions.Override) |> ignore
+                printfn "Imported %s" plcTypeName
+                props
+            with
+            | exn -> failwithf "Could not import PlcType %A" exn.Message
+
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
         plcSoftware.BlockGroup.Blocks
