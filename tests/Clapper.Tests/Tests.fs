@@ -1,7 +1,7 @@
 open Clapper
 open System.IO
 open XmlHelper
-open Block   
+open Block
 open PlcDataType
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
@@ -51,7 +51,7 @@ let sectionsRobo =
             ]
             ]
         Section.section Section.Constant []
-        Section.section Section.Return [  
+        Section.section Section.Return [
            Section.memberElement "Ret_Val" Void Section.Public []
         ]]
 
@@ -303,7 +303,7 @@ let sectionsFREQ_COUNTER =
 
 let plcDataType: PlcDataType =
     {   Name = "FREQ_COUNTER"
-        Number = 71   
+        Number = 71
         DataTypeId = DataTypeId 0
         Sections = sectionsFREQ_COUNTER
         CreationTime = System.DateTime.Now }
@@ -321,7 +321,7 @@ let plcDataType: PlcDataType =
 // |> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/PropDosing.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/AllPump.xml")
-|> PlcProgram.createAndImportBlock ("TypRoboter",V17,FunctionalBlock fcBlock)  
+|> PlcProgram.createAndImportBlock ("TypRoboter",V17,FunctionalBlock fcBlock)
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Main.xml")

@@ -26,33 +26,6 @@ type Tag =
 
 
 
-type Language =
-    | German
-    | English
-    | Spanish
-    | French
-    | Czech
-    | Polnish
-    | Chinese
-    | Russian
-    | Portuguese
-    | Slovak
-    | Dutch
-    | Hungarian
-    member this.GetValue =
-        match this with
-        | German -> "de-DE"
-        | English -> "en-US"
-        | Spanish -> "es-ES"
-        | French -> "fr-FR"
-        | Chinese -> "zh-CN"
-        | Czech -> "cs-CZ"
-        | Polnish -> "pl-PL"
-        | Russian -> "ru-RU"
-        | Portuguese -> "pt-BR"
-        | Slovak -> "sk-SK"
-        | Dutch -> "nl-BE"
-        | Hungarian -> "hu-HU"
 
 type Block =
     { Name: string
@@ -163,7 +136,7 @@ module PlcProgram =
             let activeLanguages = languageSettings.ActiveLanguages
 
             let language =
-                supportedLanguages.Find(CultureInfo.GetCultureInfo(language.GetValue))
+                supportedLanguages.Find(CultureInfo.GetCultureInfo(language.Value))
 
             activeLanguages.Add(language)
             props
@@ -321,6 +294,7 @@ module PlcProgram =
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
+
     let createPlcType (name, version, plcDataType) =
         let doc =
             XDocument(
@@ -383,7 +357,10 @@ module PlcProgram =
     let createAndExportBlock (name, version: TiaVersion, block) =
         let doc = XDocument(XElement.Parse((Block.documentInfo version block).ToString()))
         doc.Save(importExportFolder name)
-        doc.ToString()
+        [ """<?xml version="1.0" encoding="utf-8"?>"""
+          Environment.NewLine
+          doc.ToString() ]
+        |> String.concat ""
 
     let createAndImportBlock (name, version: TiaVersion, (block: Block.BlockType)) (props: PlcProps) =
         try

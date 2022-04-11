@@ -245,18 +245,19 @@ let sectionsRobo =
           [ Section.memberElement
                 "Temp"
                 Struct
+                Section.NoRemanence
                 Section.Public
-                [ Section.memberElement "_Bool" Bool Section.Public []
-                  Section.memberElement "_Byte" Byte Section.Public []
-                  Section.memberElement "_Word" Word Section.Public []
-                  Section.memberElement "_DWord" DWord Section.Public []
-                  Section.memberElement "_Int" Int Section.Public []
-                  Section.memberElement "_DInt" DInt Section.Public []
-                  Section.memberElement "_Real" Real Section.Public []
-                  Section.memberElement "_S5Time" S5Time Section.Public []
-                  Section.memberElement "_Time" Time Section.Public [] ] ]
+                [ Section.memberElement "_Bool" Bool Section.NoRemanence Section.Public []
+                  Section.memberElement "_Byte" Byte Section.NoRemanence Section.Public []
+                  Section.memberElement "_Word" Word Section.NoRemanence Section.Public []
+                  Section.memberElement "_DWord" DWord Section.NoRemanence Section.Public []
+                  Section.memberElement "_Int" Int Section.NoRemanence Section.Public []
+                  Section.memberElement "_DInt" DInt Section.NoRemanence Section.Public []
+                  Section.memberElement "_Real" Real Section.NoRemanence Section.Public []
+                  Section.memberElement "_S5Time" S5Time Section.NoRemanence Section.Public []
+                  Section.memberElement "_Time" Time Section.NoRemanence Section.Public [] ] ]
       Section.section Section.Constant []
-      Section.section Section.Return [ Section.memberElement "Ret_Val" Void Section.Public [] ] ]
+      Section.section Section.Return [ Section.memberElement "Ret_Val" Void Section.NoRemanence Section.Public [] ] ]
 
 let networkSourceTypRoboter blockName =
 
@@ -414,6 +415,7 @@ let sectionsFREQ_COUNTER =
           [ Section.memberElement
                 "litrsPerPuls"
                 UInt
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -422,6 +424,7 @@ let sectionsFREQ_COUNTER =
             Section.memberElement
                 "prewHour"
                 UInt
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -431,6 +434,7 @@ let sectionsFREQ_COUNTER =
             Section.memberElement
                 "curHour"
                 UInt
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -438,7 +442,8 @@ let sectionsFREQ_COUNTER =
                                      dataTypeAttribute Bool SetPoint ] ]
             Section.memberElement
                 "prewDay"
-                UDInt
+                (Custom "FREQ_COUNTER")
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -446,7 +451,8 @@ let sectionsFREQ_COUNTER =
                                      dataTypeAttribute Bool SetPoint ] ]
             Section.memberElement
                 "curDay"
-                UDInt
+                (Custom "FREQ_COUNTER")
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -455,6 +461,7 @@ let sectionsFREQ_COUNTER =
             Section.memberElement
                 "all"
                 UDInt
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
@@ -463,11 +470,173 @@ let sectionsFREQ_COUNTER =
             Section.memberElement
                 "rst"
                 Bool
+                Section.NoRemanence
                 Section.NoAccessibility
                 [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
                                      dataTypeAttribute Bool ExternalVisible
                                      dataTypeAttribute Bool ExternalWritable
                                      dataTypeAttribute Bool SetPoint ] ] ] ]
+
+let sectionsFREQ_COUNTERDb =
+    Section.sections [ Section.section
+                                         Section.NoSection
+                                         [ Section.memberElement
+                                               "litrsPerPuls"
+                                               UInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "prewHour"
+                                               UInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "curHour"
+                                               UInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "prewDay"
+                                               UDInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "curDay"
+                                               UDInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "all"
+                                               UDInt
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               []
+                                           Section.memberElement
+                                               "rst"
+                                               Bool
+                                               Section.NoRemanence
+                                               Section.NoAccessibility
+                                               [] ] ]
+let sectionsDbVolumeCounter =
+    [ Section.section
+          Section.Static
+          [ Section.memberElement
+                "FM201"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Inlet water consumption FM201"
+                  sectionsFREQ_COUNTERDb
+                   ]
+            Section.memberElement
+                "FM501"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Inlet water consumption UF FM501"
+                  sectionsFREQ_COUNTERDb ]
+
+            Section.memberElement
+                "FM502"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Inlet water consumption UF FM502"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM901"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Consumption of permeate RO FM901"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM902"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Concentrate consumption RO FM902"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM1201"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Consumption of permeate per consumer FM1201"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM1301"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Consumption of permeate NF FM1301"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM1302"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Concentrate consumption NF FM1302"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM1701"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Consumption of nanofiltrate on the consumer FM1701"
+                  sectionsFREQ_COUNTERDb ]
+            Section.memberElement
+                "FM1801"
+                (Custom "FREQ_COUNTER")
+                Section.Retain
+                Section.Public
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ]
+                  commentElement English "Sewage consumption FM1801"
+                  sectionsFREQ_COUNTERDb ]       ] ]
 
 
 
@@ -520,18 +689,37 @@ let tests () =
           //         let expected = Path.GetFullPath("templates/TypRoboter.xml") |> File.ReadAllText
           //         Expect.equal actual expected "TypRoboter file should match"
           //     }
-          test "Create UDT" {
-              let dataType: PlcDataType =
-                  { Name = "FREQ_COUNTER"
-                    Number = 71
-                    DataTypeId = DataTypeId 0
-                    Sections = sectionsFREQ_COUNTER
-                    CreationTime = DateTime.Now }
+          //   test "Create UDT" {
+          //       let dataType: PlcDataType =
+          //           { Name = "FREQ_COUNTER"
+          //             Number = 71
+          //             DataTypeId = DataTypeId 0
+          //             Sections = sectionsFREQ_COUNTER
+          //             CreationTime = DateTime.Now }
 
-              let actual = PlcProgram.createPlcType ("FREQ_COUNTER", V17, dataType)
+          //       let actual = PlcProgram.createPlcType ("FREQ_COUNTER", V17, dataType)
+
+          //       let expected =
+          //           Path.GetFullPath("./xmlimport/datatypes/FREQ_COUNTER.xml")
+          //           |> File.ReadAllText
+
+          //       Expect.equal actual expected "FREQ_COUNTER file should match"
+          //   }
+          test "Create DataBlock" {
+              let globalDB: GlobalDB =
+                  { Name = "dbVolumeCounters"
+                    Number = 109
+                    GlobalDBId = GlobalDBId 0
+                    MemoryLayout = Standard
+                    ProgrammingLanguage = DB
+                    Sections = sectionsDbVolumeCounter
+                    CreateTime = DateTime.Now }
+
+              let actual =
+                  PlcProgram.createAndExportBlock ("dbVolumeCounter", V17, GlobalDB globalDB)
 
               let expected =
-                  Path.GetFullPath("./xmlimport/datatypes/FREQ_COUNTER.xml")
+                  Path.GetFullPath("./xmlimport/programblocks/dbVolumeCounter.xml")
                   |> File.ReadAllText
 
               Expect.equal actual expected "FREQ_COUNTER file should match"

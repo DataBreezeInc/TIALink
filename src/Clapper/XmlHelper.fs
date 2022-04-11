@@ -6,6 +6,8 @@ open System.IO
 open System.Text
 open System
 
+
+
 type Xml =
     | Element of string * (string * string) seq * string * Xml seq
     member this.WriteContentTo(writer: XmlWriter) =
@@ -27,6 +29,34 @@ type Xml =
         let output = StringBuilder()
         using (new XmlTextWriter(new StringWriter(output), Formatting = Formatting.Indented)) this.WriteContentTo
         output.ToString()
+
+type Language =
+    | German
+    | English
+    | Spanish
+    | French
+    | Czech
+    | Polnish
+    | Chinese
+    | Russian
+    | Portuguese
+    | Slovak
+    | Dutch
+    | Hungarian
+    member this.Value =
+        match this with
+        | German -> "de-DE"
+        | English -> "en-US"
+        | Spanish -> "es-ES"
+        | French -> "fr-FR"
+        | Chinese -> "zh-CN"
+        | Czech -> "cs-CZ"
+        | Polnish -> "pl-PL"
+        | Russian -> "ru-RU"
+        | Portuguese -> "pt-BR"
+        | Slovak -> "sk-SK"
+        | Dutch -> "nl-BE"
+        | Hungarian -> "hu-HU"
 
 type UId =
     | UId of int
@@ -81,10 +111,12 @@ type TiaVersion =
 type ProgrammingLanguage =
     | LAD
     | FBD
+    | DB
     member this.Value =
         match this with
         | LAD -> "LAD"
         | FBD -> "FBD"
+        | DB -> "DB"
 
 
 
@@ -131,6 +163,7 @@ module Section =
         | Return
         | Temp
         | Constant
+        | Static
         | NoSection
         member this.Value =
             match this with
@@ -140,6 +173,7 @@ module Section =
             | Return -> "Return"
             | Temp -> "Temp"
             | Constant -> "Constant"
+            | Static -> "Static"
             | NoSection -> "None"
 
     type Accessibility =
@@ -152,20 +186,43 @@ module Section =
             | Private -> "Private"
             | NoAccessibility -> ""
 
+    type Remanence =
+        | Retain
+        | NoRemanence
+        member this.Value =
+            match this with
+            | Retain -> "Retain"
+            | NoRemanence -> ""
+
+    let sections elements =
+        Element("Sections", [ ], "", elements)
     let section (sectionName: Section) elements =
         Element("Section", [ ("Name", sectionName.Value) ], "", elements)
 
-    let memberElement name (dataType: DataType) (accessibility: Accessibility) childElements =
+    let memberElement name (dataType: DataType) (remanence: Remanence) (accessibility: Accessibility) childElements =
         Element(
             "Member",
-            [ match accessibility with
-              | NoAccessibility ->
-                  ("Name", name)
-                  ("Datatype", dataType.Value)
+            [ match remanence with
+              | NoRemanence ->
+                  match accessibility with
+                  | NoAccessibility ->
+                      ("Name", name)
+                      ("Datatype", dataType.Value)
+                  | _ ->
+                      ("Name", name)
+                      ("Datatype", dataType.Value)
+                      ("Accessibility", accessibility.Value)
               | _ ->
-                  ("Name", name)
-                  ("Datatype", dataType.Value)
-                  ("Accessibility", accessibility.Value) ],
+                  match accessibility with
+                  | NoAccessibility ->
+                      ("Name", name)
+                      ("Remanence", remanence.Value)
+                      ("Datatype", dataType.Value)
+                  | _ ->
+                      ("Name", name)
+                      ("Datatype", dataType.Value)
+                      ("Remanence", remanence.Value)
+                      ("Accessibility", accessibility.Value) ],
             "",
             childElements
         )
@@ -400,6 +457,17 @@ module Block =
         | FCBlockId of int
         member this.Value = (fun (FCBlockId id) -> string id) this
 
+    type GlobalDBId =
+        | GlobalDBId of int
+        member this.Value = (fun (GlobalDBId id) -> string id) this
+
+    type MemoryLayout =
+        | Optimized
+        | Standard
+        member this.Value =
+            match this with
+            | Optimized -> "Optimized"
+            | Standard -> "Standard"
 
     type FCBlock =
         { Name: string
@@ -408,11 +476,21 @@ module Block =
           CompileUnitId: CompileUnitId
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
+          MemoryLayout: MemoryLayout
           NetworkSource: Xml option
           CreateTime: DateTime }
 
+    type GlobalDB =
+        { Name: string
+          Number: int
+          GlobalDBId: GlobalDBId
+          ProgrammingLanguage: ProgrammingLanguage
+          Sections: seq<Xml>
+          MemoryLayout: MemoryLayout
+          CreateTime: DateTime }
+
     type BlockType =
-        | DataBlock of string
+        | GlobalDB of GlobalDB
         | OrganisationalBlock
         | FunctionalBlock of FCBlock
 
@@ -442,6 +520,9 @@ module Block =
             "",
             [ Element("ObjectList", [], "", [ multilingualTextItemElement (id + 1) ]) ]
         )
+
+    let commentElement (lang: Language) (comment: string) =
+        Element("Comment", [], "", [ Element("MultiLanguageText", [ ("Lang", lang.Value) ], comment, []) ])
 
 
     let blockCompileUnit (fcBlock: FCBlock) =
@@ -488,7 +569,7 @@ module Block =
                     Element("HeaderVersion", [], "1.1", [])
                     interfaceElement block.Sections
                     Element("IsIECCheckEnabled", [], "false", [])
-                    Element("MemoryLayout", [], "Optimized", [])
+                    Element("MemoryLayout", [], block.MemoryLayout.Value, [])
                     Element("Name", [], block.Name, [])
                     Element("Number", [], block.Number |> string, [])
                     Element("ProgrammingLanguage", [], block.ProgrammingLanguage.Value, [])
@@ -505,6 +586,40 @@ module Block =
                   "",
                   [ multilingualTextElement 1 "Comment"
                     blockCompileUnit block
+                    multilingualTextElement 8 "Title" ]
+              ) ]
+        )
+
+    let buildGlobalDB (globalDB: GlobalDB) =
+        Element(
+            "SW.Blocks.GlobalDB",
+            [ ("ID", globalDB.GlobalDBId.Value) ],
+            "",
+            [ Element(
+                  "AttributeList",
+                  [],
+                  "",
+                  [ Element("AutoNumber", [], "true", [])
+                    Element("DBAccessibleFromOPCUA", [], "true", [])
+                    Element("HeaderAuthor", [], "", [])
+                    Element("HeaderFamily", [], "", [])
+                    Element("HeaderName", [], "", [])
+                    Element("HeaderVersion", [], "1.1", [])
+                    interfaceElement globalDB.Sections
+                    Element("IsOnlyStoredInLoadMemory", [], "false", [])
+                    Element("IsWriteProtectedInAS", [], "false", [])
+                    Element("MemoryLayout", [], globalDB.MemoryLayout.Value, [])
+                    Element("Name", [], globalDB.Name, [])
+                    Element("Number", [], globalDB.Number |> string, [])
+                    Element("ProgrammingLanguage", [], globalDB.ProgrammingLanguage.Value, [])
+
+                    ]
+              )
+              Element(
+                  "ObjectList",
+                  [],
+                  "",
+                  [ multilingualTextElement 1 "Comment"
                     multilingualTextElement 8 "Title" ]
               ) ]
         )
@@ -535,7 +650,7 @@ module Block =
               )
               match block with
               | FunctionalBlock fcBlock -> buildFcBlock fcBlock
-              | DataBlock (_) -> failwith "Not Implemented"
+              | GlobalDB globalDb -> buildGlobalDB globalDb
               | OrganisationalBlock -> failwith "Not Implemented" ]
         )
 
@@ -545,7 +660,7 @@ module PlcDataType =
         | DataTypeId of int
         member this.Value = (fun (DataTypeId id) -> string id) this
 
-    type PlcDataType = 
+    type PlcDataType =
         { Name: string
           Number: int
           DataTypeId: DataTypeId
@@ -563,6 +678,7 @@ module PlcDataType =
             | ExternalVisible -> "ExternalVisible"
             | ExternalWritable -> "ExternalWritable"
             | SetPoint -> "SetPoint"
+
         member this.Status =
             match this with
             | ExternalAccessible -> "true"
@@ -599,9 +715,16 @@ module PlcDataType =
 
 
 
-    let dataTypeAttribute (dataType:DataType) (attributeInfo:AttributeInfo) =
+    let dataTypeAttribute (dataType: DataType) (attributeInfo: AttributeInfo) =
         match dataType with
-        | Bool -> Element("BooleanAttribute", [("Name", attributeInfo.Value);("SystemDefined", "true")], attributeInfo.Status, [] )
+        | Bool ->
+            Element(
+                "BooleanAttribute",
+                [ ("Name", attributeInfo.Value)
+                  ("SystemDefined", "true") ],
+                attributeInfo.Status,
+                []
+            )
         | Byte -> failwith "Not Implemented"
         | Word -> failwith "Not Implemented"
         | DWord -> failwith "Not Implemented"
@@ -614,19 +737,24 @@ module PlcDataType =
         | Time -> failwith "Not Implemented"
         | Void -> failwith "Not Implemented"
         | Struct -> failwith "Not Implemented"
-          | Custom(_) -> failwith "Not Implemented"
+        | Custom (_) -> failwith "Not Implemented"
+
     let attributeElement attributes =
-        Element("AttributeList", [], "", attributes )
+        Element("AttributeList", [], "", attributes)
 
     let dataTypeContent (dataType: PlcDataType) =
         Element(
             "SW.Types.PlcStruct",
             [ ("ID", dataType.DataTypeId.Value) ],
             "",
-            [ Element("AttributeList", [], "", [
-                interfaceElement dataType.Sections
-                Element("IsFailsafeCompliant", [], "false", [])
-                Element("Name", [], dataType.Name, []) ])
+            [ Element(
+                  "AttributeList",
+                  [],
+                  "",
+                  [ interfaceElement dataType.Sections
+                    Element("IsFailsafeCompliant", [], "false", [])
+                    Element("Name", [], dataType.Name, []) ]
+              )
               Element(
                   "ObjectList",
                   [],
