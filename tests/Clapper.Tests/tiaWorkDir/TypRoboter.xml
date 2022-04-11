@@ -145,7 +145,7 @@
                 <Call UId="30">
                   <CallInfo Name="BIT_TO_BYTE" BlockType="FC">
                     <IntegerAttribute Name="BlockNumber" Informative="true">679</IntegerAttribute>
-                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-11T09:58:04</DateAttribute>
+                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-11T10:12:40</DateAttribute>
                     <Parameter Name="BIT_0" Section="Input" Type="Bool">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>

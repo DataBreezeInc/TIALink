@@ -379,33 +379,42 @@ module PlcProgram =
                 props
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let importPlcBlock (blockName: string) (props: PlcProps) =
+    let importExportFolder (name:string) = 
+        let targetDir =
+            if not (Directory.Exists("./tiaWorkDir")) then
+                Directory.CreateDirectory("./tiaWorkDir") |> ignore
+                "./tiaWorkDir"
+            else
+                "./tiaWorkDir"
+        Path.GetFullPath($"{targetDir}/{name}.xml")
+
+    let importPlcBlock name (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
             try
-                plcSoftware.BlockGroup.Blocks.Import((FileInfo blockName),ImportOptions.Override) |> ignore
-                printfn "Imported %s" blockName
+                plcSoftware.BlockGroup.Blocks.Import((FileInfo (importExportFolder name)),ImportOptions.Override) |> ignore
+                printfn "Imported %s" name
                 props
             with
             | exn -> failwithf "Could not import PlcBlock %A" exn.Message
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let createAndExportBlock (name, version:TiaVersion, block, exportFolder) =
+    let createAndExportBlock (name, version:TiaVersion, block) =
         match block with
         | FunctionalBlock fcBlock ->
             let fcBlockXML = Block.buildFcBlock fcBlock
             let doc = XDocument(XElement.Parse((Block.documentInfo version fcBlockXML).ToString()))
-            doc.Save(Path.GetFullPath($"./{exportFolder}/{name}.xml"))
+            doc.Save(importExportFolder name)
             doc.ToString()
         | DataBlock(_) -> failwith "Not Implemented"
         | OrganisationalBlock -> failwith "Not Implemented"
 
-    let createAndImportBlock (blockName, version:TiaVersion, (block:BlockType), exportFolder) (props: PlcProps) =
+    let createAndImportBlock (name, version:TiaVersion, (block:BlockType)) (props: PlcProps) =
         try
-            let _ = createAndExportBlock (blockName, version, block, exportFolder)
-            printfn "Created FCBlock %s" blockName
-            importPlcBlock blockName props
+            let _ = createAndExportBlock (name, version, block)
+            printfn "Created FCBlock %s" name
+            importPlcBlock name props
         with
             | exn -> failwithf "Could not create PlcBlock %A" exn.Message
 
