@@ -8,21 +8,15 @@ open Siemens.Engineering.HW.Features
 open Siemens.Engineering.SW
 open Siemens.Engineering.SW.Tags
 open Siemens.Engineering.SW.Blocks
-open System.Globalization
 open Siemens.Engineering.SW.Types
-open Siemens.Engineering.Hmi
+open System.Globalization
+open XmlHelper
+open System.Xml.Linq
 
 type HardwareObject =
     { OrderNumber: string
       Name: string
       Position: int }
-
-type DataType =
-    | Bool
-    member this.getName =
-        match this with
-        | Bool -> "Bool"
-
 
 type Tag =
     { Name: string
@@ -33,8 +27,7 @@ type Tag =
 type BlockType =
     | DataBlock of string
     | OrganisationalBlock
-    | FunctionalBlock
-
+    | FunctionalBlock of FCBlock
 
 type Language =
     | German
@@ -63,9 +56,6 @@ type Language =
         | Slovak -> "sk-SK"
         | Dutch -> "nl-BE"
         | Hungarian -> "hu-HU"
-
-
-            
 
 type Block =
     { Name: string
@@ -188,7 +178,7 @@ module PlcProgram =
             let languageSettings = project.LanguageSettings
             let supportedLanguages = languageSettings.Languages
             for supportedLanguage in supportedLanguages do
-                match languageSettings.ActiveLanguages |> Seq.tryFind(fun l -> l.Culture = supportedLanguage.Culture) with 
+                match languageSettings.ActiveLanguages |> Seq.tryFind(fun l -> l.Culture = supportedLanguage.Culture) with
                 | Some _-> ()
                 | None -> languageSettings.ActiveLanguages.Add(supportedLanguage)
             props
@@ -280,7 +270,7 @@ module PlcProgram =
 
     let private createNewTag (tagTable: PlcTagTable) (tag: Tag) =
         let plcTag = tagTable.Tags.Create(tag.Name)
-        plcTag.DataTypeName <- tag.DataType.getName
+        plcTag.DataTypeName <- tag.DataType.Value
         plcTag.Comment.Items.[0].Text <- tag.Comment
         plcTag.LogicalAddress <- tag.Address
 
@@ -320,51 +310,51 @@ module PlcProgram =
         plcSoftware.BlockGroup.Blocks
         |> Seq.tryFind (fun plcBlock ->
             printfn "blockName %s" plcBlock.Name
-            plcBlock.Name = plcBlockName)
+            plcBlock.Name = plcBlockName) 
 
-    let createPlcBlock (block: Block) (props: PlcProps) =
-        match props.PlcSoftware, props.ExistingTiaPortalConnection with
-        | Some plcSoftware, Some _ ->
-            match tryFindBlockGroup plcSoftware block.Name with
-            | Some plcBlock ->
-                printfn "PlcBlock %s already exists" plcBlock.Name
-                props
-            | None ->
-                match block.BlockType with
-                | FunctionalBlock ->
-                    plcSoftware.BlockGroup.Blocks.CreateFB(
-                        block.Name,
-                        block.IsAutoNumbered,
-                        block.Number,
-                        ProgrammingLanguage.ProDiag
-                    )
-                    |> ignore
+    // let createPlcBlock (block: Block) (props: PlcProps) =
+    //     match props.PlcSoftware, props.ExistingTiaPortalConnection with
+    //     | Some plcSoftware, Some _ ->
+    //         match tryFindBlockGroup plcSoftware block.Name with
+    //         | Some plcBlock ->
+    //             printfn "PlcBlock %s already exists" plcBlock.Name
+    //             props
+    //         | None ->
+    //             match block.BlockType with
+    //             | FunctionalBlock ->
+    //                 plcSoftware.BlockGroup.Blocks.CreateFB(
+    //                     block.Name,
+    //                     block.IsAutoNumbered,
+    //                     block.Number,
+    //                     ProgrammingLanguage.ProDiag
+    //                 )
+    //                 |> ignore
 
-                    printfn "Functional Block %s created" block.Name
-                | DataBlock instanceOfName ->
-                    plcSoftware.BlockGroup.Blocks.CreateInstanceDB(
-                        block.Name,
-                        block.IsAutoNumbered,
-                        block.Number,
-                        instanceOfName
-                    )
-                    |> ignore
+    //                 printfn "Functional Block %s created" block.Name
+    //             | DataBlock instanceOfName ->
+    //                 plcSoftware.BlockGroup.Blocks.CreateInstanceDB(
+    //                     block.Name,
+    //                     block.IsAutoNumbered,
+    //                     block.Number,
+    //                     instanceOfName
+    //                 )
+    //                 |> ignore
 
-                    printfn "Data Block %s created" block.Name
-                | OrganisationalBlock -> ()
-                //TODO: Not working yet
-                // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
-                // for libraryInfo in libraryInfos do
-                //         printfn "name %A" libraryInfo.Name
-                // for libraries in tiaPortal.GlobalLibraries do
-                //     for copies in libraries.MasterCopyFolder.MasterCopies do
-                //         printfn "copies %A" copies.Name
+    //                 printfn "Data Block %s created" block.Name
+    //             | OrganisationalBlock -> ()
+    //             //TODO: Not working yet
+    //             // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
+    //             // for libraryInfo in libraryInfos do
+    //             //         printfn "name %A" libraryInfo.Name
+    //             // for libraries in tiaPortal.GlobalLibraries do
+    //             //     for copies in libraries.MasterCopyFolder.MasterCopies do
+    //             //         printfn "copies %A" copies.Name
 
-                // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
-                // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
-                // printfn "Data Block %s created" block.Name
-                props
-        | _ -> failwithf "Select / Add your device first - use `getDevice`"
+    //             // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
+    //             // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
+    //             // printfn "Data Block %s created" block.Name
+    //             props
+    //     | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let exportPlcBlock (blockName: string) (props: PlcProps) =
         match props.PlcSoftware with
@@ -400,6 +390,24 @@ module PlcProgram =
             | exn -> failwithf "Could not import PlcBlock %A" exn.Message
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
+
+    let createAndExportBlock (name, version:TiaVersion, block, exportFolder) =
+        match block with
+        | FunctionalBlock fcBlock ->
+            let fcBlockXML = Block.buildFcBlock fcBlock
+            let doc = XDocument(XElement.Parse((Block.documentInfo version fcBlockXML).ToString()))
+            doc.Save(Path.GetFullPath($"./{exportFolder}/{name}.xml"))
+            doc.ToString()
+        | DataBlock(_) -> failwith "Not Implemented"
+        | OrganisationalBlock -> failwith "Not Implemented"
+
+    let createAndImportBlock (blockName, version:TiaVersion, (block:BlockType), exportFolder) (props: PlcProps) =
+        try
+            let _ = createAndExportBlock (blockName, version, block, exportFolder)
+            printfn "Created FCBlock %s" blockName
+            importPlcBlock blockName props
+        with
+            | exn -> failwithf "Could not create PlcBlock %A" exn.Message
 
     let saveAndClose (props: PlcProps) =
         match props.Project, props.ExistingTiaPortalConnection with
