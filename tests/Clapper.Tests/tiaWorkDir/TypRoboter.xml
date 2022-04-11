@@ -2,7 +2,7 @@
 <Document>
   <Engineering version="V17" />
   <DocumentInfo>
-    <Created>2022-03-11T11:27:36.1676076Z</Created>
+    <Created>2021-09-08T12:46:16.1780561Z</Created>
     <ExportSetting>WithDefaults</ExportSetting>
     <InstalledProducts>
       <Product>
@@ -68,7 +68,7 @@
       <Number>71</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>
-      <StructureModified ReadOnly="true">2017-06-20T14:56:00.5916118Z</StructureModified>
+      <StructureModified ReadOnly="true">2022-04-11T13:02:53</StructureModified>
       <UDABlockProperties />
       <UDAEnableTagReadback>false</UDAEnableTagReadback>
     </AttributeList>
@@ -145,7 +145,7 @@
                 <Call UId="30">
                   <CallInfo Name="BIT_TO_BYTE" BlockType="FC">
                     <IntegerAttribute Name="BlockNumber" Informative="true">679</IntegerAttribute>
-                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-11T10:12:40</DateAttribute>
+                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-11T13:02:53</DateAttribute>
                     <Parameter Name="BIT_0" Section="Input" Type="Bool">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>

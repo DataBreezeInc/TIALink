@@ -1,7 +1,8 @@
 open Clapper
 open System.IO
 open XmlHelper
-open Block
+open Block   
+open PlcDataType
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A5.1"
@@ -37,21 +38,21 @@ let sectionsRobo =
         Section.section Section.Output []
         Section.section Section.InOut []
         Section.section Section.Temp [
-            Section.memberElement "Temp" Struct "Public" [
-                Section.memberElement "_Bool" Bool "Public" []
-                Section.memberElement "_Byte" Byte "Public" []
-                Section.memberElement "_Word" Word "Public" []
-                Section.memberElement "_DWord" DWord "Public" []
-                Section.memberElement "_Int" Int "Public" []
-                Section.memberElement "_DInt" DInt "Public" []
-                Section.memberElement "_Real" Real "Public" []
-                Section.memberElement "_S5Time" S5Time "Public" []
-                Section.memberElement "_Time" Time "Public" []
+            Section.memberElement "Temp" Struct Section.Public [
+                Section.memberElement "_Bool" Bool Section.Public []
+                Section.memberElement "_Byte" Byte Section.Public []
+                Section.memberElement "_Word" Word Section.Public []
+                Section.memberElement "_DWord" DWord Section.Public []
+                Section.memberElement "_Int" Int Section.Public []
+                Section.memberElement "_DInt" DInt Section.Public []
+                Section.memberElement "_Real" Real Section.Public []
+                Section.memberElement "_S5Time" S5Time Section.Public []
+                Section.memberElement "_Time" Time Section.Public []
             ]
             ]
         Section.section Section.Constant []
-        Section.section Section.Return [
-           Section.memberElement "Ret_Val" Void "Public" []
+        Section.section Section.Return [  
+           Section.memberElement "Ret_Val" Void Section.Public []
         ]]
 
 let networkSourceTypRoboter blockName =
@@ -235,8 +236,77 @@ let fcBlock  ={
         ProgrammingLanguage = LAD
         Sections = sectionsRobo
         NetworkSource = Some (networkSourceTypRoboter "ROBNAME")
+        CreateTime = System.DateTime.Now
     }
 
+
+let sectionsFREQ_COUNTER =
+    [ Section.section
+          Section.NoSection
+          [ Section.memberElement
+                "litrsPerPuls"
+                UInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+            Section.memberElement
+                "prewHour"
+                UInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+
+            Section.memberElement
+                "curHour"
+                UInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+            Section.memberElement
+                "prewDay"
+                UDInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+            Section.memberElement
+                "curDay"
+                UDInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+            Section.memberElement
+                "all"
+                UDInt
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ]
+            Section.memberElement
+                "rst"
+                Bool
+                Section.NoAccessibility
+                [ attributeElement [ dataTypeAttribute Bool ExternalAccessible
+                                     dataTypeAttribute Bool ExternalVisible
+                                     dataTypeAttribute Bool ExternalWritable
+                                     dataTypeAttribute Bool SetPoint ] ] ] ]
+
+let plcDataType: PlcDataType =
+    {   Name = "FREQ_COUNTER"
+        Number = 71   
+        DataTypeId = DataTypeId 0
+        Sections = sectionsFREQ_COUNTER
+        CreationTime = System.DateTime.Now }
 
 @"C:\Users\TimForkmann\Documents\Automatisierung\"
 |> PlcProgram.projectPath
@@ -251,7 +321,8 @@ let fcBlock  ={
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/AllPump.xml")
-|> PlcProgram.createAndImportBlock ("TypRoboter",V17,Block.FunctionalBlock fcBlock)
+|> PlcProgram.createAndImportPlcType ("FREQ_COUNTER",V17,plcDataType)
+|> PlcProgram.createAndImportBlock ("TypRoboter",V17,FunctionalBlock fcBlock)  
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Main.xml")

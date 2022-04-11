@@ -74,8 +74,7 @@ module PlcProgram =
               ProjectPath: string
               DeviceItems: DeviceItem []
               TagTableList: PlcTagTable []
-              PlcTypeList: PlcType []
-               }
+              PlcTypeList: PlcType [] }
 
     let private defaultProps () =
         { ExistingTiaPortalConnection = None
@@ -88,7 +87,7 @@ module PlcProgram =
           ProjectName = ""
           DeviceItems = [||]
           TagTableList = [||]
-          PlcTypeList = [||]  }
+          PlcTypeList = [||] }
 
     let projectPath projectPath =
         { defaultProps () with ProjectPath = projectPath }
@@ -169,15 +168,20 @@ module PlcProgram =
             activeLanguages.Add(language)
             props
         | None -> failwithf "Select your project first - use `selectProject`"
+
     let addAllLanguages (props: PlcProps) =
         match props.Project with
         | Some project ->
             let languageSettings = project.LanguageSettings
             let supportedLanguages = languageSettings.Languages
+
             for supportedLanguage in supportedLanguages do
-                match languageSettings.ActiveLanguages |> Seq.tryFind(fun l -> l.Culture = supportedLanguage.Culture) with
-                | Some _-> ()
+                match languageSettings.ActiveLanguages
+                      |> Seq.tryFind (fun l -> l.Culture = supportedLanguage.Culture)
+                    with
+                | Some _ -> ()
                 | None -> languageSettings.ActiveLanguages.Add(supportedLanguage)
+
             props
         | None -> failwithf "Select your project first - use `selectProject`"
 
@@ -291,11 +295,25 @@ module PlcProgram =
         plcSoftware.TypeGroup.Types
         |> Seq.tryFind (fun plcType -> plcType.Name = plcTypeName)
 
+    let importExportFolder (name: string) =
+        let targetDir =
+            if not (Directory.Exists("./tiaWorkDir")) then
+                Directory.CreateDirectory("./tiaWorkDir")
+                |> ignore
+
+                "./tiaWorkDir"
+            else
+                "./tiaWorkDir"
+
+        Path.GetFullPath($"{targetDir}/{name}.xml")
+
     let importPlcType (plcTypeName: string) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
             try
-                plcSoftware.TypeGroup.Types.Import((FileInfo plcTypeName),ImportOptions.Override) |> ignore
+                plcSoftware.TypeGroup.Types.Import((FileInfo(importExportFolder plcTypeName)), ImportOptions.Override)
+                |> ignore
+
                 printfn "Imported %s" plcTypeName
                 props
             with
@@ -303,19 +321,30 @@ module PlcProgram =
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let importExportFolder (name:string) =
-        let targetDir =
-            if not (Directory.Exists("./tiaWorkDir")) then
-                Directory.CreateDirectory("./tiaWorkDir") |> ignore
-                "./tiaWorkDir"
-            else
-                "./tiaWorkDir"
-        Path.GetFullPath($"{targetDir}/{name}.xml")
-
     let createPlcType (name, version, plcDataType) =
-        let doc = XDocument(XElement.Parse((PlcDataType.documentInfo version plcDataType).ToString()))
+        let doc =
+            XDocument(
+                XElement.Parse(
+                    (PlcDataType.documentInfo version plcDataType)
+                        .ToString()
+                )
+            )
+
         doc.Save(importExportFolder name)
-        ["""<?xml version="1.0" encoding="utf-8"?>""";Environment.NewLine;doc.ToString()] |> String.concat ""
+
+        [ """<?xml version="1.0" encoding="utf-8"?>"""
+          Environment.NewLine
+          doc.ToString() ]
+        |> String.concat ""
+
+    let createAndImportPlcType (name, version: TiaVersion, plcDataType) (props: PlcProps) =
+        try
+            let _ = createPlcType (name, version, plcDataType)
+            printfn "Created PLC Types %s" name
+            importPlcType name props
+        with
+        | exn -> failwithf "Could not create PlcBlock %A" exn.Message
+
 
     let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
         plcSoftware.BlockGroup.Blocks
@@ -341,7 +370,9 @@ module PlcProgram =
         match props.PlcSoftware with
         | Some plcSoftware ->
             try
-                plcSoftware.BlockGroup.Blocks.Import((FileInfo (importExportFolder name)),ImportOptions.Override) |> ignore
+                plcSoftware.BlockGroup.Blocks.Import((FileInfo(importExportFolder name)), ImportOptions.Override)
+                |> ignore
+
                 printfn "Imported %s" name
                 props
             with
@@ -349,18 +380,18 @@ module PlcProgram =
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let createAndExportBlock (name, version:TiaVersion, block) =
+    let createAndExportBlock (name, version: TiaVersion, block) =
         let doc = XDocument(XElement.Parse((Block.documentInfo version block).ToString()))
         doc.Save(importExportFolder name)
         doc.ToString()
 
-    let createAndImportBlock (name, version:TiaVersion, (block:Block.BlockType)) (props: PlcProps) =
+    let createAndImportBlock (name, version: TiaVersion, (block: Block.BlockType)) (props: PlcProps) =
         try
             let _ = createAndExportBlock (name, version, block)
             printfn "Created FCBlock %s" name
             importPlcBlock name props
         with
-            | exn -> failwithf "Could not create PlcBlock %A" exn.Message
+        | exn -> failwithf "Could not create PlcBlock %A" exn.Message
 
     let saveAndClose (props: PlcProps) =
         match props.Project, props.ExistingTiaPortalConnection with

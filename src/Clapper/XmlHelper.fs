@@ -545,7 +545,7 @@ module PlcDataType =
         | DataTypeId of int
         member this.Value = (fun (DataTypeId id) -> string id) this
 
-    type PlcDataType =
+    type PlcDataType = 
         { Name: string
           Number: int
           DataTypeId: DataTypeId
