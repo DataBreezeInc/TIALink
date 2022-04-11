@@ -316,12 +316,11 @@ let plcDataType: PlcDataType =
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
 |> PlcProgram.addTagTable tagTableList
 |> PlcProgram.addTags (tags,tagTableList)
-// |> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/FREQ_COUNTER.xml")
+|> PlcProgram.createAndImportPlcType ("FREQ_COUNTER",V17,plcDataType)
+|> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/PropDosing.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/AllPump.xml")
-|> PlcProgram.createAndImportPlcType ("FREQ_COUNTER",V17,plcDataType)
 |> PlcProgram.createAndImportBlock ("TypRoboter",V17,FunctionalBlock fcBlock)  
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
