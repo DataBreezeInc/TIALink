@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Document>
   <Engineering version="V17" />
   <DocumentInfo>
@@ -107,25 +107,13 @@
               <Text />
             </AttributeList>
           </MultilingualTextItem>
-          <MultilingualTextItem ID="3" CompositionName="Items">
-            <AttributeList>
-              <Culture>ru-RU</Culture>
-              <Text />
-            </AttributeList>
-          </MultilingualTextItem>
         </ObjectList>
       </MultilingualText>
-      <MultilingualText ID="4" CompositionName="Title">
+      <MultilingualText ID="3" CompositionName="Title">
         <ObjectList>
-          <MultilingualTextItem ID="5" CompositionName="Items">
+          <MultilingualTextItem ID="4" CompositionName="Items">
             <AttributeList>
               <Culture>en-US</Culture>
-              <Text />
-            </AttributeList>
-          </MultilingualTextItem>
-          <MultilingualTextItem ID="6" CompositionName="Items">
-            <AttributeList>
-              <Culture>ru-RU</Culture>
               <Text />
             </AttributeList>
           </MultilingualTextItem>

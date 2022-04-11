@@ -1,7 +1,7 @@
 open Clapper
 open System.IO
 open XmlHelper
-
+open Block
 let hardwareObjects =
     [ "6ES7 131-6BF00-0BA0/V1.1", "30A4.1"
       "6ES7 131-6BF00-0BA0/V1.1", "30A5.1"
@@ -222,10 +222,10 @@ let networkSourceTypRoboter blockName =
                     UId = UId 40
                     Name = "Ret_Val"
                     NameUId = UId 30
-                    WireType = Wires.IdentCon (UId 29)   
+                    WireType = Wires.IdentCon (UId 29)
                 }
         ]
-    ]) 
+    ])
 
 let fcBlock  ={
         Name = "ROBNAME"
@@ -251,9 +251,9 @@ let fcBlock  ={
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/AllPump.xml")
-|> PlcProgram.createAndImportBlock ("TypRoboter",V17,FunctionalBlock fcBlock)
+|> PlcProgram.createAndImportBlock ("TypRoboter",V17,Block.FunctionalBlock fcBlock)
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/BildungFolgen.xml")
-// |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")  
+// |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/TypRoboter.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Main.xml")
 // // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/dbVolumeCounter.xml")
 // // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/VolumeCounter.xml")

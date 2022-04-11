@@ -24,10 +24,7 @@ type Tag =
       Comment: string
       Address: string }
 
-type BlockType =
-    | DataBlock of string
-    | OrganisationalBlock
-    | FunctionalBlock of FCBlock
+
 
 type Language =
     | German
@@ -306,55 +303,25 @@ module PlcProgram =
 
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
+    let importExportFolder (name:string) =
+        let targetDir =
+            if not (Directory.Exists("./tiaWorkDir")) then
+                Directory.CreateDirectory("./tiaWorkDir") |> ignore
+                "./tiaWorkDir"
+            else
+                "./tiaWorkDir"
+        Path.GetFullPath($"{targetDir}/{name}.xml")
+
+    let createPlcType (name, version, plcDataType) =
+        let doc = XDocument(XElement.Parse((PlcDataType.documentInfo version plcDataType).ToString()))
+        doc.Save(importExportFolder name)
+        ["""<?xml version="1.0" encoding="utf-8"?>""";Environment.NewLine;doc.ToString()] |> String.concat ""
+
     let private tryFindBlockGroup (plcSoftware: PlcSoftware) plcBlockName =
         plcSoftware.BlockGroup.Blocks
         |> Seq.tryFind (fun plcBlock ->
             printfn "blockName %s" plcBlock.Name
-            plcBlock.Name = plcBlockName) 
-
-    // let createPlcBlock (block: Block) (props: PlcProps) =
-    //     match props.PlcSoftware, props.ExistingTiaPortalConnection with
-    //     | Some plcSoftware, Some _ ->
-    //         match tryFindBlockGroup plcSoftware block.Name with
-    //         | Some plcBlock ->
-    //             printfn "PlcBlock %s already exists" plcBlock.Name
-    //             props
-    //         | None ->
-    //             match block.BlockType with
-    //             | FunctionalBlock ->
-    //                 plcSoftware.BlockGroup.Blocks.CreateFB(
-    //                     block.Name,
-    //                     block.IsAutoNumbered,
-    //                     block.Number,
-    //                     ProgrammingLanguage.ProDiag
-    //                 )
-    //                 |> ignore
-
-    //                 printfn "Functional Block %s created" block.Name
-    //             | DataBlock instanceOfName ->
-    //                 plcSoftware.BlockGroup.Blocks.CreateInstanceDB(
-    //                     block.Name,
-    //                     block.IsAutoNumbered,
-    //                     block.Number,
-    //                     instanceOfName
-    //                 )
-    //                 |> ignore
-
-    //                 printfn "Data Block %s created" block.Name
-    //             | OrganisationalBlock -> ()
-    //             //TODO: Not working yet
-    //             // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
-    //             // for libraryInfo in libraryInfos do
-    //             //         printfn "name %A" libraryInfo.Name
-    //             // for libraries in tiaPortal.GlobalLibraries do
-    //             //     for copies in libraries.MasterCopyFolder.MasterCopies do
-    //             //         printfn "copies %A" copies.Name
-
-    //             // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
-    //             // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
-    //             // printfn "Data Block %s created" block.Name
-    //             props
-    //     | _ -> failwithf "Select / Add your device first - use `getDevice`"
+            plcBlock.Name = plcBlockName)
 
     let exportPlcBlock (blockName: string) (props: PlcProps) =
         match props.PlcSoftware with
@@ -365,28 +332,10 @@ module PlcProgram =
                 props
             | None ->
                 failwithf "Could not find block %s" blockName
-                //TODO: Not working yet
-                // let libraryInfos = tiaPortal.GlobalLibraries.GetGlobalLibraryInfos()
-                // for libraryInfo in libraryInfos do
-                //         printfn "name %A" libraryInfo.Name
-                // for libraries in tiaPortal.GlobalLibraries do
-                //     for copies in libraries.MasterCopyFolder.MasterCopies do
-                //         printfn "copies %A" copies.Name
 
-                // // let masterDataCopy = project.ProjectLibrary.MasterCopyFolder.MasterCopies.Find("Program cycle")
-                // // plcSoftware.BlockGroup.Blocks.CreateFrom(masterDataCopy) |> ignore
-                // printfn "Data Block %s created" block.Name
                 props
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
-    let importExportFolder (name:string) = 
-        let targetDir =
-            if not (Directory.Exists("./tiaWorkDir")) then
-                Directory.CreateDirectory("./tiaWorkDir") |> ignore
-                "./tiaWorkDir"
-            else
-                "./tiaWorkDir"
-        Path.GetFullPath($"{targetDir}/{name}.xml")
 
     let importPlcBlock name (props: PlcProps) =
         match props.PlcSoftware with
@@ -401,16 +350,11 @@ module PlcProgram =
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let createAndExportBlock (name, version:TiaVersion, block) =
-        match block with
-        | FunctionalBlock fcBlock ->
-            let fcBlockXML = Block.buildFcBlock fcBlock
-            let doc = XDocument(XElement.Parse((Block.documentInfo version fcBlockXML).ToString()))
-            doc.Save(importExportFolder name)
-            doc.ToString()
-        | DataBlock(_) -> failwith "Not Implemented"
-        | OrganisationalBlock -> failwith "Not Implemented"
+        let doc = XDocument(XElement.Parse((Block.documentInfo version block).ToString()))
+        doc.Save(importExportFolder name)
+        doc.ToString()
 
-    let createAndImportBlock (name, version:TiaVersion, (block:BlockType)) (props: PlcProps) =
+    let createAndImportBlock (name, version:TiaVersion, (block:Block.BlockType)) (props: PlcProps) =
         try
             let _ = createAndExportBlock (name, version, block)
             printfn "Created FCBlock %s" name
