@@ -383,6 +383,14 @@ module PlcProgram =
         with
         | exn -> failwithf "Could not create PlcBlock %A" exn.Message
 
+    let createDataBlock (dataBlock:Block.GlobalDB, version: TiaVersion) (props: PlcProps) =
+        try
+            let _ = createAndExportBlock (dataBlock.Name, version, Block.GlobalDB dataBlock)
+            printfn "Created DataBlock %s" dataBlock.Name
+            importPlcBlock dataBlock.Name props
+        with
+        | exn -> failwithf "Could not create PlcBlock %A" exn.Message
+
     let saveAndClose (props: PlcProps) =
         match props.Project, props.ExistingTiaPortalConnection with
         | Some project, Some tiaPortal ->

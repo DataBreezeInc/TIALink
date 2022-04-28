@@ -108,7 +108,12 @@ let private leftSide (p: Page) =
                                                                                  miBadge
                                                                                      "New"
                                                                                      "PlcDataTypeOp"
-                                                                                     Page.PlcDataTypeOp ] ]
+                                                                                     Page.PlcDataTypeOp
+                                                                                 miBadge
+                                                                                     "New"
+                                                                                     "DataBlock"
+                                                                                     Page.DataBlock
+                                                                                      ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "XmlHelper" ]
@@ -117,6 +122,7 @@ let private leftSide (p: Page) =
                                                                                      "DataTypes"
                                                                                      Page.DataTypes
                                                                                  miBadge "New" "Section" Page.Section
+                                                                                 miBadge "New" "DataBlock" Page.DataBlock
                                                                                  miBadge
                                                                                      "New"
                                                                                      "NetworkSource"
@@ -150,7 +156,7 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         | Section -> "Section", "/xmlHelper/Section", Pages.Section.SectionView()
         | NetworkSource -> "NetworkSource", "/xmlHelper/networksource", Pages.NetworkSource.NetworkSourceView()
         | Wires -> "Wires", "/xmlHelper/wires", Pages.Badge.WiresView()
-        | Block -> "Block", "/xmlHelper/block", Pages.Breadcrumbs.BlockView()
+        | Block -> "Block", "/xmlHelper/block", Pages.Block.BlockView()
         | PlcDataType -> "PlcDataType", "/xmlHelper/plcdatatype", Pages.PlcDataType.PlcDataTypeView()
         | PlcProps -> "PlcProps", "/operations/PlcProps", Pages.PlcProps.PlcPropsView()
         | Project -> "Project", "/operations/project", Pages.Project.ProjectView()
@@ -160,6 +166,7 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         | TagTable -> "TagTable", "/operations/tagtable", Pages.TagTable.TagTableView()
         | PlcDataTypeOp -> "PlcDataTypeOp", "/operations/plcdatatypeop", Pages.PlcDataTypeOp.PlcDataTypeOpView()
         | PlcBlock -> "PlcBlock", "/operations/plcblock", Pages.PlcBlock.PlcBlockView()
+        | DataBlock -> "DataBlock", "/operations/datablock", Pages.DataBlock.DataBlockView()
 
     React.router [ router.hashMode
                    router.onUrlChanged (

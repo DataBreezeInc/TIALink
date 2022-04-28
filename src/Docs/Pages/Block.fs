@@ -1,4 +1,4 @@
-﻿module Docs.Pages.Breadcrumbs
+﻿module Docs.Pages.Block
 
 open Feliz
 open Elmish

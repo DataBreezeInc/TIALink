@@ -7,26 +7,46 @@ open Feliz.DaisyUI
 open Feliz.DaisyUI.Operators
 open Docs.SharedView
 
-let ex1 =
-    let example =
-        Daisy.artboard [
-            artboard.demo
-            artboard.phone1
-            prop.text "Phone 1"
-        ]
-        |> Html.div
+let section =
 
-    let code = """Daisy.artboard [
-    artboard.demo
-    artboard.phone1
-    prop.text "Phone 1"
-]"""
-    let title = Html.text "Use Artboard for fancy mobile-like style."
-    codedView title code example
+    let code = """
+    type Section =
+        | Input
+        | InOut
+        | Output
+        | Return
+        | Temp
+        | Constant
+        | Static
+        | NoSection"""
+    let title =
+        Html.text "Clapper supports following Sections"
+    codedNoExampleView title code
 
+let accessibility =
+
+    let code = """
+    type Accessibility =
+        | Public
+        | Private
+        | NoAccessibility"""
+    let title =
+        Html.text "Following Accessibilities are supported"
+    codedNoExampleView title code
+let remanence =
+
+    let code = """
+    type Remanence =
+        | Retain
+        | NoRemanence"""
+    let title =
+        Html.text "Following Remanences are supported"
+    codedNoExampleView title code
 
 [<ReactComponent>]
 let SectionView () =
     React.fragment [
-        ex1
+        section
+        accessibility
+        remanence
     ]
