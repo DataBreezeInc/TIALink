@@ -31,7 +31,7 @@
       </Product>
     </InstalledProducts>
   </DocumentInfo>
-  <SW.Blocks.GlobalDB ID="0">
+  <SW.Blocks.GlobalDB ID="1">
     <AttributeList>
       <AutoNumber>true</AutoNumber>
       <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
@@ -269,7 +269,7 @@
       <IsWriteProtectedInAS>false</IsWriteProtectedInAS>
       <MemoryLayout>Standard</MemoryLayout>
       <Name>dbVolumeCounters</Name>
-      <Number>109</Number>
+      <Number>10</Number>
       <ProgrammingLanguage>DB</ProgrammingLanguage>
     </AttributeList>
     <ObjectList>

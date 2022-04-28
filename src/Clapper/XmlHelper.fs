@@ -482,7 +482,6 @@ module Block =
 
     type GlobalDB =
         { Name: string
-          Number: int
           GlobalDBId: GlobalDBId
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
@@ -523,8 +522,26 @@ module Block =
 
     let commentElement (lang: Language) (comment: string) =
         Element("Comment", [], "", [ Element("MultiLanguageText", [ ("Lang", lang.Value) ], comment, []) ])
+    let startValue (dataType:DataType) (value: obj) =
+        let valueStr = 
+            match dataType with 
+            | Real -> sprintf "%f" (value :?> float)
+            | Bool -> sprintf "%b" (value :?> bool)
+            | Byte -> failwith "Not Implemented"
+            | Word -> failwith "Not Implemented"
+            | DWord -> failwith "Not Implemented"
+            | Int -> sprintf "%i" (value :?> int)
+            | DInt -> sprintf "%i" (value :?> int)
+            | UInt -> sprintf "%i" (value :?> uint)
+            | UDInt -> failwith "Not Implemented"
+            | S5Time -> failwith "Not Implemented"
+            | Time -> failwith "Not Implemented"
+            | Void -> failwith "Not Implemented"
+            | Struct -> failwith "Not Implemented"
+            | Custom(_) -> failwith "Not Implemented"
+        Element("StartValue", [], valueStr , [ ])
 
-
+    
     let blockCompileUnit (fcBlock: FCBlock) =
         Element(
             "SW.Blocks.CompileUnit",
@@ -610,7 +627,7 @@ module Block =
                     Element("IsWriteProtectedInAS", [], "false", [])
                     Element("MemoryLayout", [], globalDB.MemoryLayout.Value, [])
                     Element("Name", [], globalDB.Name, [])
-                    Element("Number", [], globalDB.Number |> string, [])
+                    Element("Number", [], globalDB.GlobalDBId.Value |> string, [])
                     Element("ProgrammingLanguage", [], globalDB.ProgrammingLanguage.Value, [])
 
                     ]

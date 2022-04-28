@@ -68,7 +68,7 @@
       <Number>71</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>
-      <StructureModified ReadOnly="true">2022-04-11T13:03:58</StructureModified>
+      <StructureModified ReadOnly="true">2022-04-27T20:21:31</StructureModified>
       <UDABlockProperties />
       <UDAEnableTagReadback>false</UDAEnableTagReadback>
     </AttributeList>
@@ -145,7 +145,7 @@
                 <Call UId="30">
                   <CallInfo Name="BIT_TO_BYTE" BlockType="FC">
                     <IntegerAttribute Name="BlockNumber" Informative="true">679</IntegerAttribute>
-                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-11T13:03:58</DateAttribute>
+                    <DateAttribute Name="ParameterModifiedTS" Informative="true">2022-04-27T20:21:31</DateAttribute>
                     <Parameter Name="BIT_0" Section="Input" Type="Bool">
                       <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
                     </Parameter>
