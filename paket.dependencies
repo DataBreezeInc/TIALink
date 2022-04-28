@@ -1,10 +1,25 @@
-version 5.249.0
 
 source https://api.nuget.org/v3/index.json
 framework: net6.0, netstandard2.0
 storage: none
 
 nuget FSharp.Core
+nuget Feliz
+
+group Docs
+    source https://api.nuget.org/v3/index.json
+    framework: net6.0
+    storage: none
+
+    nuget FSharp.Core
+    nuget Feliz.Router
+    nuget Feliz.UseElmish
+    nuget Fable.Elmish
+    nuget Fable.Elmish.React
+    nuget Fable.Elmish.Debugger
+    nuget Fable.Elmish.HMR
+    nuget Feliz.DaisyUI
+    nuget Feliz.Tailwind
 
 group Build
     source https://api.nuget.org/v3/index.json
@@ -14,6 +29,7 @@ group Build
     nuget Fake.Core.Target
     nuget Fake.DotNet.Cli
     nuget Fake.Core.UserInput
+
 group Tests
     source https://api.nuget.org/v3/index.json
     framework: net6.0

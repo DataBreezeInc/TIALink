@@ -6,8 +6,8 @@
         <!-- <TargetFramework>netframework4.8</TargetFramework> -->
     </PropertyGroup>
     <ItemGroup>
-        <!-- <Compile Include="Tests.fs" /> -->
-        <Compile Include="XmlTests.fs" />
+        <Compile Include="Tests.fs" />
+        <!-- <Compile Include="XmlTests.fs" /> -->
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../../src/Clapper/Clapper.fsproj" />

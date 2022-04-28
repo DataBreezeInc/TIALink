@@ -25,8 +25,6 @@ type Tag =
       Address: string }
 
 
-
-
 type Block =
     { Name: string
       IsAutoNumbered: bool
@@ -191,10 +189,10 @@ module PlcProgram =
             printfn "Can't plug new hardware object returning current state"
             device.DeviceItems.[0]
 
-    let plugNew (orderNumber: string, hardwareName: string, position: int) (props: PlcProps) =
+    let plugNew (hardwareObject: HardwareObject) (props: PlcProps) =
         match props.Device with
         | Some device ->
-            let deviceItem = tryPlugNew (device, orderNumber, hardwareName, position)
+            let deviceItem = tryPlugNew (device, hardwareObject.OrderNumber, hardwareObject.Name, hardwareObject.Position)
 
             let deviceItems =
                 Array.concat [ props.DeviceItems
@@ -247,6 +245,21 @@ module PlcProgram =
         plcTag.DataTypeName <- tag.DataType.Value
         plcTag.Comment.Items.[0].Text <- tag.Comment
         plcTag.LogicalAddress <- tag.Address
+
+    let addTag (tag: Tag, tagTableName) (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            match tryFindTagTable plcSoftware tagTableName with
+            | Some tagTable ->
+                match tryFindTag tagTable.Tags tag with
+                | Some tag -> printfn "plcTag %s already exists" tag.Name
+                | _ -> createNewTag tagTable tag
+
+                props
+            | _ ->
+                failwithf
+                    "Can't find selected tagTable, please check the name or first a add new tagTable - use `addTagTable`"
+        | None -> failwithf "Select / Add your device first - use `getDevice`"
 
     let addTags (tags: Tag list, tagTableName) (props: PlcProps) =
         match props.PlcSoftware with
@@ -311,7 +324,7 @@ module PlcProgram =
           doc.ToString() ]
         |> String.concat ""
 
-    let createAndImportPlcType (name, version: TiaVersion, plcDataType) (props: PlcProps) =
+    let createAndImportPlcDataType (name, version: TiaVersion, plcDataType) (props: PlcProps) =
         try
             let _ = createPlcType (name, version, plcDataType)
             printfn "Created PLC Types %s" name
