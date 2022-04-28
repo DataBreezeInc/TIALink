@@ -10,7 +10,7 @@ let plugNewHardwareObject =
 
 @"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addAllLanguages
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
 |> PlcProgram.plugNewHarwareObjects hardwareObjects
@@ -18,7 +18,7 @@ let plugNewHardwareObject =
                         Name = "30A4.1"
                         Position = 1} """
     let title = Html.text "Add a hardware object to the TIA Project."
-    codedNoExampleView title code
+    codedWithPictureView title code "./hardwareobject.png"
 let plugNewHardwareObjects =
 
     let code = """
@@ -41,12 +41,12 @@ let hardwareObjects =
 
 @"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addAllLanguages
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
 |> PlcProgram.plugNewHarwareObjects hardwareObjects"""
     let title = Html.text "Add a list of hardware objects to the TIA Project."
-    codedNoExampleView title code
+    codedWithPictureView title code "./hardwareobjects.png"
 
 
 [<ReactComponent>]

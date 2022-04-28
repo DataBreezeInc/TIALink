@@ -10,7 +10,7 @@ open Docs.SharedView
 let addLanguage =
     let code = """@"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addLanguage English
 """
     let title =
@@ -20,7 +20,7 @@ let addLanguage =
 let allLanguages =
     let code = """@"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addAllLanguages"""
 
     let title =

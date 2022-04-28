@@ -2,8 +2,6 @@ module Docs.Pages.TagTable
 
 open Feliz
 open Elmish
-open Feliz.DaisyUI
-open Feliz.UseElmish
 open Docs.SharedView
 
 let addTagTable =
@@ -12,7 +10,7 @@ let addTagTable =
 
 @"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addTagTable "Tag List Name"
 )"""
     let title = Html.text "Add a TagList to your TIA project."
@@ -23,7 +21,7 @@ let addTag =
 
 @"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addTag (
     { Name = "E0.0"
       DataType = Bool
@@ -51,7 +49,7 @@ let tags =
 
 @"Your/Project/Path"
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"
+|> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.addTags (tags,"Tag List Name")"""
     let title = Html.text "Create a new TagList with a list of tags to your TIA project."
     codedWithPictureView title code "./addtags.png"

@@ -9,7 +9,7 @@ let project =
 
     let code = """@"Your/Project/Path""
 |> PlcProgram.projectPath
-|> PlcProgram.selectProject "Your Project Name"""
+|> PlcProgram.selectProject "YourProjectName"""
     let title = Html.text "Select a TIA Portal project. Creates a new Project if not existing."
     codedNoExampleView title code
 
