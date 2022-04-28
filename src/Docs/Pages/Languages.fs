@@ -11,12 +11,11 @@ let addLanguage =
     let code = """@"Your/Project/Path"
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "YourProjectName"
-|> PlcProgram.addLanguage English
-"""
+|> PlcProgram.addLanguage German"""
     let title =
         Html.text "Add one language to the TIA Project."
 
-    codedNoExampleView title code
+    codedWithPictureView title code "./language.png"
 let allLanguages =
     let code = """@"Your/Project/Path"
 |> PlcProgram.projectPath
@@ -26,7 +25,7 @@ let allLanguages =
     let title =
         Html.text "Configure all languages to the TIA Project."
 
-    codedNoExampleView title code
+    codedWithPictureView title code "./languages.png"
 
 [<ReactComponent>]
 let LanguagesView () =

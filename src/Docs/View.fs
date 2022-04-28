@@ -88,6 +88,14 @@ let private leftSide (p: Page) =
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span
+                                                                                                       "Configration" ]
+                                                                                 miBadge
+                                                                                     "New"
+                                                                                     "Languages"
+                                                                                     Page.Languages ] ]
+                                                    Daisy.menu [ menu.compact
+                                                                 prop.className "flex flex-col p-4 pt-0"
+                                                                 prop.children [ Daisy.menuTitle [ Html.span
                                                                                                        "Operations" ]
                                                                                  miBadge "New" "PlcProps" Page.PlcProps
                                                                                  miBadge "New" "Project" Page.Project
@@ -104,10 +112,6 @@ let private leftSide (p: Page) =
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "XmlHelper" ]
-                                                                                 miBadge
-                                                                                     "New"
-                                                                                     "Languages"
-                                                                                     Page.Languages
                                                                                  miBadge
                                                                                      "New"
                                                                                      "DataTypes"
@@ -141,7 +145,7 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         match state.Page with
         | Install -> "Installation", "/docs/install", Pages.Install.InstallView()
         | Use -> "How to use", "/docs/use", Pages.Use.UseView()
-        | Languages -> "Languages", "/docs/languages", Pages.Languages.LanguagesView()
+        | Languages -> "Languages", "/configuration/languages", Pages.Languages.LanguagesView()
         | DataTypes -> "DataTypes", "/xmlHelper/DataTypes", Pages.DataTypes.DataTypesView()
         | Section -> "Section", "/xmlHelper/Section", Pages.Section.SectionView()
         | NetworkSource -> "NetworkSource", "/xmlHelper/networksource", Pages.NetworkSource.NetworkSourceView()

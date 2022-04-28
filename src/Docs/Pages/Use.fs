@@ -23,19 +23,10 @@ let UseView () =
             linedMockupCode """@"TIAProgramPath"
 |> PlcProgram.projectPath"""
         ]
-        Html.divClassed "description" [
-            Html.text "For applying helpers to non-daisy elements, you need to use custom operator "
-            Html.code [ prop.className "code"; prop.text "++" ]
-            Html.text " from "
-            Html.code [ prop.className "code"; prop.text "Feliz.DaisyUI.Operators" ]
-            Html.text " namespace."
-        ]
-        Html.divClassed "max-w-xl" [
-            linedMockupCode """open Feliz.DaisyUI.Operators
-
-Html.div [
-    prop.className "my-class"
-    ++ color.success // note usage of custom operator here
-]"""
-        ]
+        Html.divClassed "description" [ Html.text "After starting your console app you have to grant Openness access to the TIA Portal." ]
+        Html.divClassed "grid flex-1" [
+                Html.img [
+                        prop.src "./opennessaccess.png"
+                ]
+             ]
     ]
