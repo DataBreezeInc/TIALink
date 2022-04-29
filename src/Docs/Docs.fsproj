@@ -19,12 +19,13 @@
         <Compile Include="Pages\HardwareObjects.fs" />
         <Compile Include="Pages\TagTable.fs" />
         <Compile Include="Pages\PlcDataTypeOp.fs" />
-        <Compile Include="Pages\PlcBlock.fs" />
         <Compile Include="Pages\NetworkSource.fs" />
         <Compile Include="Pages\DataBlock.fs" />
         <Compile Include="Pages\FunctionalBlock.fs" />
         <Compile Include="Pages\Languages.fs" />
         <Compile Include="Pages\Export.fs" />
+        <Compile Include="Pages\Compile.fs" />
+        <Compile Include="Pages\Save.fs" />
         <Compile Include="View.fs" />
         <Compile Include="App.fs" />
         <Content Include="index.html" />

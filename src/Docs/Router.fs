@@ -8,7 +8,9 @@ type Page =
     | Install
     | Use
     | Languages
+    | Compile
     | Export
+    | Save
     | DataTypes
     | Section
     | NetworkSource
@@ -21,7 +23,6 @@ type Page =
     | HardwareObjects
     | TagTable
     | PlcDataTypeOp
-    | PlcBlock
     | DataBlock
     | FunctionalBlock
 
@@ -32,7 +33,9 @@ module Page =
     let parseFromUrlSegments = function
         | [ "use" ] -> Use
         | [ "languages" ] -> Languages
+        | [ "compile" ] -> Compile
         | [ "export" ] -> Export
+        | [ "save" ] -> Save
         | [ "datatypes" ] -> DataTypes
         | [ "section" ] -> Section
         | [ "networksource" ] -> NetworkSource
@@ -45,7 +48,6 @@ module Page =
         | [ "hardwareobjects" ] -> HardwareObjects
         | [ "tagtable" ] -> TagTable
         | [ "plcdatatypeop" ] -> PlcDataTypeOp
-        | [ "plcblock" ] -> PlcBlock
         | [ "datablock" ] -> DataBlock
         | [ "functionalblock" ] -> FunctionalBlock
         | [ ] -> Install
@@ -57,7 +59,9 @@ module Page =
         | Install -> [ ] |> noQueryString
         | Use -> [ "use" ] |> noQueryString
         | Languages -> [ "languages" ] |> noQueryString
+        | Compile -> [ "compile" ] |> noQueryString
         | Export -> [ "export" ] |> noQueryString
+        | Save -> [ "save" ] |> noQueryString
         | DataTypes -> [ "datatypes" ] |> noQueryString
         | Section -> [ "section" ] |> noQueryString
         | NetworkSource -> [ "networksource" ] |> noQueryString
@@ -70,7 +74,6 @@ module Page =
         | HardwareObjects -> [ "hardwareobjects" ] |> noQueryString
         | TagTable -> [ "tagtable" ] |> noQueryString
         | PlcDataTypeOp -> [ "plcdatatypeop" ] |> noQueryString
-        | PlcBlock -> [ "plcblock" ] |> noQueryString
         | DataBlock -> [ "datablock" ] |> noQueryString
         | FunctionalBlock -> [ "functionalblock" ] |> noQueryString
 
