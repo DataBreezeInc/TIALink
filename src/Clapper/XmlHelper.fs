@@ -265,7 +265,7 @@ module NetworkSource =
         member this.GetBitOffset =
             match this.BitOffset with
             | Some offset -> offset |> string
-            | None -> failwithf "bit offset not set"
+            | None -> ""
 
     type CallInfoName = 
     | MUL 

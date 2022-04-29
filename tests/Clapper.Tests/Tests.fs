@@ -27,7 +27,7 @@ let tags =
     |> List.mapi (fun i (x, y, z, a) ->
         { Name = x
           DataType = y
-          Comment = z
+          Comment = z   
           Address = a })
 
 
@@ -44,7 +44,31 @@ let networkSourceSimplyMultiply blockName =
         "FlgNet",
         [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
         "",
-        [ NetworkSource.parts [ 
+        [ NetworkSource.parts [    
+            NetworkSource.accessElement
+                                    { AreaType = NetworkSource.Memory
+                                      ComponentName = "In1"
+                                      UId = UId 21
+                                      BitOffset = None
+                                      BlockNumber = None
+                                      DataType = Real
+                                      Scope = Local }
+            NetworkSource.accessElement
+                                    { AreaType = NetworkSource.Memory
+                                      ComponentName = "In2"
+                                      UId = UId 22
+                                      BitOffset = None
+                                      BlockNumber = None
+                                      DataType = Real
+                                      Scope = Local }
+            NetworkSource.accessElement
+                                    { AreaType = NetworkSource.Memory
+                                      ComponentName = "Out"
+                                      UId = UId 23
+                                      BitOffset = None
+                                      BlockNumber = None
+                                      DataType = Real
+                                      Scope = Local }
             NetworkSource.part "Mul" "24" ]
           Wires.wires [ Wires.wireElement
                             { UId = UId 25
