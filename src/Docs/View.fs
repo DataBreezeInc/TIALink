@@ -83,8 +83,8 @@ let private leftSide (p: Page) =
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "Docs" ]
-                                                                                 mi "Install" Page.Install
-                                                                                 mi "Use" Page.Use ] ]
+                                                                                 mi "Install" Install
+                                                                                 mi "Use" Use ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span
@@ -92,50 +92,51 @@ let private leftSide (p: Page) =
                                                                                  miBadge
                                                                                      "New"
                                                                                      "Languages"
-                                                                                     Page.Languages ] ]
+                                                                                     Languages
+                                                                                 miBadge "New" "Export" Export ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span
                                                                                                        "Operations" ]
-                                                                                 miBadge "New" "PlcProps" Page.PlcProps
-                                                                                 miBadge "New" "Project" Page.Project
-                                                                                 miBadge "New" "Device" Page.Device
+                                                                                 miBadge "New" "PlcProps" PlcProps
+                                                                                 miBadge "New" "Project" Project
+                                                                                 miBadge "New" "Device" Device
                                                                                  miBadge
                                                                                      "New"
                                                                                      "HardwareObjects"
-                                                                                     Page.HardwareObjects
-                                                                                 miBadge "New" "TagTable" Page.TagTable
+                                                                                     HardwareObjects
+                                                                                 miBadge "New" "TagTable" TagTable
                                                                                  miBadge
                                                                                      "New"
                                                                                      "PlcDataTypeOp"
-                                                                                     Page.PlcDataTypeOp
+                                                                                     PlcDataTypeOp
                                                                                  miBadge
                                                                                      "New"
                                                                                      "DataBlock"
-                                                                                     Page.DataBlock
+                                                                                     DataBlock
 
                                                                                  miBadge
                                                                                      "New"
                                                                                      "FunctionalBlock"
-                                                                                     Page.FunctionalBlock ] ]
+                                                                                     FunctionalBlock ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "XmlHelper" ]
                                                                                  miBadge
                                                                                      "New"
                                                                                      "DataTypes"
-                                                                                     Page.DataTypes
-                                                                                 miBadge "New" "Section" Page.Section
+                                                                                     DataTypes
+                                                                                 miBadge "New" "Section" Section
                                                                                  miBadge
                                                                                      "New"
                                                                                      "NetworkSource"
-                                                                                     Page.NetworkSource
-                                                                                 miBadge "New" "Wires" Page.Wires
-                                                                                 miBadge "New" "Block" Page.Block
+                                                                                     NetworkSource
+                                                                                 miBadge "New" "Wires" Wires
+                                                                                 miBadge "New" "Block" Block
                                                                                  miBadge
                                                                                      "New"
                                                                                      "PlcDataType"
-                                                                                     Page.PlcDataType ] ] ] ] ]
+                                                                                     PlcDataType ] ] ] ] ]
 
 let private inLayout state dispatch (title: string) (docLink: string) (p: Page) (elm: ReactElement) =
     Html.div [ prop.className "bg-base-100 text-base-content h-screen"
@@ -155,6 +156,7 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         | Install -> "Installation", "/docs/install", Pages.Install.InstallView()
         | Use -> "How to use", "/docs/use", Pages.Use.UseView()
         | Languages -> "Languages", "/configuration/languages", Pages.Languages.LanguagesView()
+        | Export -> "Export", "/configuration/export", Pages.Export.ExportView()
         | DataTypes -> "DataTypes", "/xmlHelper/DataTypes", Pages.DataTypes.DataTypesView()
         | Section -> "Section", "/xmlHelper/Section", Pages.Section.SectionView()
         | NetworkSource -> "NetworkSource", "/xmlHelper/networksource", Pages.NetworkSource.NetworkSourceView()
@@ -170,7 +172,8 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         | PlcDataTypeOp -> "PlcDataTypeOp", "/operations/plcdatatypeop", Pages.PlcDataTypeOp.PlcDataTypeOpView()
         | PlcBlock -> "PlcBlock", "/operations/plcblock", Pages.PlcBlock.PlcBlockView()
         | DataBlock -> "DataBlock", "/operations/datablock", Pages.DataBlock.DataBlockView()
-        | FunctionalBlock -> "FunctionalBlock", "/operations/functionalblock", Pages.FunctionalBlock.FunctionalBlockView()
+        | FunctionalBlock ->
+            "FunctionalBlock", "/operations/functionalblock", Pages.FunctionalBlock.FunctionalBlockView()
 
     React.router [ router.hashMode
                    router.onUrlChanged (

@@ -24,6 +24,7 @@
         <Compile Include="Pages\DataBlock.fs" />
         <Compile Include="Pages\FunctionalBlock.fs" />
         <Compile Include="Pages\Languages.fs" />
+        <Compile Include="Pages\Export.fs" />
         <Compile Include="View.fs" />
         <Compile Include="App.fs" />
         <Content Include="index.html" />

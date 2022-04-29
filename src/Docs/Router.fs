@@ -8,6 +8,7 @@ type Page =
     | Install
     | Use
     | Languages
+    | Export
     | DataTypes
     | Section
     | NetworkSource
@@ -26,50 +27,52 @@ type Page =
 
 [<RequireQualifiedAccess>]
 module Page =
-    let defaultPage = Page.Install
+    let defaultPage = Install
 
     let parseFromUrlSegments = function
-        | [ "use" ] -> Page.Use
-        | [ "languages" ] -> Page.Languages
-        | [ "datatypes" ] -> Page.DataTypes
-        | [ "section" ] -> Page.Section
-        | [ "networksource" ] -> Page.NetworkSource
-        | [ "wires" ] -> Page.Wires
-        | [ "block" ] -> Page.Block
-        | [ "plcdatatype" ] -> Page.PlcDataType
-        | [ "plcprops" ] -> Page.PlcProps
-        | [ "project" ] -> Page.Project
-        | [ "device" ] -> Page.Device
-        | [ "hardwareobjects" ] -> Page.HardwareObjects
-        | [ "tagtable" ] -> Page.TagTable
-        | [ "plcdatatypeop" ] -> Page.PlcDataTypeOp
-        | [ "plcblock" ] -> Page.PlcBlock
-        | [ "datablock" ] -> Page.DataBlock
-        | [ "functionalblock" ] -> Page.FunctionalBlock
-        | [ ] -> Page.Install
+        | [ "use" ] -> Use
+        | [ "languages" ] -> Languages
+        | [ "export" ] -> Export
+        | [ "datatypes" ] -> DataTypes
+        | [ "section" ] -> Section
+        | [ "networksource" ] -> NetworkSource
+        | [ "wires" ] -> Wires
+        | [ "block" ] -> Block
+        | [ "plcdatatype" ] -> PlcDataType
+        | [ "plcprops" ] -> PlcProps
+        | [ "project" ] -> Project
+        | [ "device" ] -> Device
+        | [ "hardwareobjects" ] -> HardwareObjects
+        | [ "tagtable" ] -> TagTable
+        | [ "plcdatatypeop" ] -> PlcDataTypeOp
+        | [ "plcblock" ] -> PlcBlock
+        | [ "datablock" ] -> DataBlock
+        | [ "functionalblock" ] -> FunctionalBlock
+        | [ ] -> Install
         | _ -> defaultPage
 
     let noQueryString segments : string list * (string * string) list = segments, []
 
     let toUrlSegments = function
-        | Page.Install -> [ ] |> noQueryString
-        | Page.Use -> [ "use" ] |> noQueryString
-        | Page.Languages -> [ "languages" ] |> noQueryString
-        | Page.DataTypes -> [ "datatypes" ] |> noQueryString
-        | Page.Section -> [ "section" ] |> noQueryString
-        | Page.NetworkSource -> [ "networksource" ] |> noQueryString
-        | Page.Wires -> [ "wires" ] |> noQueryString
-        | Page.Block -> [ "block" ] |> noQueryString
-        | Page.PlcDataType -> [ "plcdatatype" ] |> noQueryString
-        | Page.PlcProps -> [ "plcprops" ] |> noQueryString
-        | Page.Project -> [ "project" ] |> noQueryString
-        | Page.Device -> [ "device" ] |> noQueryString
-        | Page.HardwareObjects -> [ "hardwareobjects" ] |> noQueryString
-        | Page.TagTable -> [ "tagtable" ] |> noQueryString
-        | Page.PlcDataTypeOp -> [ "plcdatatypeop" ] |> noQueryString
-        | Page.PlcBlock -> [ "plcblock" ] |> noQueryString
-        | Page.DataBlock -> [ "datablock" ] |> noQueryString
-        | Page.FunctionalBlock -> [ "functionalblock" ] |> noQueryString
+        | Install -> [ ] |> noQueryString
+        | Use -> [ "use" ] |> noQueryString
+        | Languages -> [ "languages" ] |> noQueryString
+        | Export -> [ "export" ] |> noQueryString
+        | DataTypes -> [ "datatypes" ] |> noQueryString
+        | Section -> [ "section" ] |> noQueryString
+        | NetworkSource -> [ "networksource" ] |> noQueryString
+        | Wires -> [ "wires" ] |> noQueryString
+        | Block -> [ "block" ] |> noQueryString
+        | PlcDataType -> [ "plcdatatype" ] |> noQueryString
+        | PlcProps -> [ "plcprops" ] |> noQueryString
+        | Project -> [ "project" ] |> noQueryString
+        | Device -> [ "device" ] |> noQueryString
+        | HardwareObjects -> [ "hardwareobjects" ] |> noQueryString
+        | TagTable -> [ "tagtable" ] |> noQueryString
+        | PlcDataTypeOp -> [ "plcdatatypeop" ] |> noQueryString
+        | PlcBlock -> [ "plcblock" ] |> noQueryString
+        | DataBlock -> [ "datablock" ] |> noQueryString
+        | FunctionalBlock -> [ "functionalblock" ] |> noQueryString
 
 [<RequireQualifiedAccess>]
 module Router =
