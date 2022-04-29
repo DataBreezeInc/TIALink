@@ -4,13 +4,13 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageId>Clapper</PackageId>
         <Description>TIA Openness FSharp wrapper library</Description>
-        <RepositoryUrl>https://github.com/tforkmann/Clapper</RepositoryUrl>
-        <PackageProjectUrl>https://tforkmann.github.io/Clapper</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/tforkmann/Clapper/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/DataBreezeUG/Clapper</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/DataBreezeUG/Clapper</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/DataBreezeUG/Clapper/blob/main/LICENSE</PackageLicenseUrl>
         <PackageIconUrl></PackageIconUrl>
         <PackageTags>fsharp;tia portal;openness</PackageTags>
         <Authors>Tim Forkmann</Authors>
-        <Version>0.0.6</Version>
+        <Version>0.0.7</Version>
         <PackageReleaseNotes>Follow major release of Clapper</PackageReleaseNotes>
     </PropertyGroup>
     <ItemGroup>

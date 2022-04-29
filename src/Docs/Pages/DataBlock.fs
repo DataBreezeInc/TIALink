@@ -2,9 +2,6 @@
 
 open Feliz
 open Elmish
-open Feliz.UseElmish
-open Feliz.DaisyUI
-open Feliz.DaisyUI.Operators
 open Docs.SharedView
 
 let datablock =
