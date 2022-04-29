@@ -11,6 +11,6 @@ or using [Paket](http://fsprojects.github.io/Paket/getting-started.html)
 
     paket add Clapper
 
-## Documentation
 
-WIP
+## Documentation
+Clapper has a documentation available on https://databreezeug.github.io/Clapper
