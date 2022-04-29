@@ -55,7 +55,7 @@
       <Number>0</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>
-      <StructureModified ReadOnly="true">2022-04-28T21:40:09</StructureModified>
+      <StructureModified ReadOnly="true">2022-04-29T08:57:35</StructureModified>
       <UDABlockProperties />
       <UDAEnableTagReadback>false</UDAEnableTagReadback>
     </AttributeList>
@@ -65,7 +65,7 @@
           <MultilingualTextItem ID="2" CompositionName="Items">
             <AttributeList>
               <Culture>en-US</Culture>
-              <Text />
+              <Text>Some Comment</Text>
             </AttributeList>
           </MultilingualTextItem>
         </ObjectList>
@@ -123,7 +123,7 @@
               <MultilingualTextItem ID="5" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text />
+                  <Text>Some Comment</Text>
                 </AttributeList>
               </MultilingualTextItem>
             </ObjectList>
@@ -133,7 +133,7 @@
               <MultilingualTextItem ID="7" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text />
+                  <Text>Multiply</Text>
                 </AttributeList>
               </MultilingualTextItem>
             </ObjectList>
@@ -145,7 +145,7 @@
           <MultilingualTextItem ID="9" CompositionName="Items">
             <AttributeList>
               <Culture>en-US</Culture>
-              <Text />
+              <Text>Multiply</Text>
             </AttributeList>
           </MultilingualTextItem>
         </ObjectList>

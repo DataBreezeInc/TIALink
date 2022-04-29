@@ -196,8 +196,8 @@ module Section =
             | Retain -> "Retain"
             | NoRemanence -> ""
 
-    let sections elements =
-        Element("Sections", [ ], "", elements)
+    let sections elements = Element("Sections", [], "", elements)
+
     let section (sectionName: Section) elements =
         Element("Section", [ ("Name", sectionName.Value) ], "", elements)
 
@@ -267,13 +267,14 @@ module NetworkSource =
             | Some offset -> offset |> string
             | None -> ""
 
-    type CallInfoName = 
-    | MUL 
-    | Custom of string 
-        member this.Value = 
-            match this with 
-            | MUL ->"MUL"
+    type CallInfoName =
+        | MUL
+        | Custom of string
+        member this.Value =
+            match this with
+            | MUL -> "MUL"
             | Custom str -> str
+
     type Call =
         { BlockName: string
           AreaType: AreaType
@@ -284,8 +285,7 @@ module NetworkSource =
           BlockNumber: int
           InstanceBlockNumber: int
           CreateDate: DateTime
-          Parameters: seq<Xml>
-         }
+          Parameters: seq<Xml> }
 
     let parameter name (section: Section.Section) (dataType: DataType) =
         Element(
@@ -412,12 +412,43 @@ module NetworkSource =
                         p ]
               ) ]
         )
-    let templateValue  = Element("TemplateValue", [("Name", "Card");("Type","Cardinality")], "2",[])
-    let automaticTyped  = Element("AutomaticTyped", [("Name", "SrcType")], "", [])
-    let parts childElements = Element("Parts", [], "", childElements )
-    let part name uid = Element("Part", [("Name",name);("UId",uid)], "", 
-            [templateValue
-             automaticTyped])
+
+    let templateValue =
+        Element(
+            "TemplateValue",
+            [ ("Name", "Card")
+              ("Type", "Cardinality") ],
+            "2",
+            []
+        )
+
+    let automaticTyped = Element("AutomaticTyped", [ ("Name", "SrcType") ], "", [])
+
+
+    let networkSourceElement childElements =
+        Element(
+            "FlgNet",
+            [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
+            "",
+            childElements
+        )
+
+    let parts childElements = Element("Parts", [], "", childElements)
+
+    type Instruction =
+        | Mul
+        member this.Value =
+            match this with
+            | Mul -> "Mul"
+
+    let part (instruction: Instruction) uid =
+        Element(
+            "Part",
+            [ ("Name", instruction.Value)
+              ("UId", uid) ],
+            "",
+            [ templateValue; automaticTyped ]
+        )
 
 [<RequireQualifiedAccess>]
 module Wires =
@@ -488,7 +519,9 @@ module Block =
           MemoryLayout: MemoryLayout
           NetworkSource: Xml option
           CreateTime: DateTime
-          TiaVersion : TiaVersion }
+          TiaVersion: TiaVersion
+          Comment: string option
+          Title: string option }
 
     type GlobalDB =
         { Name: string
@@ -497,45 +530,48 @@ module Block =
           Sections: seq<Xml>
           MemoryLayout: MemoryLayout
           CreateTime: DateTime
-          TiaVersion : TiaVersion }
+          TiaVersion: TiaVersion
+          Comment: string option
+          Title: string option }
 
     type BlockType =
         | GlobalDB of GlobalDB
         | OrganisationalBlock
         | FunctionalBlock of FCBlock
 
-    let attributeList =
+    let attributeList text =
         Element(
             "AttributeList",
             [],
             "",
             [ Element("Culture", [], "en-US", [])
-              Element("Text", [], "", []) ]
+              Element("Text", [], text, []) ]
         )
 
-    let multilingualTextItemElement (id: int) =
+    let multilingualTextItemElement (id: int) text =
         Element(
             "MultilingualTextItem",
             [ ("ID", id |> string)
               ("CompositionName", "Items") ],
             "",
-            [ attributeList ]
+            [ attributeList text ]
         )
 
-    let multilingualTextElement (id: int) name =
+    let multilingualTextElement (id: int) name text =
         Element(
             "MultilingualText",
             [ ("ID", id |> string)
               ("CompositionName", name) ],
             "",
-            [ Element("ObjectList", [], "", [ multilingualTextItemElement (id + 1) ]) ]
+            [ Element("ObjectList", [], "", [ multilingualTextItemElement (id + 1) text ]) ]
         )
 
     let commentElement (lang: Language) (comment: string) =
         Element("Comment", [], "", [ Element("MultiLanguageText", [ ("Lang", lang.Value) ], comment, []) ])
-    let startValue (dataType:DataType) (value: obj) =
-        let valueStr = 
-            match dataType with 
+
+    let startValue (dataType: DataType) (value: obj) =
+        let valueStr =
+            match dataType with
             | Real -> sprintf "%f" (value :?> float)
             | Bool -> sprintf "%b" (value :?> bool)
             | Byte -> failwith "Not Implemented"
@@ -549,10 +585,11 @@ module Block =
             | Time -> failwith "Not Implemented"
             | Void -> failwith "Not Implemented"
             | Struct -> failwith "Not Implemented"
-            | Custom(_) -> failwith "Not Implemented"
-        Element("StartValue", [], valueStr , [ ])
+            | Custom (_) -> failwith "Not Implemented"
 
-    
+        Element("StartValue", [], valueStr, [])
+
+
     let blockCompileUnit (fcBlock: FCBlock) =
         Element(
             "SW.Blocks.CompileUnit",
@@ -574,8 +611,8 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 4 "Comment"
-                    multilingualTextElement 6 "Title" ]
+                  [ multilingualTextElement 4 "Comment" (fcBlock.Comment |> Option.defaultValue "")
+                    multilingualTextElement 6 "Title" (fcBlock.Title |> Option.defaultValue "") ]
               ) ]
         )
 
@@ -612,9 +649,9 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 1 "Comment"
+                  [ multilingualTextElement 1 "Comment" (block.Comment |> Option.defaultValue "")
                     blockCompileUnit block
-                    multilingualTextElement 8 "Title" ]
+                    multilingualTextElement 8 "Title" (block.Title |> Option.defaultValue "") ]
               ) ]
         )
 
@@ -647,8 +684,8 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 1 "Comment"
-                    multilingualTextElement 8 "Title" ]
+                  [ multilingualTextElement 1 "Comment" (globalDB.Comment |> Option.defaultValue "")
+                    multilingualTextElement 8 "Title" (globalDB.Title |> Option.defaultValue "") ]
               ) ]
         )
 

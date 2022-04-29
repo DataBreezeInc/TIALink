@@ -31,21 +31,17 @@ let tags =
           Address = a })
 
 
-let sectionsSimplyMultiply =
+let sectionsMultiply =
     [ Section.section
           Section.Input
           [ Section.memberElement "In1" Real Section.NoRemanence Section.Public []
             Section.memberElement "In2" Real Section.NoRemanence Section.Public [] ]
       Section.section Section.Output [ Section.memberElement "Out" Real Section.NoRemanence Section.Public [] ] ]
 
-let networkSourceSimplyMultiply blockName =
-
-    Element(
-        "FlgNet",
-        [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
-        "",
+let networkSourceMultiply =
+    NetworkSource.networkSourceElement
         [ NetworkSource.parts [    
-            NetworkSource.accessElement
+            NetworkSource.accessElement 
                                     { AreaType = NetworkSource.Memory
                                       ComponentName = "In1"
                                       UId = UId 21
@@ -69,7 +65,7 @@ let networkSourceSimplyMultiply blockName =
                                       BlockNumber = None
                                       DataType = Real
                                       Scope = Local }
-            NetworkSource.part "Mul" "24" ]
+            NetworkSource.part NetworkSource.Mul "24" ]
           Wires.wires [ Wires.wireElement
                             { UId = UId 25
                               Name = "en"
@@ -92,7 +88,6 @@ let networkSourceSimplyMultiply blockName =
                                 WireType = Wires.IdentCon(UId 23) }
                            ]
           ]
-    )
 // let networkSourceTypRoboter blockName =
 
 //     Element( 
@@ -243,16 +238,18 @@ let networkSourceSimplyMultiply blockName =
 //                               WireType = Wires.IdentCon(UId 29) } ] ]
 //     )
 
-let fcBlock =
+let fcBlockMultiply =
     { Name = "Multiply"
       FCBlockId = FCBlockId 0
       CompileUnitId = CompileUnitId "3"
       ProgrammingLanguage = LAD
-      Sections = sectionsSimplyMultiply
+      Sections = sectionsMultiply
       MemoryLayout = Optimized
-      NetworkSource = Some(networkSourceSimplyMultiply "SimplyMultiply")
+      NetworkSource = Some(networkSourceMultiply)
       CreateTime = System.DateTime.Now
-      TiaVersion = V17 }
+      TiaVersion = V17
+      Title = Some "Multiply"
+      Comment = Some "Some Comment" }
 
 
 let sectionsFREQ_COUNTER =
@@ -413,7 +410,7 @@ let sectionsDbVolumeCounter =
                   commentElement English "Consumption of permeate per consumer FM1201"
                   sectionsFREQ_COUNTERDb ]
             Section.memberElement
-                "FM1301"
+                "FM1301" 
                 (Custom "FREQ_COUNTER")
                 Section.Retain
                 Section.Public
@@ -476,8 +473,10 @@ let globalDB: GlobalDB =
       ProgrammingLanguage = DB
       Sections = sectionsDbTest
       CreateTime = System.DateTime.Now
-      TiaVersion = V17 }
-
+      TiaVersion = V17
+      Title = None
+      Comment = None }
+ 
 @"C:\Users\TimForkmann\Documents\Automatisierung\"
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "YourProjectName"
@@ -496,7 +495,7 @@ let globalDB: GlobalDB =
 // //                         Address = "%I10.0" } , "Tag List Name")
 // |> PlcProgram.createAndImportPlcType ("FREQ_COUNTER", V17, plcDataType)
 // |> PlcProgram.createDataBlock globalDB
-|> PlcProgram.createFunctionalBlock fcBlock
+|> PlcProgram.createFunctionalBlock fcBlockMultiply
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/PropDosing.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
@@ -509,5 +508,5 @@ let globalDB: GlobalDB =
 // // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Motor.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/FB1.xml")
 |> PlcProgram.compileProject
-|> PlcProgram.exportAllPlcBlocks
+// |> PlcProgram.exportAllPlcBlocks
 |> PlcProgram.saveAndClose
