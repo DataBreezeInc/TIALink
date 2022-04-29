@@ -7,24 +7,29 @@ open Feliz.DaisyUI
 open Feliz.DaisyUI.Operators
 open Docs.SharedView
 
-let ex1 =
-    let example =
-        Daisy.badge [
-            badge.lg
-            badge.error
-            prop.text "Big error badge"
-        ]
-        |> Html.div
+let wireTypes =
 
-    let code = """Daisy.badge [
-    badge.lg
-    badge.error
-    prop.text "Big error badge"
-]"""
-    let title = Html.text "Just a badge."
-    codedView title code example
+    let code =
+        """type WireType =
+    | IdentCon of UId
+    | PowerRail
+    | OpenCon of UId"""
 
-let ex2 =
+    let title = Html.text "Clapper supports following WireTypes."
+    codedNoExampleView title code
+let wire =
+
+    let code =
+        """ type Wire =
+        { UId: UId
+          Name: string
+          NameUId: UId
+          WireType: WireType }"""
+
+    let title = Html.text "A wire contain following elements."
+    codedNoExampleView title code
+
+let wireElement =
     let example =
         Daisy.badge [
             badge.sm
@@ -33,43 +38,22 @@ let ex2 =
         ]
         |> Html.div
 
-    let code = """Daisy.badge [
-    badge.lg
-    badge.error
-    prop.text "Big error badge"
+    let code = """Wires.wireElement
+                            {   UId = UId 26
+                                Name = "in1"
+                                NameUId = UId 24
+                                WireType = Wires.IdentCon(UId 21) }  "
 ]"""
-    let title = Html.text "Just a badge. Yup. Again."
-    codedView title code example
+    let title =
+        Html.text
+            "Creates a Mulitply Element with comment, titel and two inputs and one output."
 
-let ex3 =
-    let example =
-        Daisy.button.button [
-            Html.text "This is button"
-            Daisy.badge [
-                badge.sm
-                badge.success
-                prop.className "ml-2"
-                prop.text "NEW"
-            ]
-        ]
-        |> Html.div
-
-    let code = """Daisy.button.button [
-    Html.text "This is button"
-    Daisy.badge [
-        badge.sm
-        badge.success
-        prop.className "ml-2"
-        prop.text "NEW"
-    ]
-]"""
-    let title = Html.text "And now inside a button!"
-    codedView title code example
+    codedWithPictureView title code "./wireelement.png"
 
 [<ReactComponent>]
 let WiresView () =
     React.fragment [
-        ex1
-        ex2
-        ex3
+        wireTypes
+        wire
+        wireElement
     ]

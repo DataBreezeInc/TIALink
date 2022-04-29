@@ -27,12 +27,13 @@ let globalDB: GlobalDB =
       MemoryLayout = Standard
       ProgrammingLanguage = DB
       Sections = section
-      CreateTime = System.DateTime.Now }
+      CreateTime = System.DateTime.Now
+      TiaVersion = V17 }
 @"Your/Project/Path"
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "YourProjectName"
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9","ET200SP")
-|> PlcProgram.createDataBlock (globalDB,V17)"""
+|> PlcProgram.createDataBlock globalDB"""
 
     let title =
         Html.text

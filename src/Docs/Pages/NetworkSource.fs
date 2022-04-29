@@ -2,88 +2,87 @@
 
 open Feliz
 open Elmish
-open Feliz.UseElmish
-open Feliz.DaisyUI
-open Feliz.DaisyUI.Operators
 open Docs.SharedView
 
-let ex1 =
-    let example =
-        Daisy.avatar [
-            Html.div [
-                prop.className "mb-8 w-24 h-24"
-                prop.children [
-                    Html.img [
-                        prop.src "http://daisyui.com/tailwind-css-component-profile-1@56w.png"
-                    ]
-                ]
-            ]
-        ]
-        |> Html.div
+let blockType =
 
-    let code = """Daisy.avatar [
-    Html.div [
-        prop.className "mb-8 w-24 h-24"
-        prop.children [
-            Html.img [
-                prop.src "http://daisyui.com/tailwind-css-component-profile-1@56w.png"
-            ]
-        ]
-    ]
-]"""
-    let title = Html.text "Avatars are also quite easy to use!"
-    codedView title code example
+    let code =
+        """type BlockType =
+            | FB
+            | FC"""
 
-let ex2 =
-    let example =
-        Daisy.avatarGroup [
-            prop.className "-space-x-6"
-            prop.children [
-                Daisy.avatar [
-                    Html.img [
-                        prop.src "http://daisyui.com/tailwind-css-component-profile-1@56w.png"
-                    ]
-                ]
-                Daisy.avatar [
-                    Html.img [
-                        prop.src "http://daisyui.com/tailwind-css-component-profile-2@56w.png"
-                    ]
-                ]
-                Daisy.avatar [
-                    Html.img [
-                        prop.src "http://daisyui.com/tailwind-css-component-profile-3@56w.png"
-                    ]
-                ]
-            ]
-        ]
-        |> Html.div
+    let title = Html.text "Clapper supports following Sections"
+    codedNoExampleView title code
 
-    let code = """Daisy.avatarGroup [
-    prop.className "-space-x-6"
-    prop.children [
-        Daisy.avatar [
-            Html.img [
-                prop.src "http://daisyui.com/tailwind-css-component-profile-1@56w.png"
-            ]
-        ]
-        Daisy.avatar [
-            Html.img [
-                prop.src "http://daisyui.com/tailwind-css-component-profile-2@56w.png"
-            ]
-        ]
-        Daisy.avatar [
-            Html.img [
-                prop.src "http://daisyui.com/tailwind-css-component-profile-3@56w.png"
-            ]
-        ]
-    ]
-]"""
-    let title = Html.text "Group all the avatars!"
-    codedView title code example
+let areaType =
+
+    let code =
+        """type AreaType =
+            | Memory
+            | Input
+            | NoArea
+            | DB"""
+
+    let title = Html.text "Following Accessibilities are supported"
+    codedNoExampleView title code
+
+let access =
+
+    let code =
+        """type Access =
+            { AreaType: AreaType
+            DataType: DataType
+            ComponentName: string
+            UId: UId
+            BitOffset: int option
+            BlockNumber: int option
+            Scope: Scope }"""
+
+    let title = Html.text "Following Remanences are supported"
+    codedNoExampleView title code
+
+let call =
+
+    let code =
+        """
+    type Call =
+        { BlockName: string
+          AreaType: AreaType
+          CallInfoName: string
+          BlockType: BlockType
+          UId: UId
+          BitOffset: int
+          BlockNumber: int
+          InstanceBlockNumber: int
+          CreateDate: DateTime
+          Parameters: seq<Xml>
+         }"""
+
+    let title = Html.text "Following Remanences are supported"
+    codedNoExampleView title code
+
+let sections =
+
+    let code =
+        """let sections =
+    [ Section.section
+          Section.Static
+          [ Section.memberElement
+                "Meter1"
+                Real
+                Section.Retain
+                Section.Public
+                [ startValue Real 100.
+                  commentElement English "Inlet water consumption Meter1"
+                   ]]]"""
+
+    let title = Html.text "Creates a section XML Element"
+    codedWithPictureView title code "./datablock.png"
 
 [<ReactComponent>]
 let NetworkSourceView () =
-    React.fragment [
-        ex1
-        ex2
-    ]
+    React.fragment [ blockType
+                     areaType
+                     access
+                     call
+                     sections ]

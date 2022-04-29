@@ -113,7 +113,11 @@ let private leftSide (p: Page) =
                                                                                      "New"
                                                                                      "DataBlock"
                                                                                      Page.DataBlock
-                                                                                      ] ]
+
+                                                                                 miBadge
+                                                                                     "New"
+                                                                                     "FunctionalBlock"
+                                                                                     Page.FunctionalBlock ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "XmlHelper" ]
@@ -122,7 +126,6 @@ let private leftSide (p: Page) =
                                                                                      "DataTypes"
                                                                                      Page.DataTypes
                                                                                  miBadge "New" "Section" Page.Section
-                                                                                 miBadge "New" "DataBlock" Page.DataBlock
                                                                                  miBadge
                                                                                      "New"
                                                                                      "NetworkSource"
@@ -167,6 +170,7 @@ let AppView (state: State) (dispatch: Msg -> unit) =
         | PlcDataTypeOp -> "PlcDataTypeOp", "/operations/plcdatatypeop", Pages.PlcDataTypeOp.PlcDataTypeOpView()
         | PlcBlock -> "PlcBlock", "/operations/plcblock", Pages.PlcBlock.PlcBlockView()
         | DataBlock -> "DataBlock", "/operations/datablock", Pages.DataBlock.DataBlockView()
+        | FunctionalBlock -> "FunctionalBlock", "/operations/functionalblock", Pages.FunctionalBlock.FunctionalBlockView()
 
     React.router [ router.hashMode
                    router.onUrlChanged (

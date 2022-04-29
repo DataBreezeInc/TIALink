@@ -22,6 +22,7 @@ type Page =
     | PlcDataTypeOp
     | PlcBlock
     | DataBlock
+    | FunctionalBlock
 
 [<RequireQualifiedAccess>]
 module Page =
@@ -44,6 +45,7 @@ module Page =
         | [ "plcdatatypeop" ] -> Page.PlcDataTypeOp
         | [ "plcblock" ] -> Page.PlcBlock
         | [ "datablock" ] -> Page.DataBlock
+        | [ "functionalblock" ] -> Page.FunctionalBlock
         | [ ] -> Page.Install
         | _ -> defaultPage
 
@@ -67,6 +69,7 @@ module Page =
         | Page.PlcDataTypeOp -> [ "plcdatatypeop" ] |> noQueryString
         | Page.PlcBlock -> [ "plcblock" ] |> noQueryString
         | Page.DataBlock -> [ "datablock" ] |> noQueryString
+        | Page.FunctionalBlock -> [ "functionalblock" ] |> noQueryString
 
 [<RequireQualifiedAccess>]
 module Router =

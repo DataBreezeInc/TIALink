@@ -43,10 +43,28 @@ let remanence =
         Html.text "Following Remanences are supported"
     codedNoExampleView title code
 
+let sections =
+
+    let code = """let sections =
+    [ Section.section
+          Section.Static
+          [ Section.memberElement
+                "Meter1"
+                Real
+                Section.Retain
+                Section.Public
+                [ startValue Real 100.
+                  commentElement English "Inlet water consumption Meter1"
+                   ]]]"""
+    let title =
+        Html.text "Creates a section XML Element"
+    codedWithPictureView title code "./datablock.png"
+
 [<ReactComponent>]
 let SectionView () =
     React.fragment [
         section
         accessibility
         remanence
+        sections
     ]
