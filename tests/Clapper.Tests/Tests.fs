@@ -31,16 +31,12 @@ let tags =
           Address = a })
 
 
-let sectionsRobo =
+let sectionsSimplyMultiply =
     [ Section.section
           Section.Input
-          [ Section.memberElement "IN1" Real Section.NoRemanence Section.Public []
-            Section.memberElement "IN2" Real Section.NoRemanence Section.Public [] ]
-      Section.section Section.Output [ Section.memberElement "Result" Real Section.NoRemanence Section.Public [] ]
-      Section.section Section.InOut []
-      Section.section Section.Temp []
-      Section.section Section.Constant []
-      Section.section Section.Return [ Section.memberElement "Ret_Val" Void Section.NoRemanence Section.Public [] ] ]
+          [ Section.memberElement "In1" Real Section.NoRemanence Section.NoAccessibility []
+            Section.memberElement "In2" Real Section.NoRemanence Section.NoAccessibility [] ]
+      Section.section Section.Output [ Section.memberElement "Out" Real Section.NoRemanence Section.NoAccessibility [] ] ]
 
 let networkSourceSimplyMultiply blockName =
 
@@ -48,59 +44,33 @@ let networkSourceSimplyMultiply blockName =
         "FlgNet",
         [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2") ],
         "",
-        [   NetworkSource.parts [
-                                // NetworkSource.accessElement
-                                //     { AreaType = NetworkSource.Memory
-                                //       ComponentName = "In1"
-                                //       UId = UId 21
-                                //       BitOffset = Some 80
-                                //       BlockNumber = None
-                                //       DataType = Bool
-                                //       Scope = Global }
-                                // NetworkSource.accessElement
-                                //     { AreaType = NetworkSource.Memory
-                                //       ComponentName = "In2"
-                                //       UId = UId 22
-                                //       BitOffset = Some 80
-                                //       BlockNumber = None
-                                //       DataType = Bool
-                                //       Scope = Global }
-
-                                NetworkSource.callElement
-                                    { BlockName = blockName
-                                      AreaType = NetworkSource.DB
-                                      CallInfoName = NetworkSource.MUL
-                                      BlockType = NetworkSource.FC
-                                      UId = UId 23
-                                      BitOffset = 0
-                                      BlockNumber = 679
-                                      InstanceBlockNumber = 2087
-                                      CreateDate = System.DateTime.Now
-                                      Parameters =
-                                        [ NetworkSource.parameter "IN1" Section.Input Real
-                                          NetworkSource.parameter "IN2" Section.Input Real
-                                          NetworkSource.parameter "Result" Section.Output Real ] } ]
-            Wires.wires [ Wires.wireElement
-                {   UId = UId 24
-                    Name = "en"
-                    NameUId = UId 23
-                    WireType = Wires.PowerRail }]
-          //                 Wires.wireElement
-          //                     { UId = UId 25
-          //                       Name = "In1"
-          //                       NameUId = UId 23
-          //                       WireType = Wires.IdentCon(UId 21) }
-          //                 Wires.wireElement
-          //                     { UId = UId 26
-          //                       Name = "In2"
-          //                       NameUId = UId 23
-          //                       WireType = Wires.IdentCon(UId 22) }
-          //                  ]
+        [ NetworkSource.parts "Mul" "21" [ NetworkSource.templateValue [] ]
+          Wires.wires [ Wires.wireElement
+                            { UId = UId 25
+                              Name = "en"
+                              NameUId = UId 24
+                              WireType = Wires.PowerRail } 
+                        Wires.wireElement
+                            {   UId = UId 26
+                                Name = "In1"
+                                NameUId = UId 24
+                                WireType = Wires.IdentCon(UId 21) }
+                        Wires.wireElement
+                            {   UId = UId 27
+                                Name = "In2"
+                                NameUId = UId 24
+                                WireType = Wires.IdentCon(UId 22) }
+                        Wires.wireElement
+                              { UId = UId 28
+                                Name = "Out"
+                                NameUId = UId 24
+                                WireType = Wires.IdentCon(UId 23) }
+                           ]
           ]
     )
 // let networkSourceTypRoboter blockName =
 
-//     Element(
+//     Element( 
 //         "FlgNet",
 //         [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2") ],
 //         "",
@@ -253,7 +223,7 @@ let fcBlock =
       FCBlockId = FCBlockId 11
       CompileUnitId = CompileUnitId "E"
       ProgrammingLanguage = LAD
-      Sections = sectionsRobo
+      Sections = sectionsSimplyMultiply
       MemoryLayout = Optimized
       NetworkSource = Some(networkSourceSimplyMultiply "SimplyMultiply")
       CreateTime = System.DateTime.Now
@@ -487,7 +457,7 @@ let globalDB: GlobalDB =
 |> PlcProgram.projectPath
 |> PlcProgram.selectProject "YourProjectName"
 // |> PlcProgram.addLanguage German
-|> PlcProgram.addAllLanguages
+// // |> PlcProgram.addAllLanguages
 |> PlcProgram.getDevice ("6ES7 510-1DJ01-0AB0/V2.9", "ET200SP")
 // |> PlcProgram.plugNew { OrderNumber = "6ES7 131-6BF00-0BA0/V1.1"
 //                         Name = "30A4.1"
@@ -501,7 +471,7 @@ let globalDB: GlobalDB =
 // //                         Address = "%I10.0" } , "Tag List Name")
 // |> PlcProgram.createAndImportPlcType ("FREQ_COUNTER", V17, plcDataType)
 // |> PlcProgram.createDataBlock globalDB
-// |> PlcProgram.createFunctionalBlock fcBlock
+|> PlcProgram.createFunctionalBlock fcBlock
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/dbVolumeCounter.xml")
 // |> PlcProgram.importPlcType (Path.GetFullPath "./xmlimport/datatypes/PropDosing.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./xmlimport/programblocks/VolumeCounter.xml")
@@ -514,5 +484,5 @@ let globalDB: GlobalDB =
 // // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Motor.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/FB1.xml")
 |> PlcProgram.compileProject
-|> PlcProgram.exportAllPlcBlocks 
+|> PlcProgram.exportAllPlcBlocks
 |> PlcProgram.saveAndClose

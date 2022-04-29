@@ -179,11 +179,13 @@ module Section =
     type Accessibility =
         | Public
         | Private
+        | LocalVariable
         | NoAccessibility
         member this.Value =
             match this with
             | Public -> "Public"
             | Private -> "Private"
+            | LocalVariable -> "LocalVariable"
             | NoAccessibility -> ""
 
     type Remanence =
@@ -410,8 +412,8 @@ module NetworkSource =
                         p ]
               ) ]
         )
-
-    let parts childElements = Element("Parts", [], "", childElements)
+    let templateValue childElements = Element("TemplateValue", [("Name", "Card");("Type","Cardinality")], "2", childElements)
+    let parts name uid childElements = Element("Parts", [("Name",name);("UId",uid)], "", childElements)
 
 
 [<RequireQualifiedAccess>]
