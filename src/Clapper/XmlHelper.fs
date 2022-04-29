@@ -728,13 +728,6 @@ module PlcDataType =
         | DataTypeId of int
         member this.Value = (fun (DataTypeId id) -> string id) this
 
-    type PlcDataType =
-        { Name: string
-          Number: int
-          DataTypeId: DataTypeId
-          Sections: seq<Xml>
-          CreationTime: DateTime }
-
     type AttributeInfo =
         | ExternalAccessible
         | ExternalVisible
@@ -753,6 +746,13 @@ module PlcDataType =
             | ExternalVisible -> "true"
             | ExternalWritable -> "true"
             | SetPoint -> "false"
+
+    type PlcDataType =
+        { Name: string
+          Number: int
+          DataTypeId: DataTypeId
+          Sections: seq<Xml>
+          CreationTime: DateTime }
 
     let attributeList =
         Element(

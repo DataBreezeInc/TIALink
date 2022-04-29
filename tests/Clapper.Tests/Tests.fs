@@ -509,5 +509,6 @@ let globalDB: GlobalDB =
 // // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/Motor.xml")
 // |> PlcProgram.importPlcBlock (Path.GetFullPath "./testFolder/FB1.xml")
 |> PlcProgram.compileProject
-// |> PlcProgram.exportAllPlcBlocks
+|> PlcProgram.exportPlcBlock "Multiply"
+|> PlcProgram.exportAllPlcBlocks
 |> PlcProgram.saveAndClose
