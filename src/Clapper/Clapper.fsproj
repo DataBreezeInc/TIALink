@@ -22,6 +22,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+    <Compile Include="XmlHelper.fs" />
     <Compile Include="Clapper.fs" />
     </ItemGroup>
     <Import Project="..\..\.paket\Paket.Restore.targets" />

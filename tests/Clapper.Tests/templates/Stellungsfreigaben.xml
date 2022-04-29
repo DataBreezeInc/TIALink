@@ -1,0 +1,198 @@
+<SW.Blocks.CompileUnit ID="E" CompositionName="CompileUnits">
+    <AttributeList>
+        <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
+                <Parts>
+                    <Access Scope="GlobalVariable" UId="21">
+                        <Symbol>
+                            <Component Name="INTROSYS_VKE=0" />
+                            <Address Area="Memory" Type="Bool" BitOffset="80" Informative="true" />
+                        </Symbol>
+                    </Access>
+                    <Access Scope="GlobalVariable" UId="22">
+                        <Symbol>
+                            <Component Name="ROBNAME" />
+                            <Component Name="EANUM" />
+                            <Address Area="None" Type="Bool" BlockNumber="180" BitOffset="32656" Informative="true" />
+                        </Symbol>
+                    </Access>
+                    <Part Name="Contact" UId="23" />
+                    <Part Name="Coil" UId="24" />
+                </Parts>
+                <Wires>
+                    <Wire UId="25">
+                        <Powerrail />
+                        <NameCon UId="23" Name="in" />
+                    </Wire>
+                    <Wire UId="26">
+                        <IdentCon UId="21" />
+                        <NameCon UId="23" Name="operand" />
+                    </Wire>
+                    <Wire UId="27">
+                        <NameCon UId="23" Name="out" />
+                        <NameCon UId="24" Name="in" />
+                    </Wire>
+                    <Wire UId="28">
+                        <IdentCon UId="22" />
+                        <NameCon UId="24" Name="operand" />
+                    </Wire>
+                </Wires>
+            </FlgNet>
+        </NetworkSource>
+        <ProgrammingLanguage>LAD</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+        <MultilingualText ID="F" CompositionName="Comment">
+            <ObjectList>
+                <MultilingualTextItem ID="10" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>de-DE</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="11" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>es-ES</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="12" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>en-US</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="13" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>fr-FR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="14" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>zh-CN</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="15" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>cs-CZ</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="16" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pl-PL</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="17" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pt-BR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="18" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>ru-RU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="19" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>sk-SK</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1A" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>nl-BE</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1B" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>hu-HU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+            </ObjectList>
+        </MultilingualText>
+        <MultilingualText ID="1C" CompositionName="Title">
+            <ObjectList>
+                <MultilingualTextItem ID="1D" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>de-DE</Culture>
+                        <Text>BESCHEIBUNG FUNKTION</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1E" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>es-ES</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1F" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>en-US</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="20" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>fr-FR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="21" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>zh-CN</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="22" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>cs-CZ</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="23" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pl-PL</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="24" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pt-BR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="25" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>ru-RU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="26" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>sk-SK</Culture>
+                        <Text>BESCHEIBUNG FUNKTION</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="27" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>nl-BE</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="28" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>hu-HU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+            </ObjectList>
+        </MultilingualText>
+    </ObjectList>
+</SW.Blocks.CompileUnit>

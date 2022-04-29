@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+    <Engineering version="V17" />
+    <DocumentInfo>
+        <Created>2019-04-04T10:04:46.8154146Z</Created>
+        <ExportSetting>WithDefaults, WithReadOnly</ExportSetting>
+        <InstalledProducts>
+            <Product>
+                <DisplayName>Totally Integrated Automation Portal</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </Product>
+            <OptionPackage>
+                <DisplayName>TIA Portal Openness</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </OptionPackage>
+            <Product>
+                <DisplayName>STEP 7 Professional</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </Product>
+            <OptionPackage>
+                <DisplayName>STEP 7 Safety</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </OptionPackage>
+            <Product>
+                <DisplayName>WinCC Professional</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </Product>
+            <OptionPackage>
+                <DisplayName>SIMATIC Visualization Architect</DisplayName>
+                <DisplayVersion>V17</DisplayVersion>
+            </OptionPackage>
+        </InstalledProducts>
+    </DocumentInfo>
+    <SW.Blocks.FC ID="0">
+        <AttributeList>
+            <AutoNumber>false</AutoNumber>
+            <CodeModifiedDate ReadOnly="true">2019-04-04T10:04:01.8111922Z</CodeModifiedDate>
+            <CompileDate ReadOnly="true">2019-04-04T10:04:16.3409314Z</CompileDate>
+            <CreationDate ReadOnly="true">2019-04-04T10:03:42.2202115Z</CreationDate>
+            <HandleErrorsWithinBlock ReadOnly="true">false</HandleErrorsWithinBlock>
+            <HeaderAuthor />
+            <HeaderFamily />
+            <HeaderName />
+            <HeaderVersion>1.1</HeaderVersion>
+            <Interface>
+                <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+                    <Section Name="Input" />
+                    <Section Name="Output" />
+                    <Section Name="InOut" />
+                    <Section Name="Temp">
+                        <Member Name="Temp" Datatype="Struct">
+                            <Member Name="_Bool" Datatype="Bool" />
+                            <Member Name="_Byte" Datatype="Byte" />
+                            <Member Name="_Word" Datatype="Word" />
+                            <Member Name="_DWord" Datatype="DWord" />
+                            <Member Name="_Int" Datatype="Int" />
+                            <Member Name="_DInt" Datatype="DInt" />
+                            <Member Name="_Real" Datatype="Real" />
+                            <Member Name="_S5Time" Datatype="S5Time" />
+                            <Member Name="_Time" Datatype="Time" />
+                        </Member>
+                    </Section>
+                    <Section Name="Constant" />
+                    <Section Name="Return">
+                        <Member Name="Ret_Val" Datatype="Void" Accessibility="Public" />
+                    </Section>
+                </Sections>
+            </Interface>
+            <InterfaceModifiedDate ReadOnly="true">2017-06-20T14:56:00.5916118Z</InterfaceModifiedDate>
+            <IsConsistent ReadOnly="true">true</IsConsistent>
+            <IsIECCheckEnabled>false</IsIECCheckEnabled>
+            <IsKnowHowProtected ReadOnly="true">false</IsKnowHowProtected>
+            <IsWriteProtected ReadOnly="true">false</IsWriteProtected>
+            <LibraryConformanceStatus ReadOnly="true">The object is library-conformant.</LibraryConformanceStatus>
+            <MemoryLayout>Optimized</MemoryLayout>
+            <ModifiedDate ReadOnly="true">2019-04-04T10:04:01.8111922Z</ModifiedDate>
+            <Name>ROBNAME</Name>
+            <Number>71</Number>
+            <ParameterModified ReadOnly="true">2017-06-20T14:56:00.5846118Z</ParameterModified>
+            <PLCSimAdvancedSupport ReadOnly="true">true</PLCSimAdvancedSupport>
+            <ProgrammingLanguage>LAD</ProgrammingLanguage>
+            <SetENOAutomatically>False</SetENOAutomatically>
+            <StructureModified ReadOnly="true">2017-06-20T14:56:00.5916118Z</StructureModified>
+            <UDABlockProperties />
+            <UDAEnableTagReadback>false</UDAEnableTagReadback>
+        </AttributeList>
+        <ObjectList>
+            <MultilingualText ID="1" CompositionName="Comment">
+                <ObjectList>
+                    <MultilingualTextItem ID="2" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>de-DE</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="3" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>es-ES</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="4" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>en-US</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="5" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>fr-FR</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="6" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>zh-CN</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="7" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>cs-CZ</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="8" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>pl-PL</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="9" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>pt-BR</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="A" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>ru-RU</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="B" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>sk-SK</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="C" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>nl-BE</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="D" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>hu-HU</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                </ObjectList>
+            </MultilingualText>
+            <MultilingualText ID="E" CompositionName="Title">
+                <ObjectList>
+                    <MultilingualTextItem ID="F" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>de-DE</Culture>
+                            <Text>Rob_ROBNAME</Text>
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="10" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>es-ES</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="11" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>en-US</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="12" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>fr-FR</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="13" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>zh-CN</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="14" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>cs-CZ</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="15" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>pl-PL</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="16" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>pt-BR</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="17" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>ru-RU</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="18" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>sk-SK</Culture>
+                            <Text>Rob_ROBNAME</Text>
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="19" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>nl-BE</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                    <MultilingualTextItem ID="1A" CompositionName="Items">
+                        <AttributeList>
+                            <Culture>hu-HU</Culture>
+                            <Text />
+                        </AttributeList>
+                    </MultilingualTextItem>
+                </ObjectList>
+            </MultilingualText>
+        </ObjectList>
+    </SW.Blocks.FC>
+</Document>

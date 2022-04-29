@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V17" />
+  <DocumentInfo>
+    <Created>2021-09-08T12:46:16.1780561Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Blocks.GlobalDB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>1.1</HeaderVersion>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Static">
+            <Member Name="FM201" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Inlet water consumption FM201</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM501" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Inlet water consumption UF FM501</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM502" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Inlet water consumption UF FM502</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM901" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Consumption of permeate RO FM901</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM902" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Concentrate consumption RO FM902</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM1201" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Consumption of permeate per consumer FM1201</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM1301" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Consumption of permeate NF FM1301</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM1302" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Concentrate consumption NF FM1302</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM1701" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Consumption of nanofiltrate on the consumer FM1701</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+            <Member Name="FM1801" Datatype="FREQ_COUNTER" Remanence="Retain" Accessibility="Public">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+                <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Sewage consumption FM1801</MultiLanguageText>
+              </Comment>
+              <Sections>
+                <Section Name="None">
+                  <Member Name="litrsPerPuls" Datatype="UInt" />
+                  <Member Name="prewHour" Datatype="UInt" />
+                  <Member Name="curHour" Datatype="UInt" />
+                  <Member Name="prewDay" Datatype="UDInt" />
+                  <Member Name="curDay" Datatype="UDInt" />
+                  <Member Name="all" Datatype="UDInt" />
+                  <Member Name="rst" Datatype="Bool" />
+                </Section>
+              </Sections>
+            </Member>
+          </Section>
+        </Sections>
+      </Interface>
+      <IsOnlyStoredInLoadMemory>false</IsOnlyStoredInLoadMemory>
+      <IsWriteProtectedInAS>false</IsWriteProtectedInAS>
+      <MemoryLayout>Standard</MemoryLayout>
+      <Name>dbVolumeCounters</Name>
+      <Number>109</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>ru-RU</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>ru-RU</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.GlobalDB>
+</Document>

@@ -1,0 +1,208 @@
+<SW.Blocks.CompileUnit ID="E" CompositionName="CompileUnits">
+    <AttributeList>
+        <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
+                <Parts>
+                    <Access Scope="GlobalVariable" UId="21">
+                        <Symbol>
+                            <Component Name="ROBNAMEA001RFLGW1" />
+                            <Address Area="Input" Type="Bool" BitOffset="8192" Informative="true" />
+                        </Symbol>
+                    </Access>
+                    <Access Scope="GlobalVariable" UId="22">
+                        <Symbol>
+                            <Component Name="ROBNAME" />
+                            <Component Name="Rob" />
+                            <Address Area="None" Type="ST_Rob" BlockNumber="180" BitOffset="0" Informative="true" />
+                        </Symbol>
+                    </Access>
+                    <Call UId="23">
+                        <CallInfo Name="FB_Rob_PN_A" BlockType="FB">
+                            <IntegerAttribute Name="BlockNumber" Informative="true">201</IntegerAttribute>
+                            <DateAttribute Name="ParameterModifiedTS" Informative="true">2017-06-08T09:11:58</DateAttribute>
+                            <Instance Scope="GlobalVariable" UId="24">
+                                <Component Name="ROBNAME#FB_Rob_PN_A_DB" />
+                                <Address Area="DB" Type="FB_Rob_PN_A" BlockNumber="2086" BitOffset="0" Informative="true" />
+                            </Instance>
+                            <Parameter Name="Rob_A" Section="Input" Type="Pointer">
+                                <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                            </Parameter>
+                            <Parameter Name="ST_ROB" Section="InOut" Type="ST_Rob">
+                                <StringAttribute Name="InterfaceFlags" Informative="true">S7_Visible</StringAttribute>
+                            </Parameter>
+                        </CallInfo>
+                    </Call>
+                </Parts>
+                <Wires>
+                    <Wire UId="25">
+                        <Powerrail />
+                        <NameCon UId="23" Name="en" />
+                    </Wire>
+                    <Wire UId="26">
+                        <IdentCon UId="21" />
+                        <NameCon UId="23" Name="Rob_A" />
+                    </Wire>
+                    <Wire UId="27">
+                        <IdentCon UId="22" />
+                        <NameCon UId="23" Name="ST_ROB" />
+                    </Wire>
+                </Wires>
+            </FlgNet>
+        </NetworkSource>
+        <ProgrammingLanguage>LAD</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+        <MultilingualText ID="F" CompositionName="Comment">
+            <ObjectList>
+                <MultilingualTextItem ID="10" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>de-DE</Culture>
+                        <Text>Laden Inputs (Rob_A) in ST_Rob</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="11" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>es-ES</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="12" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>en-US</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="13" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>fr-FR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="14" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>zh-CN</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="15" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>cs-CZ</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="16" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pl-PL</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="17" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pt-BR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="18" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>ru-RU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="19" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>sk-SK</Culture>
+                        <Text>Laden Inputs (Rob_A) in ST_Rob</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1A" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>nl-BE</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1B" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>hu-HU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+            </ObjectList>
+        </MultilingualText>
+        <MultilingualText ID="1C" CompositionName="Title">
+            <ObjectList>
+                <MultilingualTextItem ID="1D" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>de-DE</Culture>
+                        <Text>Eingaben lesen</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1E" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>es-ES</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="1F" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>en-US</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="20" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>fr-FR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="21" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>zh-CN</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="22" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>cs-CZ</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="23" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pl-PL</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="24" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>pt-BR</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="25" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>ru-RU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="26" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>sk-SK</Culture>
+                        <Text>Eingaben lesen</Text>
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="27" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>nl-BE</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+                <MultilingualTextItem ID="28" CompositionName="Items">
+                    <AttributeList>
+                        <Culture>hu-HU</Culture>
+                        <Text />
+                    </AttributeList>
+                </MultilingualTextItem>
+            </ObjectList>
+        </MultilingualText>
+    </ObjectList>
+</SW.Blocks.CompileUnit>

@@ -9,7 +9,7 @@ open System.IO
 open BuildHelpers
 open BuildTools
 
-initializeContext()
+initializeContext ()
 
 let publishPath = Path.getFullName "publish"
 let srcPath = Path.getFullName "src"
@@ -18,7 +18,9 @@ let librarySrcPath = srcPath </> "Clapper"
 let appPublishPath = publishPath </> "app"
 
 // Targets
-let clean proj = [ proj </> "bin"; proj </> "obj" ] |> Shell.cleanDirs
+let clean proj =
+    [ proj </> "bin"; proj </> "obj" ]
+    |> Shell.cleanDirs
 
 let createNuget proj =
     clean proj
@@ -28,40 +30,42 @@ let createNuget proj =
 let getBuildParam = Environment.environVar
 let isNullOrWhiteSpace = String.IsNullOrWhiteSpace
 
+Target.create "InstallClient" (fun _ ->
+    printfn "Node version:"
+    Tools.node "--version" clientSrcPath
+    printfn "Yarn version:"
+    Tools.yarn "--version" clientSrcPath
+    Tools.yarn "install --frozen-lockfile" clientSrcPath
+)
+
 let publishNuget proj =
     createNuget proj
+
     let nugetKey =
         match getBuildParam "nugetkey" with
         | s when not (isNullOrWhiteSpace s) -> s
         | _ -> UserInput.getUserPassword "NuGet Key: "
+
     let nupkg =
         Directory.GetFiles(proj </> "bin" </> "Release")
         |> Seq.head
         |> Path.GetFullPath
+
     Tools.dotnet (sprintf "nuget push %s -s nuget.org -k %s" nupkg nugetKey) proj
 
-Target.create "Pack" (fun _ ->
-    createNuget librarySrcPath
-)
+Target.create "Pack" (fun _ -> createNuget librarySrcPath)
 
-Target.create "Publish" (fun _ ->
-    publishNuget librarySrcPath
-)
+Target.create "Publish" (fun _ -> publishNuget librarySrcPath)
 
-Target.create "PublishDocs" (fun _ ->
-    Tools.yarn "build" ""
-)
+Target.create "PublishDocs" (fun _ -> Tools.yarn "build" "")
 
-Target.create "Run" (fun _ ->
-    Tools.yarn "start" ""
-)
+Target.create "Run" (fun _ -> Tools.yarn "start" "")
 
-let dependencies = [
-    "PublishDocs"
-    "Publish"
-    ==> "Pack"
-    ==> "Run"
-]
+let dependencies =
+    [ "InstallClient" ==> "PublishDocs"
+      "InstallClient" ==> "Publish"
+      "InstallClient" ==> "Pack"
+      "InstallClient" ==> "Run" ]
 
 [<EntryPoint>]
 let main args = runOrDefault "Run" args
