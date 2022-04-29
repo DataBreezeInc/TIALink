@@ -34,17 +34,19 @@ let tags =
 let sectionsSimplyMultiply =
     [ Section.section
           Section.Input
-          [ Section.memberElement "In1" Real Section.NoRemanence Section.NoAccessibility []
-            Section.memberElement "In2" Real Section.NoRemanence Section.NoAccessibility [] ]
-      Section.section Section.Output [ Section.memberElement "Out" Real Section.NoRemanence Section.NoAccessibility [] ] ]
+          [ Section.memberElement "In1" Real Section.NoRemanence Section.Public []
+            Section.memberElement "In2" Real Section.NoRemanence Section.Public [] ]
+      Section.section Section.Output [ Section.memberElement "Out" Real Section.NoRemanence Section.Public [] ] ]
 
 let networkSourceSimplyMultiply blockName =
 
     Element(
         "FlgNet",
-        [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2") ],
+        [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
         "",
-        [ NetworkSource.parts "Mul" "21" [ NetworkSource.templateValue [] ]
+        [ NetworkSource.parts "Mul" "21" [ 
+            NetworkSource.templateValue
+            NetworkSource.automatedTyped  ]
           Wires.wires [ Wires.wireElement
                             { UId = UId 25
                               Name = "en"
@@ -52,17 +54,17 @@ let networkSourceSimplyMultiply blockName =
                               WireType = Wires.PowerRail } 
                         Wires.wireElement
                             {   UId = UId 26
-                                Name = "In1"
+                                Name = "in1"
                                 NameUId = UId 24
                                 WireType = Wires.IdentCon(UId 21) }
                         Wires.wireElement
                             {   UId = UId 27
-                                Name = "In2"
+                                Name = "in2"
                                 NameUId = UId 24
                                 WireType = Wires.IdentCon(UId 22) }
                         Wires.wireElement
                               { UId = UId 28
-                                Name = "Out"
+                                Name = "out"
                                 NameUId = UId 24
                                 WireType = Wires.IdentCon(UId 23) }
                            ]
@@ -219,9 +221,9 @@ let networkSourceSimplyMultiply blockName =
 //     )
 
 let fcBlock =
-    { Name = "SimplyMultiply"
-      FCBlockId = FCBlockId 11
-      CompileUnitId = CompileUnitId "E"
+    { Name = "Multiply"
+      FCBlockId = FCBlockId 0
+      CompileUnitId = CompileUnitId "3"
       ProgrammingLanguage = LAD
       Sections = sectionsSimplyMultiply
       MemoryLayout = Optimized

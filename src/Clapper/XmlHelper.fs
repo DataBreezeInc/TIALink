@@ -412,9 +412,9 @@ module NetworkSource =
                         p ]
               ) ]
         )
-    let templateValue childElements = Element("TemplateValue", [("Name", "Card");("Type","Cardinality")], "2", childElements)
+    let templateValue  = Element("TemplateValue", [("Name", "Card");("Type","Cardinality")], "2",[])
+    let automatedTyped  = Element("AutomatedTyped", [("Name", "SrcType");("Type","Cardinality")], "", [])
     let parts name uid childElements = Element("Parts", [("Name",name);("UId",uid)], "", childElements)
-
 
 [<RequireQualifiedAccess>]
 module Wires =

@@ -31,7 +31,7 @@
       </Product>
     </InstalledProducts>
   </DocumentInfo>
-  <SW.Blocks.FC ID="11">
+  <SW.Blocks.FC ID="0">
     <AttributeList>
       <AutoNumber>true</AutoNumber>
       <HeaderAuthor />
@@ -41,21 +41,21 @@
       <Interface>
         <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
           <Section Name="Input">
-            <Member Name="In1" Datatype="Real" />
-            <Member Name="In2" Datatype="Real" />
+            <Member Name="In1" Datatype="Real" Accessibility="Public" />
+            <Member Name="In2" Datatype="Real" Accessibility="Public" />
           </Section>
           <Section Name="Output">
-            <Member Name="Out" Datatype="Real" />
+            <Member Name="Out" Datatype="Real" Accessibility="Public" />
           </Section>
         </Sections>
       </Interface>
       <IsIECCheckEnabled>false</IsIECCheckEnabled>
       <MemoryLayout>Optimized</MemoryLayout>
-      <Name>SimplyMultiply</Name>
-      <Number>11</Number>
+      <Name>Multiply</Name>
+      <Number>0</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>
-      <StructureModified ReadOnly="true">2022-04-28T20:55:01</StructureModified>
+      <StructureModified ReadOnly="true">2022-04-28T21:09:16</StructureModified>
       <UDABlockProperties />
       <UDAEnableTagReadback>false</UDAEnableTagReadback>
     </AttributeList>
@@ -70,12 +70,13 @@
           </MultilingualTextItem>
         </ObjectList>
       </MultilingualText>
-      <SW.Blocks.CompileUnit ID="E" CompositionName="CompileUnits">
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
         <AttributeList>
           <NetworkSource>
-            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v2">
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
               <Parts Name="Mul" UId="21">
                 <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+                <AutomatedTyped Name="SrcType" Type="Cardinality" />
               </Parts>
               <Wires>
                 <Wire UId="25">
@@ -84,15 +85,15 @@
                 </Wire>
                 <Wire UId="26">
                   <IdentCon UId="21" />
-                  <NameCon UId="24" Name="In1" />
+                  <NameCon UId="24" Name="in1" />
                 </Wire>
                 <Wire UId="27">
                   <IdentCon UId="22" />
-                  <NameCon UId="24" Name="In2" />
+                  <NameCon UId="24" Name="in2" />
                 </Wire>
                 <Wire UId="28">
                   <IdentCon UId="23" />
-                  <NameCon UId="24" Name="Out" />
+                  <NameCon UId="24" Name="out" />
                 </Wire>
               </Wires>
             </FlgNet>
