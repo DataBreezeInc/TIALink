@@ -108,15 +108,6 @@ type TiaVersion =
         | V16 -> "V16"
         | V17 -> "V17"
 
-type ProgrammingLanguage =
-    | LAD
-    | FBD
-    | DB
-    member this.Value =
-        match this with
-        | LAD -> "LAD"
-        | FBD -> "FBD"
-        | DB -> "DB"
 
 
 
@@ -179,11 +170,13 @@ module Section =
     type Accessibility =
         | Public
         | Private
+        | LocalVariable
         | NoAccessibility
         member this.Value =
             match this with
             | Public -> "Public"
             | Private -> "Private"
+            | LocalVariable -> "LocalVariable"
             | NoAccessibility -> ""
 
     type Remanence =
@@ -194,8 +187,8 @@ module Section =
             | Retain -> "Retain"
             | NoRemanence -> ""
 
-    let sections elements =
-        Element("Sections", [ ], "", elements)
+    let sections elements = Element("Sections", [], "", elements)
+
     let section (sectionName: Section) elements =
         Element("Section", [ ("Name", sectionName.Value) ], "", elements)
 
@@ -263,21 +256,27 @@ module NetworkSource =
         member this.GetBitOffset =
             match this.BitOffset with
             | Some offset -> offset |> string
-            | None -> failwithf "bit offset not set"
+            | None -> ""
+
+    type CallInfoName =
+        | MUL
+        | Custom of string
+        member this.Value =
+            match this with
+            | MUL -> "MUL"
+            | Custom str -> str
 
     type Call =
         { BlockName: string
           AreaType: AreaType
-          CallInfoName: string
+          CallInfoName: CallInfoName
           BlockType: BlockType
           UId: UId
           BitOffset: int
           BlockNumber: int
           InstanceBlockNumber: int
           CreateDate: DateTime
-          Parameters: seq<Xml>
-
-         }
+          Parameters: seq<Xml> }
 
     let parameter name (section: Section.Section) (dataType: DataType) =
         Element(
@@ -334,7 +333,7 @@ module NetworkSource =
             "",
             [ Element(
                   "CallInfo",
-                  [ ("Name", call.CallInfoName)
+                  [ ("Name", call.CallInfoName.Value)
                     ("BlockType", call.BlockType.Value) ],
                   "",
                   [ match call.BlockType with
@@ -365,7 +364,7 @@ module NetworkSource =
                                   [ ("Name",
                                      call.BlockName
                                      + "#"
-                                     + call.CallInfoName
+                                     + call.CallInfoName.Value
                                      + "_"
                                      + call.BlockType.Value) ],
                                   "",
@@ -374,7 +373,7 @@ module NetworkSource =
                               Element(
                                   "Address",
                                   [ ("Area", call.AreaType.Value)
-                                    ("Type", call.CallInfoName)
+                                    ("Type", call.CallInfoName.Value)
                                     ("BlockNumber", call.InstanceBlockNumber |> string)
                                     ("BitOffset", call.BitOffset |> string)
                                     ("Informative", "true") ],
@@ -405,8 +404,42 @@ module NetworkSource =
               ) ]
         )
 
+    let templateValue =
+        Element(
+            "TemplateValue",
+            [ ("Name", "Card")
+              ("Type", "Cardinality") ],
+            "2",
+            []
+        )
+
+    let automaticTyped = Element("AutomaticTyped", [ ("Name", "SrcType") ], "", [])
+
+
+    let networkSourceElement childElements =
+        Element(
+            "FlgNet",
+            [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
+            "",
+            childElements
+        )
+
     let parts childElements = Element("Parts", [], "", childElements)
 
+    type Instruction =
+        | Mul
+        member this.Value =
+            match this with
+            | Mul -> "Mul"
+
+    let part (instruction: Instruction) uid =
+        Element(
+            "Part",
+            [ ("Name", instruction.Value)
+              ("UId", uid) ],
+            "",
+            [ templateValue; automaticTyped ]
+        )
 
 [<RequireQualifiedAccess>]
 module Wires =
@@ -415,7 +448,6 @@ module Wires =
         | IdentCon of UId
         | PowerRail
         | OpenCon of UId
-
 
     type Wire =
         { UId: UId
@@ -469,60 +501,96 @@ module Block =
             | Optimized -> "Optimized"
             | Standard -> "Standard"
 
+    type ProgrammingLanguage =
+        | LAD
+        | FBD
+        | DB
+        | SCL
+        member this.Value =
+            match this with
+            | LAD -> "LAD"
+            | FBD -> "FBD"
+            | DB -> "DB"
+            | SCL -> "SCL"
+
     type FCBlock =
         { Name: string
-          Number: int
           FCBlockId: FCBlockId
           CompileUnitId: CompileUnitId
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
           MemoryLayout: MemoryLayout
           NetworkSource: Xml option
-          CreateTime: DateTime }
+          CreateTime: DateTime
+          TiaVersion: TiaVersion
+          Comment: string option
+          Title: string option }
 
     type GlobalDB =
         { Name: string
-          Number: int
           GlobalDBId: GlobalDBId
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
           MemoryLayout: MemoryLayout
-          CreateTime: DateTime }
+          CreateTime: DateTime
+          TiaVersion: TiaVersion
+          Comment: string option
+          Title: string option }
 
     type BlockType =
         | GlobalDB of GlobalDB
         | OrganisationalBlock
         | FunctionalBlock of FCBlock
 
-    let attributeList =
+    let attributeList text =
         Element(
             "AttributeList",
             [],
             "",
             [ Element("Culture", [], "en-US", [])
-              Element("Text", [], "", []) ]
+              Element("Text", [], text, []) ]
         )
 
-    let multilingualTextItemElement (id: int) =
+    let multilingualTextItemElement (id: int) text =
         Element(
             "MultilingualTextItem",
             [ ("ID", id |> string)
               ("CompositionName", "Items") ],
             "",
-            [ attributeList ]
+            [ attributeList text ]
         )
 
-    let multilingualTextElement (id: int) name =
+    let multilingualTextElement (id: int) name text =
         Element(
             "MultilingualText",
             [ ("ID", id |> string)
               ("CompositionName", name) ],
             "",
-            [ Element("ObjectList", [], "", [ multilingualTextItemElement (id + 1) ]) ]
+            [ Element("ObjectList", [], "", [ multilingualTextItemElement (id + 1) text ]) ]
         )
 
     let commentElement (lang: Language) (comment: string) =
         Element("Comment", [], "", [ Element("MultiLanguageText", [ ("Lang", lang.Value) ], comment, []) ])
+
+    let startValue (dataType: DataType) (value: obj) =
+        let valueStr =
+            match dataType with
+            | Real -> sprintf "%f" (value :?> float)
+            | Bool -> sprintf "%b" (value :?> bool)
+            | Byte -> failwith "Not Implemented"
+            | Word -> failwith "Not Implemented"
+            | DWord -> failwith "Not Implemented"
+            | Int -> sprintf "%i" (value :?> int)
+            | DInt -> sprintf "%i" (value :?> int)
+            | UInt -> sprintf "%i" (value :?> uint)
+            | UDInt -> failwith "Not Implemented"
+            | S5Time -> failwith "Not Implemented"
+            | Time -> failwith "Not Implemented"
+            | Void -> failwith "Not Implemented"
+            | Struct -> failwith "Not Implemented"
+            | Custom (_) -> failwith "Not Implemented"
+
+        Element("StartValue", [], valueStr, [])
 
 
     let blockCompileUnit (fcBlock: FCBlock) =
@@ -546,8 +614,8 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 4 "Comment"
-                    multilingualTextElement 6 "Title" ]
+                  [ multilingualTextElement 4 "Comment" (fcBlock.Comment |> Option.defaultValue "")
+                    multilingualTextElement 6 "Title" (fcBlock.Title |> Option.defaultValue "") ]
               ) ]
         )
 
@@ -571,7 +639,7 @@ module Block =
                     Element("IsIECCheckEnabled", [], "false", [])
                     Element("MemoryLayout", [], block.MemoryLayout.Value, [])
                     Element("Name", [], block.Name, [])
-                    Element("Number", [], block.Number |> string, [])
+                    Element("Number", [], block.FCBlockId.Value, [])
                     Element("ProgrammingLanguage", [], block.ProgrammingLanguage.Value, [])
                     Element("SetENOAutomatically", [], "false", [])
                     Element("StructureModified", [ ("ReadOnly", "true") ], block.CreateTime |> creationTime, [])
@@ -584,9 +652,9 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 1 "Comment"
+                  [ multilingualTextElement 1 "Comment" (block.Comment |> Option.defaultValue "")
                     blockCompileUnit block
-                    multilingualTextElement 8 "Title" ]
+                    multilingualTextElement 8 "Title" (block.Title |> Option.defaultValue "") ]
               ) ]
         )
 
@@ -610,7 +678,7 @@ module Block =
                     Element("IsWriteProtectedInAS", [], "false", [])
                     Element("MemoryLayout", [], globalDB.MemoryLayout.Value, [])
                     Element("Name", [], globalDB.Name, [])
-                    Element("Number", [], globalDB.Number |> string, [])
+                    Element("Number", [], globalDB.GlobalDBId.Value |> string, [])
                     Element("ProgrammingLanguage", [], globalDB.ProgrammingLanguage.Value, [])
 
                     ]
@@ -619,8 +687,8 @@ module Block =
                   "ObjectList",
                   [],
                   "",
-                  [ multilingualTextElement 1 "Comment"
-                    multilingualTextElement 8 "Title" ]
+                  [ multilingualTextElement 1 "Comment" (globalDB.Comment |> Option.defaultValue "")
+                    multilingualTextElement 8 "Title" (globalDB.Title |> Option.defaultValue "") ]
               ) ]
         )
 
@@ -660,13 +728,6 @@ module PlcDataType =
         | DataTypeId of int
         member this.Value = (fun (DataTypeId id) -> string id) this
 
-    type PlcDataType =
-        { Name: string
-          Number: int
-          DataTypeId: DataTypeId
-          Sections: seq<Xml>
-          CreationTime: DateTime }
-
     type AttributeInfo =
         | ExternalAccessible
         | ExternalVisible
@@ -685,6 +746,13 @@ module PlcDataType =
             | ExternalVisible -> "true"
             | ExternalWritable -> "true"
             | SetPoint -> "false"
+
+    type PlcDataType =
+        { Name: string
+          Number: int
+          DataTypeId: DataTypeId
+          Sections: seq<Xml>
+          CreationTime: DateTime }
 
     let attributeList =
         Element(
