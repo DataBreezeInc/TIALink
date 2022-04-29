@@ -413,8 +413,11 @@ module NetworkSource =
               ) ]
         )
     let templateValue  = Element("TemplateValue", [("Name", "Card");("Type","Cardinality")], "2",[])
-    let automatedTyped  = Element("AutomatedTyped", [("Name", "SrcType");("Type","Cardinality")], "", [])
-    let parts name uid childElements = Element("Parts", [("Name",name);("UId",uid)], "", childElements)
+    let automaticTyped  = Element("AutomaticTyped", [("Name", "SrcType")], "", [])
+    let parts childElements = Element("Parts", [], "", childElements )
+    let part name uid = Element("Part", [("Name",name);("UId",uid)], "", 
+            [templateValue
+             automaticTyped])
 
 [<RequireQualifiedAccess>]
 module Wires =
@@ -423,7 +426,6 @@ module Wires =
         | IdentCon of UId
         | PowerRail
         | OpenCon of UId
-
 
     type Wire =
         { UId: UId

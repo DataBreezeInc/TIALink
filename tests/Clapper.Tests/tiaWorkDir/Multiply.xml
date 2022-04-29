@@ -55,7 +55,7 @@
       <Number>0</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
       <SetENOAutomatically>false</SetENOAutomatically>
-      <StructureModified ReadOnly="true">2022-04-28T21:09:16</StructureModified>
+      <StructureModified ReadOnly="true">2022-04-28T21:30:42</StructureModified>
       <UDABlockProperties />
       <UDAEnableTagReadback>false</UDAEnableTagReadback>
     </AttributeList>
@@ -74,9 +74,11 @@
         <AttributeList>
           <NetworkSource>
             <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4">
-              <Parts Name="Mul" UId="21">
-                <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
-                <AutomatedTyped Name="SrcType" Type="Cardinality" />
+              <Parts>
+                <Part Name="Mul" UId="24">
+                  <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+                  <AutomaticTyped Name="SrcType" />
+                </Part>
               </Parts>
               <Wires>
                 <Wire UId="25">

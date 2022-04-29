@@ -44,14 +44,13 @@ let networkSourceSimplyMultiply blockName =
         "FlgNet",
         [ ("xmlns", "http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v4") ],
         "",
-        [ NetworkSource.parts "Mul" "21" [ 
-            NetworkSource.templateValue
-            NetworkSource.automatedTyped  ]
+        [ NetworkSource.parts [ 
+            NetworkSource.part "Mul" "24" ]
           Wires.wires [ Wires.wireElement
                             { UId = UId 25
                               Name = "en"
                               NameUId = UId 24
-                              WireType = Wires.PowerRail } 
+                              WireType = Wires.PowerRail }  
                         Wires.wireElement
                             {   UId = UId 26
                                 Name = "in1"
