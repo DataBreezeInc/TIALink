@@ -361,11 +361,14 @@ module PlcProgram =
     let exportAllPlcBlocks (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
-            for plcBlock in plcSoftware.BlockGroup.Blocks do
-            
-                plcBlock.Export(FileInfo(Path.GetFullPath($"{props.ProjectPath}/{props.ProjectName}/Exports/{plcBlock.Name}.xml")), ExportOptions.WithDefaults)
-                printfn "Successfully exported PlcBlock %s" plcBlock.Name
-            props
+            if props.Compiled then
+                for plcBlock in plcSoftware.BlockGroup.Blocks do
+                
+                    plcBlock.Export(FileInfo(Path.GetFullPath($"{props.ProjectPath}/{props.ProjectName}/Exports/{plcBlock.Name}.xml")), ExportOptions.WithDefaults)
+                    printfn "Successfully exported PlcBlock %s" plcBlock.Name
+                props
+            else  
+                failwithf "You have to compile your project first before you can export your blocks - use `compileProject`"        
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
 
