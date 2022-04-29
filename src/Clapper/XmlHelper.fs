@@ -265,10 +265,17 @@ module NetworkSource =
             | Some offset -> offset |> string
             | None -> failwithf "bit offset not set"
 
+    type CallInfoName = 
+    | MUL 
+    | Custom of string 
+        member this.Value = 
+            match this with 
+            | MUL ->"MUL"
+            | Custom str -> str
     type Call =
         { BlockName: string
           AreaType: AreaType
-          CallInfoName: string
+          CallInfoName: CallInfoName
           BlockType: BlockType
           UId: UId
           BitOffset: int
@@ -276,7 +283,6 @@ module NetworkSource =
           InstanceBlockNumber: int
           CreateDate: DateTime
           Parameters: seq<Xml>
-
          }
 
     let parameter name (section: Section.Section) (dataType: DataType) =
@@ -334,7 +340,7 @@ module NetworkSource =
             "",
             [ Element(
                   "CallInfo",
-                  [ ("Name", call.CallInfoName)
+                  [ ("Name", call.CallInfoName.Value)
                     ("BlockType", call.BlockType.Value) ],
                   "",
                   [ match call.BlockType with
@@ -365,7 +371,7 @@ module NetworkSource =
                                   [ ("Name",
                                      call.BlockName
                                      + "#"
-                                     + call.CallInfoName
+                                     + call.CallInfoName.Value
                                      + "_"
                                      + call.BlockType.Value) ],
                                   "",
@@ -374,7 +380,7 @@ module NetworkSource =
                               Element(
                                   "Address",
                                   [ ("Area", call.AreaType.Value)
-                                    ("Type", call.CallInfoName)
+                                    ("Type", call.CallInfoName.Value)
                                     ("BlockNumber", call.InstanceBlockNumber |> string)
                                     ("BitOffset", call.BitOffset |> string)
                                     ("Informative", "true") ],
@@ -471,14 +477,14 @@ module Block =
 
     type FCBlock =
         { Name: string
-          Number: int
           FCBlockId: FCBlockId
           CompileUnitId: CompileUnitId
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
           MemoryLayout: MemoryLayout
           NetworkSource: Xml option
-          CreateTime: DateTime }
+          CreateTime: DateTime
+          TiaVersion : TiaVersion }
 
     type GlobalDB =
         { Name: string
@@ -486,7 +492,8 @@ module Block =
           ProgrammingLanguage: ProgrammingLanguage
           Sections: seq<Xml>
           MemoryLayout: MemoryLayout
-          CreateTime: DateTime }
+          CreateTime: DateTime
+          TiaVersion : TiaVersion }
 
     type BlockType =
         | GlobalDB of GlobalDB
@@ -588,7 +595,7 @@ module Block =
                     Element("IsIECCheckEnabled", [], "false", [])
                     Element("MemoryLayout", [], block.MemoryLayout.Value, [])
                     Element("Name", [], block.Name, [])
-                    Element("Number", [], block.Number |> string, [])
+                    Element("Number", [], block.FCBlockId.Value, [])
                     Element("ProgrammingLanguage", [], block.ProgrammingLanguage.Value, [])
                     Element("SetENOAutomatically", [], "false", [])
                     Element("StructureModified", [ ("ReadOnly", "true") ], block.CreateTime |> creationTime, [])

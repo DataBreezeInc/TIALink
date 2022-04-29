@@ -9,6 +9,7 @@ open Siemens.Engineering.SW
 open Siemens.Engineering.SW.Tags
 open Siemens.Engineering.SW.Blocks
 open Siemens.Engineering.SW.Types
+open Siemens.Engineering.Compiler
 open System.Globalization
 open XmlHelper
 open System.Xml.Linq
@@ -47,7 +48,8 @@ module PlcProgram =
               ProjectPath: string
               DeviceItems: DeviceItem []
               TagTableList: PlcTagTable []
-              PlcTypeList: PlcType [] }
+              PlcTypeList: PlcType []
+              Compiled : bool }
 
     let private defaultProps () =
         { ExistingTiaPortalConnection = None
@@ -60,7 +62,8 @@ module PlcProgram =
           ProjectName = ""
           DeviceItems = [||]
           TagTableList = [||]
-          PlcTypeList = [||] }
+          PlcTypeList = [||]
+          Compiled = false }
 
     let projectPath projectPath =
         { defaultProps () with ProjectPath = projectPath }
@@ -344,14 +347,25 @@ module PlcProgram =
     let exportPlcBlock (blockName: string) (props: PlcProps) =
         match props.PlcSoftware with
         | Some plcSoftware ->
-            match tryFindBlockGroup plcSoftware blockName with
-            | Some plcBlock ->
-                plcBlock.Export(FileInfo(props.ProjectPath + blockName + ".xlm"), ExportOptions.WithDefaults)
-                props
-            | None ->
-                failwithf "Could not find block %s" blockName
-
-                props
+            if props.Compiled then
+                match tryFindBlockGroup plcSoftware blockName with
+                | Some plcBlock ->
+                    plcBlock.Export(FileInfo(props.ProjectPath + blockName + ".xlm"), ExportOptions.WithDefaults)
+                    props
+                | None ->
+                    failwithf "Could not find block %s" blockName
+                    props
+            else  
+                failwithf "You have to compile your project first before you can export your blocks - use `compileProject`"      
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
+    let exportAllPlcBlocks (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            for plcBlock in plcSoftware.BlockGroup.Blocks do
+            
+                plcBlock.Export(FileInfo(Path.GetFullPath($"{props.ProjectPath}/{props.ProjectName}/Exports/{plcBlock.Name}.xml")), ExportOptions.WithDefaults)
+                printfn "Successfully exported PlcBlock %s" plcBlock.Name
+            props
         | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
 
@@ -384,13 +398,33 @@ module PlcProgram =
             importPlcBlock name props
         with
         | exn -> failwithf "Could not create PlcBlock %A" exn.Message
-    let createDataBlock (dataBlock:Block.GlobalDB, version: TiaVersion) (props: PlcProps) =
+    let createDataBlock (dataBlock:Block.GlobalDB) (props: PlcProps) =
         try
-            let _ = createAndExportBlock (dataBlock.Name, version, Block.GlobalDB dataBlock)
+            let _ = createAndExportBlock (dataBlock.Name, dataBlock.TiaVersion, Block.GlobalDB dataBlock)
             printfn "Created DataBlock %s" dataBlock.Name
             importPlcBlock dataBlock.Name props
         with
         | exn -> failwithf "Could not create PlcBlock %A" exn.Message
+    let createFunctionalBlock (functionalBlock:Block.FCBlock) (props: PlcProps) =
+        try
+            let _ = createAndExportBlock (functionalBlock.Name, functionalBlock.TiaVersion, Block.FunctionalBlock functionalBlock)
+            printfn "Created FunctionalBlock %s" functionalBlock.Name
+            importPlcBlock functionalBlock.Name props
+        with
+        | exn -> failwithf "Could not create PlcBlock %A" exn.Message
+
+    let compileProject (props: PlcProps) =
+        match props.PlcSoftware with
+        | Some plcSoftware ->
+            let compileService = plcSoftware.GetService<ICompilable>()
+            let result = compileService.Compile()  
+            printfn 
+                $"Result :  {result.State.ToString()} 
+                Errors: {result.ErrorCount.ToString()} 
+                Warnings: {result.WarningCount.ToString()} 
+                Compiler"
+            { props with Compiled = true}
+        | _ -> failwithf "Select / Add your device first - use `getDevice`"
 
     let saveAndClose (props: PlcProps) =
         match props.Project, props.ExistingTiaPortalConnection with
