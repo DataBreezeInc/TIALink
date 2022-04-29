@@ -108,15 +108,6 @@ type TiaVersion =
         | V16 -> "V16"
         | V17 -> "V17"
 
-type ProgrammingLanguage =
-    | LAD
-    | FBD
-    | DB
-    member this.Value =
-        match this with
-        | LAD -> "LAD"
-        | FBD -> "FBD"
-        | DB -> "DB"
 
 
 
@@ -509,6 +500,18 @@ module Block =
             match this with
             | Optimized -> "Optimized"
             | Standard -> "Standard"
+
+    type ProgrammingLanguage =
+        | LAD
+        | FBD
+        | DB
+        | SCL
+        member this.Value =
+            match this with
+            | LAD -> "LAD"
+            | FBD -> "FBD"
+            | DB -> "DB"
+            | SCL -> "SCL"
 
     type FCBlock =
         { Name: string
