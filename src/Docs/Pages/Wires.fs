@@ -30,20 +30,12 @@ let wire =
     codedNoExampleView title code
 
 let wireElement =
-    let example =
-        Daisy.badge [
-            badge.sm
-            badge.success
-            prop.text "Success badge"
-        ]
-        |> Html.div
 
     let code = """Wires.wireElement
-                            {   UId = UId 26
-                                Name = "in1"
-                                NameUId = UId 24
-                                WireType = Wires.IdentCon(UId 21) }  "
-]"""
+    {   UId = UId 26
+        Name = "in1"
+        NameUId = UId 24
+        WireType = Wires.IdentCon(UId 21) } """
     let title =
         Html.text
             "Creates a Mulitply Element with comment, titel and two inputs and one output."
