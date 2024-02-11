@@ -27,7 +27,7 @@ let dataTypes =
     | Struct
     | Custom of string"""
     let title =
-        Html.text "Clapper supports following DataTypes"
+        Html.text "TIALink supports following DataTypes"
     codedNoExampleView title code
 
 [<ReactComponent>]

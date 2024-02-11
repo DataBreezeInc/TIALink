@@ -14,7 +14,7 @@ initializeContext ()
 let publishPath = Path.getFullName "publish"
 let srcPath = Path.getFullName "src"
 let clientSrcPath = srcPath </> "Docs"
-let librarySrcPath = srcPath </> "Clapper"
+let librarySrcPath = srcPath </> "TIALink"
 let appPublishPath = publishPath </> "app"
 
 // Targets

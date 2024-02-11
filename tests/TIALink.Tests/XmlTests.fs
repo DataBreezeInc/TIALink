@@ -4,7 +4,7 @@ open System.IO
 open Expecto
 open System
 open XmlHelper
-open Clapper
+open TIALink
 open Block
 open PlcDataType
 

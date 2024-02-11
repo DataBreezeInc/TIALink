@@ -15,7 +15,7 @@ let wireTypes =
     | PowerRail
     | OpenCon of UId"""
 
-    let title = Html.text "Clapper supports following WireTypes."
+    let title = Html.text "TIALink supports following WireTypes."
     codedNoExampleView title code
 let wire =
 

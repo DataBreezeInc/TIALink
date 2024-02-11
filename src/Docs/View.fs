@@ -76,10 +76,10 @@ let private leftSide (p: Page) =
                                     prop.children [ Html.divClassed
                                                         "inline-block text-3xl font-title px-5 py-5 font-bold"
                                                         [ Html.span [ color.textPrimary
-                                                                      prop.text "Clapper" ]
-                                                          Html.a [ prop.href "https://www.nuget.org/packages/Clapper"
+                                                                      prop.text "TIALink" ]
+                                                          Html.a [ prop.href "https://www.nuget.org/packages/TIALink"
                                                                    prop.children [ Html.img [ prop.src
-                                                                                                  "https://img.shields.io/nuget/v/Clapper.svg?style=flat-square" ] ] ] ]
+                                                                                                  "https://img.shields.io/nuget/v/TIALink.svg?style=flat-square" ] ] ] ]
                                                     Daisy.menu [ menu.compact
                                                                  prop.className "flex flex-col p-4 pt-0"
                                                                  prop.children [ Daisy.menuTitle [ Html.span "Docs" ]

@@ -1,16 +1,16 @@
-# Clapper [![NuGet](https://img.shields.io/nuget/v/Clapper.svg?style=flat-square)](https://www.nuget.org/packages/Clapper/)
+# TIALink [![NuGet](https://img.shields.io/nuget/v/TIALink.svg?style=flat-square)](https://www.nuget.org/packages/TIALink/)
 
 TIA Openness FSharp wrapper library
 
 ## Installation (manual)
 If you want to install this package manually, use usual NuGet package command
 
-    Install-Package Clapper
+    Install-Package TIALink
 
 or using [Paket](http://fsprojects.github.io/Paket/getting-started.html)
 
-    paket add Clapper
+    paket add TIALink
 
 
 ## Documentation
-Clapper has a documentation available on https://databreezeug.github.io/Clapper
+TIALink has a documentation available on https://databreezeug.github.io/TIALink

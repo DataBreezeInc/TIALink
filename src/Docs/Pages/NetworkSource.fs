@@ -11,7 +11,7 @@ let blockType =
             | FB
             | FC"""
 
-    let title = Html.text "Clapper supports following Sections"
+    let title = Html.text "TIALink supports following Sections"
     codedNoExampleView title code
 
 let areaType =

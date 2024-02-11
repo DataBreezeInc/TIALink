@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Docs", "src\Docs\Docs.fsproj", "{3F7A6B8B-594C-4E1B-8374-722B2B3D8342}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Clapper", "src\Clapper\Clapper.fsproj", "{3F7A6B8B-594C-4E1B-8374-722B2B3D8342}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TIALink", "src\TIALink\TIALink.fsproj", "{3F7A6B8B-594C-4E1B-8374-722B2B3D8342}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Clapper.Tests", "tests\Clapper.Tests\ClapperTests.fsproj", "{1CA2E092-2320-451D-A4F0-9ED7C7C528CA}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "TIALink.Tests", "tests\TIALink.Tests\TIALinkTests.fsproj", "{1CA2E092-2320-451D-A4F0-9ED7C7C528CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

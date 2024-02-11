@@ -10,7 +10,7 @@
         <!-- <Compile Include="XmlTests.fs" /> -->
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../../src/Clapper/Clapper.fsproj" />
+        <ProjectReference Include="../../src/TIALink/TIALink.fsproj" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="Siemens.Engineering">

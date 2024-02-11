@@ -20,7 +20,7 @@ let section =
         | Static
         | NoSection"""
     let title =
-        Html.text "Clapper supports following Sections"
+        Html.text "TIALink supports following Sections"
     codedNoExampleView title code
 
 let accessibility =

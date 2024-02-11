@@ -17,8 +17,8 @@ let InstallView () =
                                     prop.text " TIA Openness installation steps" ]
                            Html.text " and then proceed with installing "
                            Html.a [ prop.className "link"
-                                    prop.href "https://www.nuget.org/packages/Clapper"
-                                    prop.text "Clapper NuGet" ]
+                                    prop.href "https://www.nuget.org/packages/TIALink"
+                                    prop.text "TIALink NuGet" ]
                            Html.text "." ]
                      Daisy.alert [
                         alert.warning
@@ -28,11 +28,11 @@ let InstallView () =
                      Html.divClassed
                          "max-w-xl"
                          [ Daisy.mockupCode [ Html.pre [ mockupCode.prefix "$"
-                                                         prop.children [ Html.code "Install-Package Clapper" ] ] ] ]
+                                                         prop.children [ Html.code "Install-Package TIALink" ] ] ] ]
                      Html.divClassed "description" [ Html.text "or Paket" ]
                      Html.divClassed
                          "max-w-xl"
                          [ Daisy.mockupCode [ Html.pre [ mockupCode.prefix "$"
-                                                         prop.children [ Html.code "paket add Clapper" ] ] ] ]
+                                                         prop.children [ Html.code "paket add TIALink" ] ] ] ]
 
                       ]

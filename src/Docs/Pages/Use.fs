@@ -12,7 +12,7 @@ let UseView () =
     React.fragment [
         Html.divClassed "description" [ Html.text "After installation just open proper namespace:" ]
         Html.divClassed "max-w-xl" [
-            linedMockupCode "open Clapper"
+            linedMockupCode "open TIALink"
         ]
         Html.divClassed "description" [
             Html.text "Now you can start using library. Everything important starts with "
