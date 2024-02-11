@@ -1,6 +1,6 @@
 
 source https://api.nuget.org/v3/index.json
-framework: net6.0, netstandard2.0
+framework: net8.0, netstandard2.0
 storage: none
 
 nuget FSharp.Core
@@ -8,7 +8,7 @@ nuget Feliz
 
 group Docs
     source https://api.nuget.org/v3/index.json
-    framework: net6.0
+    framework: net8.0
     storage: none
 
     nuget FSharp.Core
@@ -23,7 +23,7 @@ group Docs
 
 group Build
     source https://api.nuget.org/v3/index.json
-    framework: net6.0
+    framework: net8.0
     storage: none
 
     nuget Fake.Core.Target
@@ -32,7 +32,7 @@ group Build
 
 group Tests
     source https://api.nuget.org/v3/index.json
-    framework: net6.0
+    framework: net8.0
     storage: none
 
     nuget Expecto
